@@ -1,0 +1,39 @@
+{
+  "name": "postcss-copy",
+  "version": "1.0.0",
+  "description": "A postcss plugin to copy all assets referenced in CSS to a custom destination folder and updating the URLs.",
+  "main": "index.js",
+  "dependencies": {
+    "fs-extra": "^0.23.1",
+    "postcss": "^5.0.1",
+    "reduce-function-call": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel": "^5.8.21",
+    "babel-eslint": "^4.0.5",
+    "babel-runtime": "^5.8.20",
+    "eslint": "^1.0.0",
+    "eslint-config-airbnb": "0.0.7",
+    "eslint-plugin-react": "^3.2.0",
+    "tap-spec": "^4.1.0",
+    "tape": "^4.2.0"
+  },
+  "scripts": {
+    "test": "rm -rf tests/dist && node tests/index.js | tap-spec",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && babel src --source-maps --optional runtime --out-dir dist --ignore /tests/",
+    "start": "babel src --watch --source-maps --optional runtime --out-dir dist --ignore /tests/",
+    "debug": "iron-node tests/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geut/postcss-copy.git"
+  },
+  "keywords": [],
+  "author": "Geut <geut.studio@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/geut/postcss-copy/issues"
+  },
+  "homepage": "https://github.com/geut/postcss-copy#readme"
+}

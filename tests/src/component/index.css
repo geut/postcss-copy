@@ -1,0 +1,7 @@
+.check-relative {
+    background: url('images/component.jpg');
+}
+
+.check-parent-relative {
+    background: url('../images/test.jpg');
+}
