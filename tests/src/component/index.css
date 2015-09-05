@@ -3,5 +3,5 @@
 }
 
 .check-parent-relative {
-    background: url('../images/test.jpg');
+    background: url('../images/test.jpg?#iefix&v=4.4.0');
 }

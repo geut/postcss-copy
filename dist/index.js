@@ -32,6 +32,10 @@ var _crypto = require('crypto');
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
+var _pathExists = require('path-exists');
+
+var _pathExists2 = _interopRequireDefault(_pathExists);
+
 var tags = ['assetsPath', 'path', 'name', 'hash', 'ext'];
 
 /**
@@ -85,7 +89,7 @@ function getFileMeta(dirname, value, opts) {
     if (!fileMeta.content) {
         return false;
     }
-    fileMeta.hash = opts.hashFunc(fileMeta.content);
+    fileMeta.hash = opts.hashFunction(fileMeta.content);
     fileMeta.fullName = _path2['default'].basename(parseUrl.pathname);
     // name without extension
     fileMeta.name = _path2['default'].basename(parseUrl.pathname, _path2['default'].extname(parseUrl.pathname));
@@ -119,7 +123,9 @@ function processCopy(result, urlMeta, opts, decl) {
 
     var fileMeta = getFileMeta(dirname, urlMeta.value, opts);
     if (!fileMeta) {
-        result.warn('Can\'t read file \'' + urlMeta.value + '\', ignoring', { node: decl });
+        result.warn('Can\'t read file \'' + urlMeta.value + '\', ignoring', {
+            node: decl
+        });
         return createUrl(urlMeta);
     }
 
@@ -129,11 +135,11 @@ function processCopy(result, urlMeta, opts, decl) {
     });
     var resultAbsolutePath = _path2['default'].resolve(opts.dest, tpl);
 
-    if (!_fsExtra2['default'].ensureFileSync(resultAbsolutePath)) {
+    if (!_pathExists2['default'].sync(resultAbsolutePath)) {
         _fsExtra2['default'].outputFileSync(resultAbsolutePath, fileMeta.content);
     }
 
-    var resultUrl = _path2['default'].relative(opts.keepRelativeSrcPath ? dirname.replace(opts.src, opts.dest) : opts.dest, resultAbsolutePath) + fileMeta.extra;
+    var resultUrl = _path2['default'].relative(opts.keepRelativePath ? dirname.replace(opts.src, opts.dest) : opts.dest, resultAbsolutePath) + fileMeta.extra;
 
     return createUrl(urlMeta, resultUrl);
 }
@@ -173,15 +179,15 @@ function processDecl(result, decl, opts) {
 function init() {
     var userOpts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-    var defaultOpts = {
+    var opts = {
         assetsPath: 'assets',
         template: '[assetsPath]/[hash].[ext]',
-        keepRelativeSrcPath: true,
-        hashFunc: function hashFunc(content) {
+        keepRelativePath: true,
+        hashFunction: function hashFunction(content) {
             return _crypto2['default'].createHash('sha1').update(content).digest('hex').substr(0, 16);
         }
     };
-    var opts = _Object$assign(defaultOpts, userOpts);
+    _Object$assign(opts, userOpts);
 
     return function (style, result) {
         if (opts.src) {

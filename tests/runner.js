@@ -1,14 +1,18 @@
 import test from 'tape';
-import fs from 'fs';
 import postcss from 'postcss';
 import copy from '../src/index.js';
+import pathExists from 'path-exists';
+import path from 'path';
+import fs from 'fs-extra';
+import crypto from 'crypto';
 
-function processStyle(filename, userOpts = {}) {
-    const opts = Object.assign({
-        src: 'tests/src',
-        dest: 'tests/dest'
-    }, userOpts);
-
+/**
+ * processStyle
+ * @param  {string} filename e.g: index.css
+ * @param  {Object} opts = {} e.g: {src: 'tests/src', dest: 'tests/dest'}
+ * @return {string}
+ */
+function processStyle(filename, opts = {}) {
     const file = fs
         .readFileSync('tests/src/' + filename, 'utf8')
         .trim();
@@ -23,20 +27,256 @@ function processStyle(filename, userOpts = {}) {
 
 function makeRegex(str) {
     return new RegExp(
-        str
+        ('\'' + str + '\'')
         .replace(/\//g, '\\\/')
         .replace(/\./g, '\\.')
         .replace(/\?/g, '\\?')
     );
 }
 
-const cssIndex = processStyle('index.css');
-const cssCheckRelative = processStyle('component/index.css');
+function testFileExists(t, file) {
+    pathExists(path.join('tests/dest', file))
+        .then((exists) => {
+            t.ok(exists, `File "${file}" created.`);
+        });
+}
 
-test('test-copy-assets', (t) => {
-    const start = Date.now();
+function deleteDest() {
+    fs.removeSync('tests/dest');
+}
 
-    setTimeout(() => {
-        t.equal(Date.now() - start, 100);
-    }, 100);
+test('options test', (t) => {
+    t.throws(() => {
+        processStyle('index.css', {dest: undefined});
+    },
+        null,
+        'Throw an exception if the `dest` option is not setted.'
+    );
+
+    t.end();
+});
+
+test(`default process test =>
+template: '[assetsPath]/[hash].[ext]'
+`,
+(t) => {
+    deleteDest(t);
+    t.plan(7);
+
+    const copyOpts = {
+        src: 'tests/src',
+        dest: 'tests/dest'
+    };
+
+    const indexCss = processStyle('index.css', copyOpts);
+
+    t.ok(
+        indexCss.match(makeRegex('assets/b6c8f21e92b50900.jpg')),
+        '@index.css => process url image (simple)'
+    );
+    t.ok(
+        indexCss.match(
+            makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+        ),
+        '@index.css => process url image (with parameters)'
+    );
+
+    const componentCss = processStyle('component/index.css', copyOpts);
+    t.ok(
+        componentCss.match(makeRegex('../assets/27da26a06634b050.jpg')),
+        '@component/index.css => process url image (simple)'
+    );
+    t.ok(
+        componentCss.match(
+            makeRegex('../assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+        ),
+        '@component/index.css => process url image (with parameters)'
+    );
+
+    testFileExists(t, 'assets/b6c8f21e92b50900.jpg');
+    testFileExists(t, 'assets/0ed7c955a2951f04.jpg');
+    testFileExists(t, 'assets/27da26a06634b050.jpg');
+});
+
+test(`process test =>
+template: '[path]/[hash].[ext]'
+`,
+(t) => {
+    deleteDest(t);
+    t.plan(7);
+
+    const copyOpts = {
+        src: 'tests/src',
+        dest: 'tests/dest',
+        template: '[path]/[hash].[ext]'
+    };
+
+    const indexCss = processStyle('index.css', copyOpts);
+    t.ok(
+        indexCss.match(makeRegex('images/b6c8f21e92b50900.jpg')),
+        '@index.css => process url image (simple)'
+    );
+    t.ok(
+        indexCss.match(
+            makeRegex('images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+        ),
+        '@index.css => process url image (with parameters)'
+    );
+
+    const componentCss = processStyle('component/index.css', copyOpts);
+    t.ok(
+        componentCss.match(makeRegex('images/27da26a06634b050.jpg')),
+        '@component/index.css => process url image (simple)'
+    );
+    t.ok(
+        componentCss.match(
+            makeRegex('../images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+        ),
+        '@component/index.css => process url image (with parameters)'
+    );
+
+    testFileExists(t, 'images/b6c8f21e92b50900.jpg');
+    testFileExists(t, 'images/0ed7c955a2951f04.jpg');
+    testFileExists(t, 'component/images/27da26a06634b050.jpg');
+});
+
+test(`process test =>
+template: '[path]/[name].[ext]'
+`,
+(t) => {
+    deleteDest(t);
+    t.plan(7);
+
+    const copyOpts = {
+        src: 'tests/src',
+        dest: 'tests/dest',
+        template: '[path]/[name].[ext]'
+    };
+
+    const indexCss = processStyle('index.css', copyOpts);
+    t.ok(
+        indexCss.match(makeRegex('images/other.jpg')),
+        '@index.css => process url image (simple)'
+    );
+    t.ok(
+        indexCss.match(
+            makeRegex('images/test.jpg?#iefix&v=4.4.0')
+        ),
+        '@index.css => process url image (with parameters)'
+    );
+
+    const componentCss = processStyle('component/index.css', copyOpts);
+    t.ok(
+        componentCss.match(makeRegex('images/component.jpg')),
+        '@component/index.css => process url image (simple)'
+    );
+    t.ok(
+        componentCss.match(
+            makeRegex('../images/test.jpg?#iefix&v=4.4.0')
+        ),
+        '@component/index.css => process url image (with parameters)'
+    );
+
+    testFileExists(t, 'images/other.jpg');
+    testFileExists(t, 'images/test.jpg');
+    testFileExists(t, 'component/images/component.jpg');
+});
+
+test(`process test =>
+template: '[assetsPath]/[hash].[ext]',
+keepRelativePath: false
+`,
+(t) => {
+    deleteDest(t);
+    t.plan(7);
+
+    const copyOpts = {
+        src: 'tests/src',
+        dest: 'tests/dest',
+        keepRelativePath: false
+    };
+
+    const indexCss = processStyle('index.css', copyOpts);
+
+    t.ok(
+        indexCss.match(makeRegex('assets/b6c8f21e92b50900.jpg')),
+        '@index.css => process url image (simple)'
+    );
+    t.ok(
+        indexCss.match(
+            makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+        ),
+        '@index.css => process url image (with parameters)'
+    );
+
+    const componentCss = processStyle('component/index.css', copyOpts);
+    t.ok(
+        componentCss.match(makeRegex('assets/27da26a06634b050.jpg')),
+        '@component/index.css => process url image (simple)'
+    );
+    t.ok(
+        componentCss.match(
+            makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+        ),
+        '@component/index.css => process url image (with parameters)'
+    );
+
+    testFileExists(t, 'assets/b6c8f21e92b50900.jpg');
+    testFileExists(t, 'assets/0ed7c955a2951f04.jpg');
+    testFileExists(t, 'assets/27da26a06634b050.jpg');
+});
+
+test(`process test =>
+template: '[assetsPath]/[hash].[ext]',
+hashFunction: {custom}
+`,
+(t) => {
+    deleteDest(t);
+    t.plan(7);
+
+    const copyOpts = {
+        src: 'tests/src',
+        dest: 'tests/dest',
+        hashFunction(content) {
+            // borschik
+            return crypto.createHash('sha1')
+                .update(content)
+                .digest('base64')
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=/g, '')
+                .replace(/^[+-]+/g, '');
+        }
+    };
+
+    const indexCss = processStyle('index.css', copyOpts);
+    t.ok(
+        indexCss.match(makeRegex('assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg')),
+        '@index.css => process url image (simple)'
+    );
+    t.ok(
+        indexCss.match(
+            makeRegex('assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0')
+        ),
+        '@index.css => process url image (with parameters)'
+    );
+
+    const componentCss = processStyle('component/index.css', copyOpts);
+    t.ok(
+        componentCss.match(
+            makeRegex('../assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg')
+        ),
+        '@component/index.css => process url image (simple)'
+    );
+    t.ok(
+        componentCss.match(
+            makeRegex('../assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg' +
+            '?#iefix&v=4.4.0')
+        ),
+        '@component/index.css => process url image (with parameters)'
+    );
+
+    testFileExists(t, 'assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg');
+    testFileExists(t, 'assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg');
+    testFileExists(t, 'assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg');
 });

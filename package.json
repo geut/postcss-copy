@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "fs-extra": "^0.23.1",
+    "path-exists": "^2.0.0",
     "postcss": "^5.0.1",
     "reduce-function-call": "^1.0.1"
   },
@@ -19,7 +20,7 @@
     "tape": "^4.2.0"
   },
   "scripts": {
-    "test": "rm -rf tests/dist && node tests/index.js | tap-spec",
+    "test": "node tests/index.js | tap-spec",
     "clean": "rm -rf dist",
     "build": "npm run clean && babel src --source-maps --optional runtime --out-dir dist --ignore /tests/",
     "start": "babel src --watch --source-maps --optional runtime --out-dir dist --ignore /tests/",

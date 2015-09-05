@@ -4,6 +4,7 @@ import reduceFunctionCall from 'reduce-function-call';
 import fs from 'fs-extra';
 import url from 'url';
 import crypto from 'crypto';
+import pathExists from 'path-exists';
 
 const tags = [
     'assetsPath',
@@ -75,7 +76,7 @@ function getFileMeta(dirname, value, opts) {
     if (!(fileMeta.content)) {
         return false;
     }
-    fileMeta.hash = opts.hashFunc(fileMeta.content);
+    fileMeta.hash = opts.hashFunction(fileMeta.content);
     fileMeta.fullName = path.basename(parseUrl.pathname);
     // name without extension
     fileMeta.name = path.basename(
@@ -93,7 +94,7 @@ function getFileMeta(dirname, value, opts) {
         .replace(fileMeta.fullName, '')
         .replace(/^\/+|\/+$/gm, '');
     fileMeta.extra = (parseUrl.search ? parseUrl.search : '') +
-                     (parseUrl.hash ? parseUrl.hash : '');
+        (parseUrl.hash ? parseUrl.hash : '');
     return fileMeta;
 }
 
@@ -119,8 +120,9 @@ function processCopy(result, urlMeta, opts, decl) {
 
     const fileMeta = getFileMeta(dirname, urlMeta.value, opts);
     if (!(fileMeta)) {
-        result.warn('Can\'t read file \'' + urlMeta.value + '\', ignoring',
-        {node: decl});
+        result.warn('Can\'t read file \'' + urlMeta.value + '\', ignoring', {
+            node: decl
+        });
         return createUrl(urlMeta);
     }
 
@@ -133,12 +135,12 @@ function processCopy(result, urlMeta, opts, decl) {
     });
     const resultAbsolutePath = path.resolve(opts.dest, tpl);
 
-    if (!(fs.ensureFileSync(resultAbsolutePath))) {
+    if (!(pathExists.sync(resultAbsolutePath))) {
         fs.outputFileSync(resultAbsolutePath, fileMeta.content);
     }
 
     const resultUrl = path.relative(
-        opts.keepRelativeSrcPath
+        opts.keepRelativePath
             ? dirname.replace(opts.src, opts.dest)
             : opts.dest,
         resultAbsolutePath
@@ -184,18 +186,18 @@ function processDecl(result, decl, opts) {
  * }
  */
 function init(userOpts = {}) {
-    const defaultOpts = {
+    const opts = {
         assetsPath: 'assets',
         template: '[assetsPath]/[hash].[ext]',
-        keepRelativeSrcPath: true,
-        hashFunc: (content) => {
+        keepRelativePath: true,
+        hashFunction(content) {
             return crypto.createHash('sha1')
                 .update(content)
                 .digest('hex')
                 .substr(0, 16);
         }
     };
-    const opts = Object.assign(defaultOpts, userOpts);
+    Object.assign(opts, userOpts);
 
     return (style, result) => {
         if (opts.src) {
