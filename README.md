@@ -46,7 +46,7 @@ Define a template name for your final url assets.
 * **[name]**: Real name of your asset.
 * **[path]**: Original relative path of your asset.
 * **[ext]**: Extension of the asset.
-*
+
 ##### hashFunction
 Define a custom function to create the hash name.
 ```js
