@@ -61,6 +61,14 @@ function createUrl(urlMeta, newPath) {
         ')';
 }
 
+/**
+ * readFile
+ *
+ * function to try read the src file
+ *
+ * @param  {string} filepath
+ * @return {contents|boolean}
+ */
 function readFile(filepath) {
     try {
         return fs.readFileSync(filepath);
@@ -69,6 +77,17 @@ function readFile(filepath) {
     }
 }
 
+/**
+ * getFileMeta
+ *
+ * Helper function that reads the file ang get some helpful information
+ * to the copy process.
+ *
+ * @param  {string} dirname
+ * @param  {string} value
+ * @param  {Object} options
+ * @return {Object} meta information from the resource
+ */
 function getFileMeta(dirname, value, opts) {
     const fileMeta = {};
     const parseUrl = url.parse(path.resolve(dirname, value), true);
@@ -99,14 +118,12 @@ function getFileMeta(dirname, value, opts) {
 }
 
 /**
- * Copy images read from url() to an specific assets destination
- * (`assetsPath`) and fix url() according to that path.
- * You can rename the assets by a hash or keep the real pathname.
+ * processCopy
  *
- * @param {String} dirname to dirname
- * @param {String} urlMeta url meta data
- * @param {String} to destination
- * @param {Object} options plugin options
+ * @param {Object} result
+ * @param {Object} urlMeta url meta data
+ * @param {Object} options
+ * @param {Object} decl postcss declaration
  * @return {String} new url
  */
 function processCopy(result, urlMeta, opts, decl) {
@@ -152,8 +169,8 @@ function processCopy(result, urlMeta, opts, decl) {
 /**
  * Processes one declaration
  *
- * @param {Object} decl postcss declaration
- * @param {String|Function} mode plugin mode
+ * @param {Object} result
+ * @param {Object} decl  postcss declaration
  * @param {Object} options plugin options
  * @return {void}
  */
