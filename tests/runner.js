@@ -47,7 +47,14 @@ function deleteDest() {
 
 test('options test', (t) => {
     t.throws(() => {
-        processStyle('index.css', {dest: undefined});
+        processStyle('index.css');
+    },
+        null,
+        'Throw an exception if the `src` option is not setted.'
+    );
+
+    t.throws(() => {
+        processStyle('index.css', {src: 'setted'});
     },
         null,
         'Throw an exception if the `dest` option is not setted.'
@@ -57,7 +64,7 @@ test('options test', (t) => {
 });
 
 test(`default process test =>
-template: '[assetsPath]/[hash].[ext]'
+template: 'assets/[hash].[ext]'
 `,
 (t) => {
     deleteDest(t);
@@ -65,7 +72,8 @@ template: '[assetsPath]/[hash].[ext]'
 
     const copyOpts = {
         src: 'tests/src',
-        dest: 'tests/dest'
+        dest: 'tests/dest',
+        template: 'assets/[hash].[ext]'
     };
 
     const indexCss = processStyle('index.css', copyOpts);
@@ -183,7 +191,7 @@ template: '[path]/[name].[ext]'
 });
 
 test(`process test =>
-template: '[assetsPath]/[hash].[ext]',
+template: 'assets/[hash].[ext]',
 keepRelativePath: false
 `,
 (t) => {
@@ -227,7 +235,7 @@ keepRelativePath: false
 });
 
 test(`process test =>
-template: '[assetsPath]/[hash].[ext]',
+template: 'assets/[hash].[ext]',
 hashFunction: {custom}
 `,
 (t) => {

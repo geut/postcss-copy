@@ -7,7 +7,6 @@ import crypto from 'crypto';
 import pathExists from 'path-exists';
 
 const tags = [
-    'assetsPath',
     'path',
     'name',
     'hash',
@@ -199,13 +198,12 @@ function processDecl(result, decl, opts) {
  * userOpts = {
  * 		src: {String} optional
  * 		dest: {String} optional
- *      template: {String} optional (default '[assetsPath]/[hash].[ext]')
+ *      template: {String} optional (default 'assets/[hash].[ext]')
  * }
  */
 function init(userOpts = {}) {
     const opts = {
-        assetsPath: 'assets',
-        template: '[assetsPath]/[hash].[ext]',
+        template: 'assets/[hash].[ext]',
         keepRelativePath: true,
         hashFunction(content) {
             return crypto.createHash('sha1')
@@ -220,7 +218,7 @@ function init(userOpts = {}) {
         if (opts.src) {
             opts.src = path.resolve(opts.src);
         } else {
-            opts.src = process.cwd();
+            throw new Error('Option `src` is required in postcss-copy');
         }
         if (opts.dest) {
             opts.dest = path.resolve(opts.dest);

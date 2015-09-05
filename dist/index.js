@@ -36,7 +36,7 @@ var _pathExists = require('path-exists');
 
 var _pathExists2 = _interopRequireDefault(_pathExists);
 
-var tags = ['assetsPath', 'path', 'name', 'hash', 'ext'];
+var tags = ['path', 'name', 'hash', 'ext'];
 
 /**
  * return quote type
@@ -190,15 +190,14 @@ function processDecl(result, decl, opts) {
  * userOpts = {
  * 		src: {String} optional
  * 		dest: {String} optional
- *      template: {String} optional (default '[assetsPath]/[hash].[ext]')
+ *      template: {String} optional (default 'assets/[hash].[ext]')
  * }
  */
 function init() {
     var userOpts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
     var opts = {
-        assetsPath: 'assets',
-        template: '[assetsPath]/[hash].[ext]',
+        template: 'assets/[hash].[ext]',
         keepRelativePath: true,
         hashFunction: function hashFunction(content) {
             return _crypto2['default'].createHash('sha1').update(content).digest('hex').substr(0, 16);
@@ -210,7 +209,7 @@ function init() {
         if (opts.src) {
             opts.src = _path2['default'].resolve(opts.src);
         } else {
-            opts.src = process.cwd();
+            throw new Error('Option `src` is required in postcss-copy');
         }
         if (opts.dest) {
             opts.dest = _path2['default'].resolve(opts.dest);
