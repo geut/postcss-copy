@@ -95,6 +95,9 @@ gulp.task('buildCss', function () {
 });
 ```
 
+## On roadmap
+
+* Switch to PostCSS Async.
 
 ## Credits
 
