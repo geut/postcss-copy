@@ -1,3 +1,12 @@
+<a name="1.1.3"></a>
+## 1.1.3 (2015-09-06)
+
+
+* add roadmap section ([632ea4a](https://github.com/geut/postcss-copy/commit/632ea4a))
+* fix readme ([8eddbc2](https://github.com/geut/postcss-copy/commit/8eddbc2))
+
+
+
 <a name="1.1.2"></a>
 ## 1.1.2 (2015-09-05)
 
