@@ -1,0 +1,131 @@
+[{
+  "name": "default process test => template: 'assets/[hash].[ext]'",
+  "opts": {
+    "template": "assets/[hash].[ext]"
+  },
+  "assertions": {
+    "index": [{
+      "desc": "@index.css => process url image (simple)",
+      "match": "assets/b6c8f21e92b50900.jpg"
+    }, {
+      "desc": "@index.css => process url image (with parameters)",
+      "match": "assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+    }],
+    "component": [{
+      "desc": "@component/index.css => process url image (simple)",
+      "match": "../assets/27da26a06634b050.jpg"
+    }, {
+      "desc": "@component/index.css => process url image (with parameters)",
+      "match": "../assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+    }],
+    "exists": [
+      "assets/b6c8f21e92b50900.jpg",
+      "assets/0ed7c955a2951f04.jpg",
+      "assets/27da26a06634b050.jpg"
+    ]
+  }
+}, {
+  "name": "process test => template: '[path]/[hash].[ext]'",
+  "opts": {
+    "template": "[path]/[hash].[ext]"
+  },
+  "assertions": {
+    "index": [{
+      "desc": "@index.css => process url image (simple)",
+      "match": "images/b6c8f21e92b50900.jpg"
+    }, {
+      "desc": "@index.css => process url image (with parameters)",
+      "match": "images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+    }],
+    "component": [{
+      "desc": "@component/index.css => process url image (simple)",
+      "match": "images/27da26a06634b050.jpg"
+    }, {
+      "desc": "@component/index.css => process url image (with parameters)",
+      "match": "../images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+    }],
+    "exists": [
+      "images/b6c8f21e92b50900.jpg",
+      "images/0ed7c955a2951f04.jpg",
+      "component/images/27da26a06634b050.jpg"
+    ]
+  }
+},{
+  "name": "process test => template: '[path]/[name].[ext]'",
+  "opts": {
+    "template": "[path]/[name].[ext]"
+  },
+  "assertions": {
+    "index": [{
+      "desc": "@index.css => process url image (simple)",
+      "match": "images/other.jpg"
+    }, {
+      "desc": "@index.css => process url image (with parameters)",
+      "match": "images/test.jpg?#iefix&v=4.4.0"
+    }],
+    "component": [{
+      "desc": "@component/index.css => process url image (simple)",
+      "match": "images/component.jpg"
+    }, {
+      "desc": "@component/index.css => process url image (with parameters)",
+      "match": "../images/test.jpg?#iefix&v=4.4.0"
+    }],
+    "exists": [
+      "images/other.jpg",
+      "images/test.jpg",
+      "component/images/component.jpg"
+    ]
+  }
+},{
+  "name": "process test => template: 'assets/[hash].[ext]', keepRelativePath: false",
+  "opts": {
+    "keepRelativePath": false
+  },
+  "assertions": {
+    "index": [{
+      "desc": "@index.css => process url image (simple)",
+      "match": "assets/b6c8f21e92b50900.jpg"
+    }, {
+      "desc": "@index.css => process url image (with parameters)",
+      "match": "assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+    }],
+    "component": [{
+      "desc": "@component/index.css => process url image (simple)",
+      "match": "assets/27da26a06634b050.jpg"
+    }, {
+      "desc": "@component/index.css => process url image (with parameters)",
+      "match": "assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+    }],
+    "exists": [
+      "assets/b6c8f21e92b50900.jpg",
+      "assets/0ed7c955a2951f04.jpg",
+      "assets/27da26a06634b050.jpg"
+    ]
+  }
+},{
+  "name": "process test => template: 'assets/[hash].[ext]', hashFunction: {custom}",
+  "opts": {
+    "hashFunction": "custom"
+  },
+  "assertions": {
+    "index": [{
+      "desc": "@index.css => process url image (simple)",
+      "match": "assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg"
+    }, {
+      "desc": "@index.css => process url image (with parameters)",
+      "match": "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0"
+    }],
+    "component": [{
+      "desc": "@component/index.css => process url image (simple)",
+      "match": "../assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg"
+    }, {
+      "desc": "@component/index.css => process url image (with parameters)",
+      "match": "../assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0"
+    }],
+    "exists": [
+      "assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg",
+      "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg",
+      "assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg"
+    ]
+  }
+}]
