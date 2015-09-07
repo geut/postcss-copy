@@ -6,10 +6,7 @@ import url from 'url';
 import crypto from 'crypto';
 import pathExists from 'path-exists';
 import mkdirp from 'mkdirp';
-import {
-    _extend
-}
-from 'util';
+import {_extend} from 'util';
 
 const tags = [
     'path',
