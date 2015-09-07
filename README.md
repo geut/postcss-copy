@@ -1,5 +1,5 @@
 # postcss-copy [![Build Status](https://travis-ci.org/geut/postcss-copy.svg?branch=master)](https://travis-ci.org/geut/postcss-copy)
-> A postcss plugin to copy all assets referenced in CSS files to a custom destination folder and updating the URLs.
+> An **async** postcss plugin to copy all assets referenced in CSS files to a custom destination folder and updating the URLs.
 
 ## Install
 
@@ -97,7 +97,7 @@ gulp.task('buildCss', function () {
 
 ## On roadmap
 
-* Switch to PostCSS Async.
+nothing for now :)
 
 ## Credits
 
