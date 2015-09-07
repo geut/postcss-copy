@@ -6,6 +6,7 @@ import url from 'url';
 import crypto from 'crypto';
 import pathExists from 'path-exists';
 import mkdirp from 'mkdirp';
+import {_extend} from 'util';
 
 const tags = [
     'path',
@@ -244,7 +245,7 @@ function processDecl(result, decl, opts) {
  * }
  */
 function init(userOpts = {}) {
-    const opts = {
+    let opts = {
         template: 'assets/[hash].[ext]',
         keepRelativePath: true,
         hashFunction(content) {
@@ -254,7 +255,7 @@ function init(userOpts = {}) {
                 .substr(0, 16);
         }
     };
-    Object.assign(opts, userOpts);
+    opts = _extend(opts, userOpts);
 
     return (style, result) => {
         if (opts.src) {
