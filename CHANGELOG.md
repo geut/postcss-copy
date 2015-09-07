@@ -1,3 +1,11 @@
+<a name="2.0.1"></a>
+## 2.0.1 (2015-09-07)
+
+
+* minor fix in package.json ([db04fe1](https://github.com/geut/postcss-copy/commit/db04fe1))
+
+
+
 <a name="2.0.0"></a>
 # 2.0.0 (2015-09-07)
 
