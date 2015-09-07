@@ -12,7 +12,7 @@
   "devDependencies": {
     "babel": "^5.8.21",
     "babel-eslint": "^4.0.5",
-    "babel-runtime": "^5.8.20",
+    "babel-tape-runner": "^1.2.0",
     "eslint": "^1.0.0",
     "eslint-config-airbnb": "0.0.7",
     "eslint-plugin-react": "^3.2.0",
@@ -23,10 +23,10 @@
     "dist"
   ],
   "scripts": {
-    "test": "node tests/index.js | tap-spec",
+    "test": "babel-tape-runner \"src/tests/index.js\" | tap-spec",
     "clean": "rm -rf dist",
-    "build": "npm run clean && babel src --source-maps --optional runtime --out-dir dist",
-    "start": "babel src --watch --source-maps --optional runtime --out-dir dist",
+    "build": "npm run clean && babel src --source-maps --out-dir dist --ignore /tests/",
+    "start": "babel src --watch --source-maps --out-dir dist --ignore /tests/",
     "prepublish": "npm run build",
     "debug": "iron-node tests/index.js"
   },

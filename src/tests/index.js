@@ -1,26 +1,29 @@
 import test from 'tape';
 import postcss from 'postcss';
-import copy from '../src/index.js';
+import copy from '../index.js';
 import pathExists from 'path-exists';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
 
+const src = 'src/tests/src';
+const dest = 'src/tests/dest';
+
 /**
  * processStyle
  * @param  {string} filename e.g: index.css
- * @param  {Object} opts = {} e.g: {src: 'tests/src', dest: 'tests/dest'}
+ * @param  {Object} opts = {} e.g: {src: src, dest: dest}
  * @return {string}
  */
 function processStyle(filename, opts = {}) {
     const file = fs
-        .readFileSync('tests/src/' + filename, 'utf8')
+        .readFileSync(path.join(src, filename), 'utf8')
         .trim();
 
     return postcss()
         .use(copy(opts))
         .process(file, {
-            from: 'tests/src/' + filename
+            from: path.join(src, filename)
         })
         .then((result) => {
             return result.css;
@@ -37,13 +40,13 @@ function makeRegex(str) {
 }
 
 function testFileExists(t, file) {
-    pathExists(path.join('tests/dest', file))
+    pathExists(path.join(dest, file))
         .then((exists) => {
             t.ok(exists, `File "${file}" created.`);
         });
 }
 
-function deleteDest(pathDest = 'tests/dest') {
+function deleteDest(pathDest = 'src/tests/dest') {
     if (fs.existsSync(pathDest)) {
         fs.readdirSync(pathDest).forEach((file) => {
             const curPath = pathDest + '/' + file;
@@ -84,8 +87,8 @@ template: 'assets/[hash].[ext]'
     t.plan(7);
 
     const copyOpts = {
-        src: 'tests/src',
-        dest: 'tests/dest',
+        src: src,
+        dest: dest,
         template: 'assets/[hash].[ext]'
     };
 
@@ -129,8 +132,8 @@ template: '[path]/[hash].[ext]'
     t.plan(7);
 
     const copyOpts = {
-        src: 'tests/src',
-        dest: 'tests/dest',
+        src: src,
+        dest: dest,
         template: '[path]/[hash].[ext]'
     };
 
@@ -173,8 +176,8 @@ template: '[path]/[name].[ext]'
     t.plan(7);
 
     const copyOpts = {
-        src: 'tests/src',
-        dest: 'tests/dest',
+        src: src,
+        dest: dest,
         template: '[path]/[name].[ext]'
     };
 
@@ -218,8 +221,8 @@ keepRelativePath: false
     t.plan(7);
 
     const copyOpts = {
-        src: 'tests/src',
-        dest: 'tests/dest',
+        src: src,
+        dest: dest,
         keepRelativePath: false
     };
 
@@ -263,8 +266,8 @@ hashFunction: {custom}
     t.plan(7);
 
     const copyOpts = {
-        src: 'tests/src',
-        dest: 'tests/dest',
+        src: src,
+        dest: dest,
         hashFunction(content) {
             // borschik
             return crypto.createHash('sha1')
