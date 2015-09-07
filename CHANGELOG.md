@@ -1,3 +1,12 @@
+<a name="2.1.3"></a>
+## 2.1.3 (2015-09-07)
+
+
+* added new tests, fix minor error ([dc9cc41](https://github.com/geut/postcss-copy/commit/dc9cc41))
+* remove async task from roadmap in the readme ([cf4bd3a](https://github.com/geut/postcss-copy/commit/cf4bd3a))
+
+
+
 <a name="2.1.1"></a>
 ## 2.1.1 (2015-09-07)
 
