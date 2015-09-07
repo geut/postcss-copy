@@ -80,6 +80,41 @@ test('options test', (t) => {
     t.end();
 });
 
+test(`invalid url() test`, (t) => {
+    deleteDest(t);
+    t.plan(2);
+
+    const copyOpts = {
+        src: src,
+        dest: dest
+    };
+
+    processStyle('invalid.css', copyOpts)
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('assets/b6c8f21e92b50900.jpg')) &&
+                css.match(makeRegex('data:image/gif;base64,R0lGOD')),
+                '@invalid.css => Ignore if the url() is not valid.'
+            );
+        })
+        .catch((err) => {
+            t.fail(`@invalid.css => ${err}`);
+        });
+
+    processStyle('not-found.css', copyOpts)
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('assets/b6c8f21e92b50900.jpg')) &&
+                css.match(makeRegex('images/image-not-found.jpg')),
+                '@not-found.css => Ignore if the asset is not found ' +
+                'in the src path.'
+            );
+        })
+        .catch((err) => {
+            t.fail(`@not-found.css => ${err}`);
+        });
+});
+
 test(`default process test =>
 template: 'assets/[hash].[ext]'
 `, (t) => {

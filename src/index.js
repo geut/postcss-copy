@@ -72,11 +72,13 @@ function createUrl(urlMeta, newPath) {
  */
 function readFile(filepath) {
     return new Promise((resolve, reject) => {
-        try {
-            resolve(fs.readFileSync(filepath));
-        } catch (e) {
-            reject(`Can't read the file in ${filepath}`);
-        }
+        fs.readFile(filepath, (err, data) => {
+            if (err) {
+                reject(`Can't read the file in ${filepath}`);
+            } else {
+                resolve(data);
+            }
+        });
     });
 }
 
@@ -91,12 +93,13 @@ function readFile(filepath) {
  */
 function writeFile(fileMeta) {
     return new Promise((resolve, reject) => {
-        try {
-            fs.writeFileSync(fileMeta.resultAbsolutePath, fileMeta.content);
-            resolve(fileMeta);
-        } catch (e) {
-            reject(`Can't write in ${fileMeta.resultAbsolutePath}`);
-        }
+        fs.writeFile(fileMeta.resultAbsolutePath, fileMeta.content, (err) => {
+            if (err) {
+                reject(`Can't write in ${fileMeta.resultAbsolutePath}`);
+            } else {
+                resolve(fileMeta);
+            }
+        });
     });
 }
 
@@ -196,6 +199,10 @@ function processCopy(result, urlMeta, opts, decl) {
         ) + fileMeta.extra;
 
         return createUrl(urlMeta, resultUrl);
+    })
+    .catch((err) => {
+        decl.warn(result, err);
+        return createUrl(urlMeta);
     });
 }
 
@@ -208,7 +215,7 @@ function processCopy(result, urlMeta, opts, decl) {
  * @return {void}
  */
 function processDecl(result, decl, opts) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         reduceFunctionCall(decl.value, 'url', (value) => {
             const urlMeta = getUrlMetaData(value);
 
@@ -218,7 +225,9 @@ function processDecl(result, decl, opts) {
                 urlMeta.value.indexOf('#') === 0 ||
                 /^[a-z]+:\/\//.test(urlMeta.value)
             ) {
-                return createUrl(urlMeta);
+                decl.value = createUrl(urlMeta);
+                resolve();
+                return;
             }
 
             processCopy(result, urlMeta, opts, decl)
@@ -227,7 +236,7 @@ function processDecl(result, decl, opts) {
                 resolve();
             })
             .catch((error) => {
-                reject(`Error in postcss-copy: ${error}`);
+                result.warn(error, { node: decl });
             });
         });
     });
