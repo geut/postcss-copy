@@ -4,7 +4,7 @@
   "description": "A postcss plugin to copy all assets referenced in CSS to a custom destination folder and updating the URLs.",
   "main": "index.js",
   "dependencies": {
-    "fs-extra": "^0.23.1",
+    "mkdirp": "^0.5.1",
     "path-exists": "^2.0.0",
     "postcss": "^5.0.1",
     "reduce-function-call": "^1.0.1"
@@ -22,8 +22,9 @@
   "scripts": {
     "test": "node tests/index.js | tap-spec",
     "clean": "rm -rf dist",
-    "build": "npm run clean && babel src --source-maps --optional runtime --out-dir dist --ignore /tests/",
-    "start": "babel src --watch --source-maps --optional runtime --out-dir dist --ignore /tests/",
+    "build": "npm run clean && babel src --source-maps --optional runtime --out-dir dist",
+    "start": "babel src --watch --source-maps --optional runtime --out-dir dist",
+    "prepublish": "npm run build",
     "debug": "iron-node tests/index.js"
   },
   "repository": {

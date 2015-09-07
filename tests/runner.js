@@ -3,7 +3,7 @@ import postcss from 'postcss';
 import copy from '../src/index.js';
 import pathExists from 'path-exists';
 import path from 'path';
-import fs from 'fs-extra';
+import fs from 'fs';
 import crypto from 'crypto';
 
 /**
@@ -22,7 +22,9 @@ function processStyle(filename, opts = {}) {
         .process(file, {
             from: 'tests/src/' + filename
         })
-        .css;
+        .then((result) => {
+            return result.css;
+        });
 }
 
 function makeRegex(str) {
@@ -41,22 +43,34 @@ function testFileExists(t, file) {
         });
 }
 
-function deleteDest() {
-    fs.removeSync('tests/dest');
+function deleteDest(pathDest = 'tests/dest') {
+    if (fs.existsSync(pathDest)) {
+        fs.readdirSync(pathDest).forEach((file) => {
+            const curPath = pathDest + '/' + file;
+            if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteDest(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(pathDest);
+    }
 }
 
 test('options test', (t) => {
     t.throws(() => {
         processStyle('index.css');
     },
-        null,
+        /undefined/,
         'Throw an exception if the `src` option is not setted.'
     );
 
     t.throws(() => {
-        processStyle('index.css', {src: 'setted'});
+        processStyle('index.css', {
+            src: 'setted'
+        });
     },
-        null,
+        /undefined/,
         'Throw an exception if the `dest` option is not setted.'
     );
 
@@ -65,8 +79,7 @@ test('options test', (t) => {
 
 test(`default process test =>
 template: 'assets/[hash].[ext]'
-`,
-(t) => {
+`, (t) => {
     deleteDest(t);
     t.plan(7);
 
@@ -76,40 +89,42 @@ template: 'assets/[hash].[ext]'
         template: 'assets/[hash].[ext]'
     };
 
-    const indexCss = processStyle('index.css', copyOpts);
+    processStyle('index.css', copyOpts)
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('assets/b6c8f21e92b50900.jpg')),
+                '@index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+                ),
+                '@index.css => process url image (with parameters)'
+            );
 
-    t.ok(
-        indexCss.match(makeRegex('assets/b6c8f21e92b50900.jpg')),
-        '@index.css => process url image (simple)'
-    );
-    t.ok(
-        indexCss.match(
-            makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
-        ),
-        '@index.css => process url image (with parameters)'
-    );
+            return processStyle('component/index.css', copyOpts);
+        })
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('../assets/27da26a06634b050.jpg')),
+                '@component/index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('../assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+                ),
+                '@component/index.css => process url image (with parameters)'
+            );
 
-    const componentCss = processStyle('component/index.css', copyOpts);
-    t.ok(
-        componentCss.match(makeRegex('../assets/27da26a06634b050.jpg')),
-        '@component/index.css => process url image (simple)'
-    );
-    t.ok(
-        componentCss.match(
-            makeRegex('../assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
-        ),
-        '@component/index.css => process url image (with parameters)'
-    );
-
-    testFileExists(t, 'assets/b6c8f21e92b50900.jpg');
-    testFileExists(t, 'assets/0ed7c955a2951f04.jpg');
-    testFileExists(t, 'assets/27da26a06634b050.jpg');
+            testFileExists(t, 'assets/b6c8f21e92b50900.jpg');
+            testFileExists(t, 'assets/0ed7c955a2951f04.jpg');
+            testFileExists(t, 'assets/27da26a06634b050.jpg');
+        });
 });
 
 test(`process test =>
 template: '[path]/[hash].[ext]'
-`,
-(t) => {
+`, (t) => {
     deleteDest(t);
     t.plan(7);
 
@@ -119,39 +134,41 @@ template: '[path]/[hash].[ext]'
         template: '[path]/[hash].[ext]'
     };
 
-    const indexCss = processStyle('index.css', copyOpts);
-    t.ok(
-        indexCss.match(makeRegex('images/b6c8f21e92b50900.jpg')),
-        '@index.css => process url image (simple)'
-    );
-    t.ok(
-        indexCss.match(
-            makeRegex('images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
-        ),
-        '@index.css => process url image (with parameters)'
-    );
+    processStyle('index.css', copyOpts)
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('images/b6c8f21e92b50900.jpg')),
+                '@index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+                ),
+                '@index.css => process url image (with parameters)'
+            );
+            return processStyle('component/index.css', copyOpts);
+        })
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('images/27da26a06634b050.jpg')),
+                '@component/index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('../images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+                ),
+                '@component/index.css => process url image (with parameters)'
+            );
 
-    const componentCss = processStyle('component/index.css', copyOpts);
-    t.ok(
-        componentCss.match(makeRegex('images/27da26a06634b050.jpg')),
-        '@component/index.css => process url image (simple)'
-    );
-    t.ok(
-        componentCss.match(
-            makeRegex('../images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
-        ),
-        '@component/index.css => process url image (with parameters)'
-    );
-
-    testFileExists(t, 'images/b6c8f21e92b50900.jpg');
-    testFileExists(t, 'images/0ed7c955a2951f04.jpg');
-    testFileExists(t, 'component/images/27da26a06634b050.jpg');
+            testFileExists(t, 'images/b6c8f21e92b50900.jpg');
+            testFileExists(t, 'images/0ed7c955a2951f04.jpg');
+            testFileExists(t, 'component/images/27da26a06634b050.jpg');
+        });
 });
 
 test(`process test =>
 template: '[path]/[name].[ext]'
-`,
-(t) => {
+`, (t) => {
     deleteDest(t);
     t.plan(7);
 
@@ -161,40 +178,42 @@ template: '[path]/[name].[ext]'
         template: '[path]/[name].[ext]'
     };
 
-    const indexCss = processStyle('index.css', copyOpts);
-    t.ok(
-        indexCss.match(makeRegex('images/other.jpg')),
-        '@index.css => process url image (simple)'
-    );
-    t.ok(
-        indexCss.match(
-            makeRegex('images/test.jpg?#iefix&v=4.4.0')
-        ),
-        '@index.css => process url image (with parameters)'
-    );
+    processStyle('index.css', copyOpts)
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('images/other.jpg')),
+                '@index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('images/test.jpg?#iefix&v=4.4.0')
+                ),
+                '@index.css => process url image (with parameters)'
+            );
+            return processStyle('component/index.css', copyOpts);
+        })
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('images/component.jpg')),
+                '@component/index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('../images/test.jpg?#iefix&v=4.4.0')
+                ),
+                '@component/index.css => process url image (with parameters)'
+            );
 
-    const componentCss = processStyle('component/index.css', copyOpts);
-    t.ok(
-        componentCss.match(makeRegex('images/component.jpg')),
-        '@component/index.css => process url image (simple)'
-    );
-    t.ok(
-        componentCss.match(
-            makeRegex('../images/test.jpg?#iefix&v=4.4.0')
-        ),
-        '@component/index.css => process url image (with parameters)'
-    );
-
-    testFileExists(t, 'images/other.jpg');
-    testFileExists(t, 'images/test.jpg');
-    testFileExists(t, 'component/images/component.jpg');
+            testFileExists(t, 'images/other.jpg');
+            testFileExists(t, 'images/test.jpg');
+            testFileExists(t, 'component/images/component.jpg');
+        });
 });
 
 test(`process test =>
 template: 'assets/[hash].[ext]',
 keepRelativePath: false
-`,
-(t) => {
+`, (t) => {
     deleteDest(t);
     t.plan(7);
 
@@ -204,41 +223,42 @@ keepRelativePath: false
         keepRelativePath: false
     };
 
-    const indexCss = processStyle('index.css', copyOpts);
+    processStyle('index.css', copyOpts)
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('assets/b6c8f21e92b50900.jpg')),
+                '@index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+                ),
+                '@index.css => process url image (with parameters)'
+            );
+            return processStyle('component/index.css', copyOpts);
+        })
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('assets/27da26a06634b050.jpg')),
+                '@component/index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
+                ),
+                '@component/index.css => process url image (with parameters)'
+            );
 
-    t.ok(
-        indexCss.match(makeRegex('assets/b6c8f21e92b50900.jpg')),
-        '@index.css => process url image (simple)'
-    );
-    t.ok(
-        indexCss.match(
-            makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
-        ),
-        '@index.css => process url image (with parameters)'
-    );
-
-    const componentCss = processStyle('component/index.css', copyOpts);
-    t.ok(
-        componentCss.match(makeRegex('assets/27da26a06634b050.jpg')),
-        '@component/index.css => process url image (simple)'
-    );
-    t.ok(
-        componentCss.match(
-            makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0')
-        ),
-        '@component/index.css => process url image (with parameters)'
-    );
-
-    testFileExists(t, 'assets/b6c8f21e92b50900.jpg');
-    testFileExists(t, 'assets/0ed7c955a2951f04.jpg');
-    testFileExists(t, 'assets/27da26a06634b050.jpg');
+            testFileExists(t, 'assets/b6c8f21e92b50900.jpg');
+            testFileExists(t, 'assets/0ed7c955a2951f04.jpg');
+            testFileExists(t, 'assets/27da26a06634b050.jpg');
+        });
 });
 
 test(`process test =>
 template: 'assets/[hash].[ext]',
 hashFunction: {custom}
-`,
-(t) => {
+`, (t) => {
     deleteDest(t);
     t.plan(7);
 
@@ -257,34 +277,38 @@ hashFunction: {custom}
         }
     };
 
-    const indexCss = processStyle('index.css', copyOpts);
-    t.ok(
-        indexCss.match(makeRegex('assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg')),
-        '@index.css => process url image (simple)'
-    );
-    t.ok(
-        indexCss.match(
-            makeRegex('assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0')
-        ),
-        '@index.css => process url image (with parameters)'
-    );
+    processStyle('index.css', copyOpts)
+        .then((css) => {
+            t.ok(
+                css.match(makeRegex('assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg')),
+                '@index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg' +
+                        '?#iefix&v=4.4.0')
+                ),
+                '@index.css => process url image (with parameters)'
+            );
+            return processStyle('component/index.css', copyOpts);
+        })
+        .then((css) => {
+            t.ok(
+                css.match(
+                    makeRegex('../assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg')
+                ),
+                '@component/index.css => process url image (simple)'
+            );
+            t.ok(
+                css.match(
+                    makeRegex('../assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg' +
+                        '?#iefix&v=4.4.0')
+                ),
+                '@component/index.css => process url image (with parameters)'
+            );
 
-    const componentCss = processStyle('component/index.css', copyOpts);
-    t.ok(
-        componentCss.match(
-            makeRegex('../assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg')
-        ),
-        '@component/index.css => process url image (simple)'
-    );
-    t.ok(
-        componentCss.match(
-            makeRegex('../assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg' +
-            '?#iefix&v=4.4.0')
-        ),
-        '@component/index.css => process url image (with parameters)'
-    );
-
-    testFileExists(t, 'assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg');
-    testFileExists(t, 'assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg');
-    testFileExists(t, 'assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg');
+            testFileExists(t, 'assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg');
+            testFileExists(t, 'assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg');
+            testFileExists(t, 'assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg');
+        });
 });
