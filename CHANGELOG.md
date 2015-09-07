@@ -1,3 +1,11 @@
+<a name="2.1.0"></a>
+# 2.1.0 (2015-09-07)
+
+
+* delete option babel runtime ([3cf371b](https://github.com/geut/postcss-copy/commit/3cf371b))
+
+
+
 <a name="2.0.1"></a>
 ## 2.0.1 (2015-09-07)
 
