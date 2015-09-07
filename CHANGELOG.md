@@ -1,3 +1,11 @@
+<a name="2.0.0"></a>
+# 2.0.0 (2015-09-07)
+
+
+* major change: Switch to PostCSS Async, remove the fs-extra dependency ([87167e1](https://github.com/geut/postcss-copy/commit/87167e1))
+
+
+
 <a name="1.1.3"></a>
 ## 1.1.3 (2015-09-06)
 
