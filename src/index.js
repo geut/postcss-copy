@@ -6,7 +6,10 @@ import url from 'url';
 import crypto from 'crypto';
 import pathExists from 'path-exists';
 import mkdirp from 'mkdirp';
-import {_extend} from 'util';
+import {
+    _extend
+}
+from 'util';
 
 const tags = [
     'path',
@@ -37,8 +40,8 @@ function getUrlMetaData(string) {
     const urlMeta = {
         before: string.slice(0, string.indexOf(quote)),
         quote: quote,
-        value: quote
-            ? trimedString.substr(1, trimedString.length - 2)
+        value: quote ?
+            trimedString.substr(1, trimedString.length - 2)
             : trimedString,
         after: string.slice(string.lastIndexOf(quote) + 1)
     };
@@ -178,32 +181,32 @@ function processCopy(result, urlMeta, opts, decl) {
         : opts.src;
 
     return getFileMeta(dirname, urlMeta.value, opts)
-    .then((fileMeta) => {
-        let tpl = opts.template;
-        tags.forEach((tag) => {
-            tpl = tpl.replace(
-                '[' + tag + ']',
-                fileMeta[tag] ? fileMeta[tag] : opts[tag]
-            );
+        .then((fileMeta) => {
+            let tpl = opts.template;
+            tags.forEach((tag) => {
+                tpl = tpl.replace(
+                    '[' + tag + ']',
+                    fileMeta[tag] ? fileMeta[tag] : opts[tag]
+                );
+            });
+            fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
+
+            return copyFile(fileMeta);
+        })
+        .then((fileMeta) => {
+            const resultUrl = path.relative(
+                opts.keepRelativePath
+                    ? dirname.replace(opts.src, opts.dest)
+                    : opts.dest,
+                fileMeta.resultAbsolutePath
+            ) + fileMeta.extra;
+
+            return createUrl(urlMeta, resultUrl);
+        })
+        .catch((err) => {
+            decl.warn(result, err);
+            return createUrl(urlMeta);
         });
-        fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
-
-        return copyFile(fileMeta);
-    })
-    .then((fileMeta) => {
-        const resultUrl = path.relative(
-            opts.keepRelativePath
-                ? dirname.replace(opts.src, opts.dest)
-                : opts.dest,
-            fileMeta.resultAbsolutePath
-        ) + fileMeta.extra;
-
-        return createUrl(urlMeta, resultUrl);
-    })
-    .catch((err) => {
-        decl.warn(result, err);
-        return createUrl(urlMeta);
-    });
 }
 
 /**
@@ -231,13 +234,15 @@ function processDecl(result, decl, opts) {
             }
 
             processCopy(result, urlMeta, opts, decl)
-            .then((newUrl) => {
-                decl.value = newUrl;
-                resolve();
-            })
-            .catch((error) => {
-                result.warn(error, { node: decl });
-            });
+                .then((newUrl) => {
+                    decl.value = newUrl;
+                    resolve();
+                })
+                .catch((error) => {
+                    result.warn(error, {
+                        node: decl
+                    });
+                });
         });
     });
 }
