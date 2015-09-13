@@ -1,3 +1,14 @@
+<a name="2.1.7"></a>
+## 2.1.7 (2015-09-13)
+
+
+* don't rewrite the assets if the file exists and add test to check this feature ([3fec4f0](https://github.com/geut/postcss-copy/commit/3fec4f0))
+* format code ([8d88b62](https://github.com/geut/postcss-copy/commit/8d88b62))
+* format code ([f9874ef](https://github.com/geut/postcss-copy/commit/f9874ef))
+* refactory common tests ([83b2861](https://github.com/geut/postcss-copy/commit/83b2861))
+
+
+
 <a name="2.1.3"></a>
 ## 2.1.3 (2015-09-07)
 
