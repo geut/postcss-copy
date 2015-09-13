@@ -22,7 +22,8 @@
       "assets/b6c8f21e92b50900.jpg",
       "assets/0ed7c955a2951f04.jpg",
       "assets/27da26a06634b050.jpg"
-    ]
+    ],
+    "no-modified": "assets/0ed7c955a2951f04.jpg"
   }
 }, {
   "name": "process test => template: '[path]/[hash].[ext]'",
@@ -48,7 +49,8 @@
       "images/b6c8f21e92b50900.jpg",
       "images/0ed7c955a2951f04.jpg",
       "component/images/27da26a06634b050.jpg"
-    ]
+    ],
+    "no-modified": "assets/0ed7c955a2951f04.jpg"
   }
 },{
   "name": "process test => template: '[path]/[name].[ext]'",
@@ -74,7 +76,8 @@
       "images/other.jpg",
       "images/test.jpg",
       "component/images/component.jpg"
-    ]
+    ],
+    "no-modified": "images/test.jpg"
   }
 },{
   "name": "process test => template: 'assets/[hash].[ext]', keepRelativePath: false",
@@ -100,7 +103,8 @@
       "assets/b6c8f21e92b50900.jpg",
       "assets/0ed7c955a2951f04.jpg",
       "assets/27da26a06634b050.jpg"
-    ]
+    ],
+    "no-modified": "assets/0ed7c955a2951f04.jpg"
   }
 },{
   "name": "process test => template: 'assets/[hash].[ext]', hashFunction: {custom}",
@@ -126,6 +130,7 @@
       "assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg",
       "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg",
       "assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg"
-    ]
+    ],
+    "no-modified": "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg"
   }
 }]

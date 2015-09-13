@@ -111,9 +111,10 @@ function writeFile(fileMeta) {
 function copyFile(fileMeta) {
     return pathExists(fileMeta.resultAbsolutePath)
         .then((exists) => {
-            if (!exists) {
-                mkdirp.sync(path.dirname(fileMeta.resultAbsolutePath));
+            if (exists) {
+                return fileMeta;
             }
+            mkdirp.sync(path.dirname(fileMeta.resultAbsolutePath));
             return writeFile(fileMeta);
         });
 }

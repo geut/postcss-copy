@@ -121,7 +121,7 @@ import commonTests from './common-tests.json';
 commonTests.forEach((cTest) => {
     test(cTest.name, (t) => {
         deleteDest(t);
-        t.plan(7);
+        t.plan(8);
 
         if (cTest.opts.hashFunction === 'custom') {
             cTest.opts.hashFunction = (content) => {
@@ -140,6 +140,9 @@ commonTests.forEach((cTest) => {
             dest: dest
         }, cTest.opts);
 
+        let oldTime;
+        let newTime;
+
         processStyle('index.css', copyOpts)
             .then((css) => {
                 cTest.assertions.index.forEach((assertion) => {
@@ -148,6 +151,10 @@ commonTests.forEach((cTest) => {
                         assertion.desc
                     );
                 });
+
+                oldTime = fs.statSync(
+                    path.join(dest, cTest.assertions['no-modified'])
+                ).mtime.getTime();
 
                 return processStyle('component/index.css', copyOpts);
             })
@@ -158,6 +165,15 @@ commonTests.forEach((cTest) => {
                         assertion.desc
                     );
                 });
+
+                newTime = fs.statSync(
+                    path.join(dest, cTest.assertions['no-modified'])
+                ).mtime.getTime();
+
+                t.ok(
+                    oldTime === newTime,
+                    `${cTest.assertions['no-modified']} was not modified.`
+                );
 
                 cTest.assertions.exists.forEach((file) => {
                     testFileExists(t, file);
