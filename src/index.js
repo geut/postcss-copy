@@ -107,14 +107,23 @@ function writeFile(fileMeta) {
  * @param  {[type]} filepath [description]
  * @return {[type]}          [description]
  */
-function copyFile(fileMeta) {
+function copyFile(fileMeta, transform) {
     return pathExists(fileMeta.resultAbsolutePath)
         .then((exists) => {
             if (exists) {
+                fileMeta.exists = true;
                 return fileMeta;
             }
+
+            fileMeta.exists = false;
             mkdirp.sync(path.dirname(fileMeta.resultAbsolutePath));
-            return writeFile(fileMeta);
+            return transform(fileMeta);
+        })
+        .then((fmTransform) => {
+            if (fmTransform.exists) {
+                return fmTransform;
+            }
+            return writeFile(fmTransform);
         });
 }
 
@@ -179,9 +188,6 @@ function processCopy(result, urlMeta, opts, decl) {
 
     return getFileMeta(dirname, urlMeta.value, opts)
         .then((fileMeta) => {
-            return opts.transform(fileMeta);
-        })
-        .then((fileMeta) => {
             let tpl = opts.template;
             tags.forEach((tag) => {
                 tpl = tpl.replace(
@@ -191,7 +197,7 @@ function processCopy(result, urlMeta, opts, decl) {
             });
             fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
 
-            return copyFile(fileMeta);
+            return copyFile(fileMeta, opts.transform);
         })
         .then((fileMeta) => {
             const resultUrl = path.relative(
