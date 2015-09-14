@@ -205,6 +205,9 @@ test('check-transform', (t) => {
         dest: dest,
         template: '[path]/[name].[ext]',
         transform(fileMeta) {
+            if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
+                return fileMeta;
+            }
             return new Promise((resolve, reject) => {
                 new Imagemin()
                     .src(fileMeta.contents)
