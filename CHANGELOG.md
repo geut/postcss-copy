@@ -1,3 +1,14 @@
+<a name="2.2.0"></a>
+# 2.2.0 (2015-09-14)
+
+
+* add eslint to the test script, remove test node 0.10 from travis ([02cbcd4](https://github.com/geut/postcss-copy/commit/02cbcd4))
+* fix readme ([61f22c8](https://github.com/geut/postcss-copy/commit/61f22c8))
+* fix readme ([87ec0ae](https://github.com/geut/postcss-copy/commit/87ec0ae))
+* new option/feature: transform and add test for it ([131e1a3](https://github.com/geut/postcss-copy/commit/131e1a3))
+
+
+
 <a name="2.1.7"></a>
 ## 2.1.7 (2015-09-13)
 
