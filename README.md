@@ -71,7 +71,7 @@ By default the copy process keep the relative path between each ```asset``` and 
 ##### transform
 Extend the copy method to apply a transform in the contents (e.g: optimize images).
 
-**IMPORTANT:** The function must return the fileMeta (modified) or a promise that with the fileMeta when is resolved.
+**IMPORTANT:** The function must return the fileMeta (modified) or a promise using ```resolve(fileMeta)```.
 ```js
 var Imagemin = require('imagemin');
 
