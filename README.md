@@ -42,7 +42,7 @@ Define the dest path of your CSS files and assets.
 
 ##### template (default = 'assets/[hash].[ext]')
 Define a template name for your final url assets.
-* **[hash]**: Let you use a hash name based on the content of the file.
+* **[hash]**: Let you use a hash name based on the contents of the file.
 * **[name]**: Real name of your asset.
 * **[path]**: Original relative path of your asset.
 * **[ext]**: Extension of the asset.
@@ -52,10 +52,10 @@ Define a custom function to create the hash name.
 ```js
 var copyOpts = {
     ...,
-    hashFunction(content) {
+    hashFunction(contents) {
         // borschik
         return crypto.createHash('sha1')
-            .update(content)
+            .update(contents)
             .digest('base64')
             .replace(/\+/g, '-')
             .replace(/\//g, '_')
@@ -93,6 +93,34 @@ gulp.task('buildCss', function () {
         .pipe(postcss(processors))
         .pipe(gulp.dest('dist'));
 });
+```
+
+##### transform
+Extend the copy method to apply a transform in the contents (e.g: optimize images).
+
+**IMPORTANT:** The function must return the fileMeta (modified) or a promise that with the fileMeta when is resolved.
+```js
+var Imagemin = require('imagemin');
+
+var copyOpts = {
+    ...,
+    transform(fileMeta) {
+        return new Promise((resolve, reject) => {
+            new Imagemin()
+                .src(fileMeta.contents)
+                .use(Imagemin.jpegtran({
+                    progressive: true
+                }))
+                .run((err, files) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    fileMeta.contents = files[0].contents;
+                    resolve(fileMeta); // <- important
+                });
+        });
+    }
+};
 ```
 
 ## On roadmap

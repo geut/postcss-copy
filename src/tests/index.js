@@ -6,6 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
 import {_extend} from 'util';
+import Imagemin from 'imagemin';
 
 const src = 'src/tests/src';
 const dest = 'src/tests/dest';
@@ -61,6 +62,8 @@ function deleteDest(pathDest = 'src/tests/dest') {
     }
 }
 
+deleteDest();
+
 test('options test', (t) => {
     t.throws(() => {
         processStyle('index.css');
@@ -82,7 +85,6 @@ test('options test', (t) => {
 });
 
 test(`invalid url() test`, (t) => {
-    deleteDest(t);
     t.plan(2);
 
     const copyOpts = {
@@ -120,14 +122,13 @@ import commonTests from './common-tests.json';
 
 commonTests.forEach((cTest) => {
     test(cTest.name, (t) => {
-        deleteDest(t);
         t.plan(8);
 
         if (cTest.opts.hashFunction === 'custom') {
-            cTest.opts.hashFunction = (content) => {
+            cTest.opts.hashFunction = (contents) => {
                 // borschik
                 return crypto.createHash('sha1')
-                    .update(content)
+                    .update(contents)
                     .digest('base64')
                     .replace(/\+/g, '-')
                     .replace(/\//g, '_')
@@ -180,4 +181,46 @@ commonTests.forEach((cTest) => {
                 });
             });
     });
+});
+
+test('check-transform', (t) => {
+    t.plan(1);
+
+    const copyOpts = {
+        src: src,
+        dest: dest,
+        template: '[path]/[name].[ext]',
+        transform(fileMeta) {
+            return new Promise((resolve, reject) => {
+                new Imagemin()
+                    .src(fileMeta.contents)
+                    .use(Imagemin.jpegtran({
+                        progressive: true
+                    }))
+                    .run((err, files) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        fileMeta.contents = files[0].contents;
+                        resolve(fileMeta);
+                    });
+            });
+        }
+    };
+
+    processStyle('check-transform.css', copyOpts)
+        .then(() => {
+            const oldSize = fs
+                .statSync(path.join(src, 'images/bigimage.jpg'))
+                .size;
+
+            const newSize = fs
+                .statSync(path.join(dest, 'images/bigimage.jpg'))
+                .size;
+
+            t.ok(
+                newSize < oldSize,
+                'Optimize bigimage.jpg'
+            );
+        });
 });

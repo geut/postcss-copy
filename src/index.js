@@ -87,13 +87,12 @@ function readFile(filepath) {
  *
  * function to write the asset file in dest
  *
- * @param  {string} filepath
- * @param  {string} content
+ * @param  {object} fileMeta
  * @return {contents|boolean}
  */
 function writeFile(fileMeta) {
     return new Promise((resolve, reject) => {
-        fs.writeFile(fileMeta.resultAbsolutePath, fileMeta.content, (err) => {
+        fs.writeFile(fileMeta.resultAbsolutePath, fileMeta.contents, (err) => {
             if (err) {
                 reject(`Can't write in ${fileMeta.resultAbsolutePath}`);
             } else {
@@ -133,10 +132,10 @@ function copyFile(fileMeta) {
 function getFileMeta(dirname, value, opts) {
     const parseUrl = url.parse(path.resolve(dirname, value), true);
     return readFile(parseUrl.pathname)
-        .then((content) => {
+        .then((contents) => {
             const fileMeta = {};
-            fileMeta.content = content;
-            fileMeta.hash = opts.hashFunction(fileMeta.content);
+            fileMeta.contents = contents;
+            fileMeta.hash = opts.hashFunction(fileMeta.contents);
             fileMeta.fullName = path.basename(parseUrl.pathname);
             // name without extension
             fileMeta.name = path.basename(
@@ -179,6 +178,9 @@ function processCopy(result, urlMeta, opts, decl) {
         : opts.src;
 
     return getFileMeta(dirname, urlMeta.value, opts)
+        .then((fileMeta) => {
+            return opts.transform(fileMeta);
+        })
         .then((fileMeta) => {
             let tpl = opts.template;
             tags.forEach((tag) => {
@@ -260,11 +262,14 @@ function init(userOpts = {}) {
     let opts = {
         template: 'assets/[hash].[ext]',
         keepRelativePath: true,
-        hashFunction(content) {
+        hashFunction(contents) {
             return crypto.createHash('sha1')
-                .update(content)
+                .update(contents)
                 .digest('hex')
                 .substr(0, 16);
+        },
+        transform(fileMeta) {
+            return fileMeta;
         }
     };
     opts = _extend(opts, userOpts);

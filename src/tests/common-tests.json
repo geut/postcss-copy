@@ -50,7 +50,7 @@
       "images/0ed7c955a2951f04.jpg",
       "component/images/27da26a06634b050.jpg"
     ],
-    "no-modified": "assets/0ed7c955a2951f04.jpg"
+    "no-modified": "images/0ed7c955a2951f04.jpg"
   }
 },{
   "name": "process test => template: '[path]/[name].[ext]'",
