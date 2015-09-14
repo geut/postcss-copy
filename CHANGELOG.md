@@ -1,3 +1,12 @@
+<a name="2.2.2"></a>
+## 2.2.2 (2015-09-14)
+
+
+* fix issue #1: allow extra rules before/after url ([3ab7cff](https://github.com/geut/postcss-copy/commit/3ab7cff)), closes [#1](https://github.com/geut/postcss-copy/issues/1)
+* simple refactory in copyFile func ([40c3f88](https://github.com/geut/postcss-copy/commit/40c3f88))
+
+
+
 <a name="2.2.1"></a>
 ## 2.2.1 (2015-09-14)
 
