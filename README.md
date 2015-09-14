@@ -68,33 +68,6 @@ var copyOpts = {
 #####  keepRelativePath (default = true)
 By default the copy process keep the relative path between each ```asset``` and the path of his  ```CSS file```. You can change this behavior setting the option in false and each ```asset``` will define the path based only in the ```dest``` path option (see [Using copy with postcss-import](#using-postcss-import))
 
-## <a name="using-postcss-import"></a> Using copy with postcss-import
-[postcss-import](https://github.com/postcss/postcss-import) is a great plugin that allow us work our css files in a modular way with the same behavior of CommonJS.
-Since this plugin create at the end only one file with all your CSS files inline (loaded with the @import keyword) you need disabled in ```copy``` the option ```keepRelativePath```:
-
-```js
-var gulp = require('gulp');
-var postcss = require('gulp-postcss');
-var postcssCopy = require('postcss-copy');
-var postcssImport = require('postcss-import');
-
-gulp.task('buildCss', function () {
-    var processors = [
-        postcssImport(),
-        postcssCopy({
-            src: 'src',
-            dest: 'dist',
-            keepRelativePath: false // required to work with postcss-import
-        })
-    ];
-
-    return gulp
-        .src('src/index.css')
-        .pipe(postcss(processors))
-        .pipe(gulp.dest('dist'));
-});
-```
-
 ##### transform
 Extend the copy method to apply a transform in the contents (e.g: optimize images).
 
@@ -121,6 +94,33 @@ var copyOpts = {
         });
     }
 };
+```
+
+## <a name="using-postcss-import"></a> Using copy with postcss-import
+[postcss-import](https://github.com/postcss/postcss-import) is a great plugin that allow us work our css files in a modular way with the same behavior of CommonJS.
+Since this plugin create at the end only one file with all your CSS files inline (loaded with the @import keyword) you need disabled in ```copy``` the option ```keepRelativePath```:
+
+```js
+var gulp = require('gulp');
+var postcss = require('gulp-postcss');
+var postcssCopy = require('postcss-copy');
+var postcssImport = require('postcss-import');
+
+gulp.task('buildCss', function () {
+    var processors = [
+        postcssImport(),
+        postcssCopy({
+            src: 'src',
+            dest: 'dist',
+            keepRelativePath: false // required to work with postcss-import
+        })
+    ];
+
+    return gulp
+        .src('src/index.css')
+        .pipe(postcss(processors))
+        .pipe(gulp.dest('dist'));
+});
 ```
 
 ## On roadmap
