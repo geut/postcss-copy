@@ -110,12 +110,11 @@ function writeFile(fileMeta) {
 function copyFile(fileMeta, transform) {
     return pathExists(fileMeta.resultAbsolutePath)
         .then((exists) => {
+            fileMeta.exists = exists;
             if (exists) {
-                fileMeta.exists = true;
                 return fileMeta;
             }
 
-            fileMeta.exists = false;
             mkdirp.sync(path.dirname(fileMeta.resultAbsolutePath));
             return transform(fileMeta);
         })
