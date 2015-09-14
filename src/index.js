@@ -53,13 +53,11 @@ function getUrlMetaData(string) {
  * @return {String} new url()
  */
 function createUrl(urlMeta, newPath) {
-    return 'url(' +
-        urlMeta.before +
+    return urlMeta.before +
         urlMeta.quote +
         (newPath || urlMeta.value) +
         urlMeta.quote +
-        urlMeta.after +
-        ')';
+        urlMeta.after;
 }
 
 /**
@@ -240,7 +238,7 @@ function processDecl(result, decl, opts) {
 
             processCopy(result, urlMeta, opts, decl)
                 .then((newUrl) => {
-                    decl.value = newUrl;
+                    decl.value = decl.value.replace(value, newUrl);
                     resolve();
                 })
                 .catch((error) => {

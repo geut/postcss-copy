@@ -10,6 +10,10 @@
     }, {
       "desc": "@index.css => process url image (with parameters)",
       "match": "assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+    }, {
+      "desc": "@index.css => extra rules in image (simple)",
+      "match": "url('assets/b6c8f21e92b50900.jpg') center center",
+      "regex-simple": true
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
@@ -37,6 +41,10 @@
     }, {
       "desc": "@index.css => process url image (with parameters)",
       "match": "images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+    }, {
+      "desc": "@index.css => extra rules in image (simple)",
+      "match": "url('images/b6c8f21e92b50900.jpg') center center",
+      "regex-simple": true
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
@@ -64,6 +72,10 @@
     }, {
       "desc": "@index.css => process url image (with parameters)",
       "match": "images/test.jpg?#iefix&v=4.4.0"
+    }, {
+      "desc": "@index.css => extra rules in image (simple)",
+      "match": "url('images/other.jpg') center center",
+      "regex-simple": true
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
@@ -91,6 +103,10 @@
     }, {
       "desc": "@index.css => process url image (with parameters)",
       "match": "assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+    }, {
+      "desc": "@index.css => extra rules in image (simple)",
+      "match": "url('assets/b6c8f21e92b50900.jpg') center center",
+      "regex-simple": true
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
@@ -118,6 +134,10 @@
     }, {
       "desc": "@index.css => process url image (with parameters)",
       "match": "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0"
+    }, {
+      "desc": "@index.css => extra rules in image (simple)",
+      "match": "url('assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg') center center",
+      "regex-simple": true
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",

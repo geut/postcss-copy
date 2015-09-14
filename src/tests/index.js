@@ -32,9 +32,17 @@ function processStyle(filename, opts = {}) {
         });
 }
 
-function makeRegex(str) {
+function makeRegex(str, simple = false) {
+    let value;
+    if (simple) {
+        value = str;
+    } else {
+        value = '\'' + str + '\'';
+    }
     return new RegExp(
-        ('\'' + str + '\'')
+        value
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)')
         .replace(/\//g, '\\\/')
         .replace(/\./g, '\\.')
         .replace(/\?/g, '\\?')
@@ -122,7 +130,7 @@ import commonTests from './common-tests.json';
 
 commonTests.forEach((cTest) => {
     test(cTest.name, (t) => {
-        t.plan(8);
+        t.plan(9);
 
         if (cTest.opts.hashFunction === 'custom') {
             cTest.opts.hashFunction = (contents) => {
@@ -148,7 +156,10 @@ commonTests.forEach((cTest) => {
             .then((css) => {
                 cTest.assertions.index.forEach((assertion) => {
                     t.ok(
-                        css.match(makeRegex(assertion.match)),
+                        css.match(makeRegex(
+                            assertion.match,
+                            assertion['regex-simple']
+                        )),
                         assertion.desc
                     );
                 });
@@ -162,7 +173,10 @@ commonTests.forEach((cTest) => {
             .then((css) => {
                 cTest.assertions.component.forEach((assertion) => {
                     t.ok(
-                        css.match(makeRegex(assertion.match)),
+                        css.match(makeRegex(
+                            assertion.match,
+                            assertion['regex-simple']
+                        )),
                         assertion.desc
                     );
                 });

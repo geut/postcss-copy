@@ -5,3 +5,7 @@ body {
 div {
     background: url('images/other.jpg');
 }
+
+span {
+    background: url('images/other.jpg') center center;
+}
