@@ -1,3 +1,11 @@
+<a name="2.2.1"></a>
+## 2.2.1 (2015-09-14)
+
+
+* fix issue: transform if the file not exist in the dest path ([d1deb43](https://github.com/geut/postcss-copy/commit/d1deb43))
+
+
+
 <a name="2.2.0"></a>
 # 2.2.0 (2015-09-14)
 
