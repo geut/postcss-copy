@@ -61,26 +61,6 @@ function createUrl(urlMeta, newPath) {
 }
 
 /**
- * readFile
- *
- * function to read the src file
- *
- * @param  {string} filepath
- * @return {contents|boolean}
- */
-function readFile(filepath) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(filepath, (err, data) => {
-            if (err) {
-                reject(`Can't read the file in ${filepath}`);
-            } else {
-                resolve(data);
-            }
-        });
-    });
-}
-
-/**
  * writeFile
  *
  * function to write the asset file in dest
@@ -137,32 +117,68 @@ function copyFile(fileMeta, transform) {
  */
 function getFileMeta(dirname, value, opts) {
     const parseUrl = url.parse(path.resolve(dirname, value), true);
-    return readFile(parseUrl.pathname)
-        .then((contents) => {
-            const fileMeta = {};
-            fileMeta.contents = contents;
-            fileMeta.hash = opts.hashFunction(fileMeta.contents);
-            fileMeta.fullName = path.basename(parseUrl.pathname);
-            // name without extension
-            fileMeta.name = path.basename(
-                parseUrl.pathname,
-                path.extname(parseUrl.pathname)
-            );
-            // extension without the '.'
-            fileMeta.ext = path.extname(parseUrl.pathname).replace('.', '');
-            // the absolute path without the #hash param
-            fileMeta.absolutePath = parseUrl.pathname;
-            // path between the basePath and the filename
-            fileMeta.path = fileMeta
-                .absolutePath
-                .replace(opts.src, '')
-                .replace(fileMeta.fullName, '')
-                .replace(/^\/+|\/+$/gm, '');
-            fileMeta.extra = (parseUrl.search ? parseUrl.search : '') +
-                (parseUrl.hash ? parseUrl.hash : '');
+    const fileMeta = {};
 
-            return fileMeta;
+    // path between the basePath and the filename
+    let i = 0;
+    while (!fileMeta.src && i < opts.src.length) {
+        if (parseUrl.pathname.indexOf(opts.src[i]) !== -1) {
+            fileMeta.src = opts.src[i];
+        }
+        i++;
+    }
+
+    if (!(fileMeta.src)) {
+        throw new Error('Error in postcss-copy: "src" ' +
+        `not found in ${parseUrl.pathname}`);
+    }
+
+    return new Promise((resolve, reject) => {
+        fs.readFile(parseUrl.pathname, (err, contents) => {
+            if (err) {
+                reject(`Can't read the file in ${parseUrl.pathname}`);
+            } else {
+                fileMeta.contents = contents;
+                fileMeta.hash = opts.hashFunction(fileMeta.contents);
+                fileMeta.fullName = path.basename(parseUrl.pathname);
+                // name without extension
+                fileMeta.name = path.basename(
+                    parseUrl.pathname,
+                    path.extname(parseUrl.pathname)
+                );
+                // extension without the '.'
+                fileMeta.ext = path.extname(parseUrl.pathname).replace('.', '');
+                // the absolute path without the #hash param
+                fileMeta.absolutePath = parseUrl.pathname;
+
+                fileMeta.path = fileMeta
+                    .absolutePath
+                    .replace(fileMeta.src, '')
+                    .replace(fileMeta.fullName, '')
+                    .replace(/^\/+|\/+$/gm, '');
+                fileMeta.extra = (parseUrl.search ? parseUrl.search : '') +
+                    (parseUrl.hash ? parseUrl.hash : '');
+
+                resolve(fileMeta);
+            }
         });
+    });
+}
+
+/**
+ * update the url result
+ * @param {Object} decl postcss declaration
+ * @param {string} old value
+ * @param {Object} urlMeta url meta data
+ * @param  {String} new url
+ * @return {Object} return decl postcss declaration with url updated
+ */
+function updateUrl(decl, oldValue, urlMeta, resultUrl) {
+    decl.value = decl.value.replace(
+        oldValue,
+        createUrl(urlMeta, resultUrl)
+    );
+    return decl.value;
 }
 
 /**
@@ -172,16 +188,24 @@ function getFileMeta(dirname, value, opts) {
  * @param {Object} urlMeta url meta data
  * @param {Object} options
  * @param {Object} decl postcss declaration
+ * @param {string} old value
  * @return {String} new url
  */
-function processCopy(result, urlMeta, opts, decl) {
+function processCopy(result, urlMeta, opts, decl, oldValue) {
+    // ignore absolute urls, hasshes or data uris
+    if (urlMeta.value.indexOf('/') === 0 ||
+        urlMeta.value.indexOf('data:') === 0 ||
+        urlMeta.value.indexOf('#') === 0 ||
+        /^[a-z]+:\/\//.test(urlMeta.value)
+    ) {
+        updateUrl(decl, oldValue, urlMeta);
+    }
+
     /**
      * dirname of the read file css
      * @type {String}
      */
-    const dirname = decl.source && decl.source.input
-        ? path.dirname(decl.source.input.file)
-        : opts.src;
+    const dirname = path.dirname(decl.source.input.file);
 
     return getFileMeta(dirname, urlMeta.value, opts)
         .then((fileMeta) => {
@@ -199,16 +223,16 @@ function processCopy(result, urlMeta, opts, decl) {
         .then((fileMeta) => {
             const resultUrl = path.relative(
                 opts.keepRelativePath
-                    ? dirname.replace(opts.src, opts.dest)
+                    ? dirname.replace(fileMeta.src, opts.dest)
                     : opts.dest,
                 fileMeta.resultAbsolutePath
             ) + fileMeta.extra;
 
-            return createUrl(urlMeta, resultUrl);
+            return updateUrl(decl, oldValue, urlMeta, resultUrl);
         })
         .catch((err) => {
             decl.warn(result, err);
-            return createUrl(urlMeta);
+            return updateUrl(decl, oldValue, urlMeta);
         });
 }
 
@@ -221,32 +245,16 @@ function processCopy(result, urlMeta, opts, decl) {
  * @return {void}
  */
 function processDecl(result, decl, opts) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
+        const promises = [];
+
         reduceFunctionCall(decl.value, 'url', (value) => {
             const urlMeta = getUrlMetaData(value);
 
-            // ignore absolute urls, hasshes or data uris
-            if (urlMeta.value.indexOf('/') === 0 ||
-                urlMeta.value.indexOf('data:') === 0 ||
-                urlMeta.value.indexOf('#') === 0 ||
-                /^[a-z]+:\/\//.test(urlMeta.value)
-            ) {
-                decl.value = createUrl(urlMeta);
-                resolve();
-                return;
-            }
-
-            processCopy(result, urlMeta, opts, decl)
-                .then((newUrl) => {
-                    decl.value = decl.value.replace(value, newUrl);
-                    resolve();
-                })
-                .catch((error) => {
-                    result.warn(error, {
-                        node: decl
-                    });
-                });
+            promises.push(processCopy(result, urlMeta, opts, decl, value));
         });
+
+        Promise.all(promises).then(resolve, reject);
     });
 }
 
@@ -279,7 +287,11 @@ function init(userOpts = {}) {
 
     return (style, result) => {
         if (opts.src) {
-            opts.src = path.resolve(opts.src);
+            if (typeof opts.src === 'string') {
+                opts.src = [path.resolve(opts.src)];
+            } else {
+                opts.src = opts.src.map((elem) => path.resolve(elem));
+            }
         } else {
             throw new Error('Option `src` is required in postcss-copy');
         }
