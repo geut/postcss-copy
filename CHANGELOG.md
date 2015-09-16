@@ -1,3 +1,13 @@
+<a name="2.2.9"></a>
+## 2.2.9 (2015-09-16)
+
+
+* - fix error with multiple urls in one line, e.g fonts of bootstrap ([f1dc542](https://github.com/geut/postcss-copy/commit/f1dc542))
+* added new tests ([feeb657](https://github.com/geut/postcss-copy/commit/feeb657))
+* update test for the transform function, update example of the transform in the readme ([544e5b8](https://github.com/geut/postcss-copy/commit/544e5b8))
+
+
+
 <a name="2.2.2"></a>
 ## 2.2.2 (2015-09-14)
 

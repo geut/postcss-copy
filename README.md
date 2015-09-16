@@ -35,9 +35,10 @@ gulp.task('buildCss', function () {
 
 ## Options
 
-##### src (required)
+##### src ({string|array} required)
 Define the base src path of your CSS files.
-##### dest (required)
+
+##### dest ({string} required)
 Define the dest path of your CSS files and assets.
 
 ##### template (default = 'assets/[hash].[ext]')
@@ -102,6 +103,15 @@ var copyOpts = {
 ## <a name="using-postcss-import"></a> Using copy with postcss-import
 [postcss-import](https://github.com/postcss/postcss-import) is a great plugin that allow us work our css files in a modular way with the same behavior of CommonJS.
 Since this plugin create at the end only one file with all your CSS files inline (loaded with the @import keyword) you need disabled in ```copy``` the option ```keepRelativePath```:
+One thing more...
+postcss-import has the ability of load files from node_modules. If your src folder is at the same level of node_modules like this:
+```
+myProject/
+|-- node_modules/
+|-- dest/
+|-- src/
+```
+In this case you need define ```a multiple src```
 
 ```js
 var gulp = require('gulp');
@@ -113,7 +123,7 @@ gulp.task('buildCss', function () {
     var processors = [
         postcssImport(),
         postcssCopy({
-            src: 'src',
+            src: ['src', 'node_modules'],
             dest: 'dist',
             keepRelativePath: false // required to work with postcss-import
         })
