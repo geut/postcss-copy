@@ -9,6 +9,7 @@ import {_extend} from 'util';
 import Imagemin from 'imagemin';
 
 const src = 'src/tests/src';
+const libSrc = 'src/tests/external_libs';
 const dest = 'src/tests/dest';
 
 /**
@@ -19,13 +20,13 @@ const dest = 'src/tests/dest';
  */
 function processStyle(filename, opts = {}) {
     const file = fs
-        .readFileSync(path.join(src, filename), 'utf8')
+        .readFileSync(filename, 'utf8')
         .trim();
 
     return postcss()
         .use(copy(opts))
         .process(file, {
-            from: path.join(src, filename)
+            from: filename
         })
         .then((result) => {
             return result.css;
@@ -73,23 +74,40 @@ function deleteDest(pathDest = 'src/tests/dest') {
 deleteDest();
 
 test('options test', (t) => {
-    t.throws(() => {
-        processStyle('index.css');
-    },
-        /undefined/,
-        'Throw an exception if the `src` option is not setted.'
-    );
+    t.plan(3);
 
-    t.throws(() => {
-        processStyle('index.css', {
-            src: 'setted'
+    processStyle(path.join(src, 'index.css'))
+        .catch((err) => {
+            t.pass(
+                `Throw an exception if the "src" option is not setted. ${err}`
+            );
         });
-    },
-        /undefined/,
-        'Throw an exception if the `dest` option is not setted.'
-    );
 
-    t.end();
+    processStyle(
+        path.join(src, 'index.css'),
+        {
+            src: 'setted'
+        }
+    )
+    .catch((err) => {
+        t.pass(
+            `Throw an exception if the "dest" option is not setted. ${err}`
+        );
+    });
+
+    processStyle(
+        path.join(libSrc, 'bootstrap/css/bootstrap.css'),
+        {
+            src: src,
+            dest: dest
+        }
+    )
+    .catch((err) => {
+        t.pass(
+            `Throw an exception if the filename not belongs
+            to the "src" option. ${err}`
+        );
+    });
 });
 
 test(`invalid url() test`, (t) => {
@@ -100,7 +118,7 @@ test(`invalid url() test`, (t) => {
         dest: dest
     };
 
-    processStyle('invalid.css', copyOpts)
+    processStyle(path.join(src, 'invalid.css'), copyOpts)
         .then((css) => {
             t.ok(
                 css.match(makeRegex('assets/b6c8f21e92b50900.jpg')) &&
@@ -112,7 +130,7 @@ test(`invalid url() test`, (t) => {
             t.fail(`@invalid.css => ${err}`);
         });
 
-    processStyle('not-found.css', copyOpts)
+    processStyle(path.join(src, 'not-found.css'), copyOpts)
         .then((css) => {
             t.ok(
                 css.match(makeRegex('assets/b6c8f21e92b50900.jpg')) &&
@@ -130,7 +148,7 @@ import commonTests from './common-tests.json';
 
 commonTests.forEach((cTest) => {
     test(cTest.name, (t) => {
-        t.plan(9);
+        t.plan(21);
 
         if (cTest.opts.hashFunction === 'custom') {
             cTest.opts.hashFunction = (contents) => {
@@ -152,7 +170,7 @@ commonTests.forEach((cTest) => {
         let oldTime;
         let newTime;
 
-        processStyle('index.css', copyOpts)
+        processStyle(path.join(src, 'index.css'), copyOpts)
             .then((css) => {
                 cTest.assertions.index.forEach((assertion) => {
                     t.ok(
@@ -168,10 +186,42 @@ commonTests.forEach((cTest) => {
                     path.join(dest, cTest.assertions['no-modified'])
                 ).mtime.getTime();
 
-                return processStyle('component/index.css', copyOpts);
+                copyOpts.src = [src, libSrc];
+                t.comment('*************************************************');
+                t.comment('from now testing with multiple src: [src, libSrc]');
+                t.comment('*************************************************');
+                return processStyle(
+                    path.join(src, 'component/index.css'),
+                    copyOpts
+                );
             })
             .then((css) => {
                 cTest.assertions.component.forEach((assertion) => {
+                    t.ok(
+                        css.match(makeRegex(
+                            assertion.match,
+                            assertion['regex-simple']
+                        )),
+                        assertion.desc
+                    );
+                });
+
+                newTime = fs.statSync(
+                    path.join(dest, cTest.assertions['no-modified'])
+                ).mtime.getTime();
+
+                t.ok(
+                    oldTime === newTime,
+                    `${cTest.assertions['no-modified']} was not modified.`
+                );
+
+                return processStyle(
+                    path.join(libSrc, 'bootstrap/css/bootstrap.css'),
+                    copyOpts
+                );
+            })
+            .then((css) => {
+                cTest.assertions.external_libs.forEach((assertion) => {
                     t.ok(
                         css.match(makeRegex(
                             assertion.match,
@@ -225,7 +275,7 @@ test('check-transform', (t) => {
         }
     };
 
-    processStyle('check-transform.css', copyOpts)
+    processStyle(path.join(src, 'check-transform.css'), copyOpts)
         .then(() => {
             const oldSize = fs
                 .statSync(path.join(src, 'images/bigimage.jpg'))
