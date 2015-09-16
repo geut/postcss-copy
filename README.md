@@ -102,7 +102,8 @@ var copyOpts = {
 
 ## <a name="using-postcss-import"></a> Using copy with postcss-import
 [postcss-import](https://github.com/postcss/postcss-import) is a great plugin that allow us work our css files in a modular way with the same behavior of CommonJS.
-Since this plugin create at the end only one file with all your CSS files inline (loaded with the @import keyword) you need disabled in ```copy``` the option ```keepRelativePath```:
+Since this plugin create at the end only one file with all your CSS files inline (loaded with the @import keyword) you need disabled in ```copy``` the option ```keepRelativePath```.
+
 One thing more...
 postcss-import has the ability of load files from node_modules. If your src folder is at the same level of node_modules like this:
 ```
