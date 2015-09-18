@@ -1,3 +1,13 @@
+<a name="2.2.10"></a>
+## 2.2.10 (2015-09-18)
+
+
+* Merge pull request #2 from wbinnssmith/patch-1 ([d8107ff](https://github.com/geut/postcss-copy/commit/d8107ff))
+* return early when processing data/absolute/hash urls ([67f674d](https://github.com/geut/postcss-copy/commit/67f674d))
+* update readme ([45375c4](https://github.com/geut/postcss-copy/commit/45375c4))
+
+
+
 <a name="2.2.9"></a>
 ## 2.2.9 (2015-09-16)
 
