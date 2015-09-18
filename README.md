@@ -1,7 +1,10 @@
 # postcss-copy [![Build Status](https://travis-ci.org/geut/postcss-copy.svg?branch=master)](https://travis-ci.org/geut/postcss-copy)
 > An **async** postcss plugin to copy all assets referenced in CSS files to a custom destination folder and updating the URLs.
 
-## Install
+[Install](#install) | [Quick Start](#quick-start) | [Options](#options) | [Custom Hash Function](#custom-hash-function) | [Transform](#using-transform) | [Using postcss-import](#using-postcss-import) | [Roadmap](#roadmap) | [Credits](#credits) |
+--- | --- | --- | --- | --- | --- | --- | --- |
+
+## <a name="install"></a> Install
 
 With [npm](https://npmjs.com/package/postcss-copy) do:
 
@@ -9,7 +12,7 @@ With [npm](https://npmjs.com/package/postcss-copy) do:
 npm install postcss-copy
 ```
 
-## Quick Start
+## <a name="quick-start"></a> Quick Start
 
 ### Using [Gulp](https://github.com/postcss/gulp-postcss)
 
@@ -33,7 +36,7 @@ gulp.task('buildCss', function () {
 });
 ```
 
-## Options
+## <a name="options"></a> Options
 
 ##### src ({string|array} required)
 Define the base src path of your CSS files.
@@ -48,7 +51,7 @@ Define a template name for your final url assets.
 * **[path]**: Original relative path of your asset.
 * **[ext]**: Extension of the asset.
 
-##### hashFunction
+##### <a name="custom-hash-function"></a> hashFunction
 Define a custom function to create the hash name.
 ```js
 var copyOpts = {
@@ -69,7 +72,7 @@ var copyOpts = {
 #####  keepRelativePath (default = true)
 By default the copy process keep the relative path between each ```asset``` and the path of his  ```CSS file```. You can change this behavior setting the option in false and each ```asset``` will define the path based only in the ```dest``` path option (see [Using copy with postcss-import](#using-postcss-import))
 
-##### transform
+##### <a name="using-transform"></a> transform
 Extend the copy method to apply a transform in the contents (e.g: optimize images).
 
 **IMPORTANT:** The function must return the fileMeta (modified) or a promise using ```resolve(fileMeta)```.
@@ -137,11 +140,11 @@ gulp.task('buildCss', function () {
 });
 ```
 
-## On roadmap
+## <a name="roadmap"></a> On roadmap
 
 nothing for now :)
 
-## Credits
+## <a name="credits"></a> Credits
 
 * Thanks to @conradz and his rework plugin [rework-assets](https://github.com/conradz/rework-assets) my inspiration in this plugin.
 * Thanks to @MoOx for let me create the copy function in his [postcss-url](https://github.com/postcss/postcss-url) plugin.
