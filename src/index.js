@@ -198,7 +198,7 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
         urlMeta.value.indexOf('#') === 0 ||
         /^[a-z]+:\/\//.test(urlMeta.value)
     ) {
-        updateUrl(decl, oldValue, urlMeta);
+        return updateUrl(decl, oldValue, urlMeta);
     }
 
     /**
