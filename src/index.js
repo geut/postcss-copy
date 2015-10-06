@@ -116,17 +116,18 @@ function copyFile(fileMeta, transform) {
  * @return {Object} meta information from the resource
  */
 function getFileMeta(dirname, value, opts) {
-    const parseUrl = url.parse(path.resolve(dirname, value), true);
+    let pathName = path.resolve(dirname, value);
+    const parseUrl = url.parse(pathName, true);
     const extra = (parseUrl.search ? parseUrl.search : '') +
         (parseUrl.hash ? parseUrl.hash : '');
-    parseUrl.pathname = path.resolve(dirname, value).replace(extra, '');
+    pathName = pathName.replace(extra, '');
 
     const fileMeta = {};
 
     // path between the basePath and the filename
     let i = 0;
     while (!fileMeta.src && i < opts.src.length) {
-        if (parseUrl.pathname.indexOf(opts.src[i]) !== -1) {
+        if (pathName.indexOf(opts.src[i]) !== -1) {
             fileMeta.src = opts.src[i];
         }
         i++;
@@ -134,26 +135,26 @@ function getFileMeta(dirname, value, opts) {
 
     if (!(fileMeta.src)) {
         throw new Error('Error in postcss-copy: "src" ' +
-        `not found in ${parseUrl.pathname}`);
+        `not found in ${pathName}`);
     }
 
     return new Promise((resolve, reject) => {
-        fs.readFile(parseUrl.pathname, (err, contents) => {
+        fs.readFile(pathName, (err, contents) => {
             if (err) {
-                reject(`Can't read the file in ${parseUrl.pathname}`);
+                reject(`Can't read the file in ${pathName}`);
             } else {
                 fileMeta.contents = contents;
                 fileMeta.hash = opts.hashFunction(fileMeta.contents);
-                fileMeta.fullName = path.basename(parseUrl.pathname);
+                fileMeta.fullName = path.basename(pathName);
                 // name without extension
                 fileMeta.name = path.basename(
-                    parseUrl.pathname,
-                    path.extname(parseUrl.pathname)
+                    pathName,
+                    path.extname(pathName)
                 );
                 // extension without the '.'
-                fileMeta.ext = path.extname(parseUrl.pathname).replace('.', '');
+                fileMeta.ext = path.extname(pathName).replace('.', '');
                 // the absolute path without the #hash param
-                fileMeta.absolutePath = parseUrl.pathname;
+                fileMeta.absolutePath = pathName;
 
                 fileMeta.path = fileMeta
                     .absolutePath
