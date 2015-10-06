@@ -3,13 +3,13 @@
 
 Sections |
 --- |
-[Install](#install) | 
-[Quick Start](#quick-start) | 
-[Options](#options) | 
-[Custom Hash Function](#custom-hash-function) | 
-[Transform](#using-transform) | 
-[Using postcss-import](#using-postcss-import) | 
-[Roadmap](#roadmap) | 
+[Install](#install) |
+[Quick Start](#quick-start) |
+[Options](#options) |
+[Custom Hash Function](#custom-hash-function) |
+[Transform](#using-transform) |
+[Using postcss-import](#using-postcss-import) |
+[Roadmap](#roadmap) |
 [Credits](#credits) |
 
 
@@ -80,6 +80,12 @@ var copyOpts = {
 
 #####  keepRelativePath (default = true)
 By default the copy process keep the relative path between each ```asset``` and the path of his  ```CSS file```. You can change this behavior setting the option in false and each ```asset``` will define the path based only in the ```dest``` path option (see [Using copy with postcss-import](#using-postcss-import))
+<br/>
+**IMPORTANT:** If keepRelativePath is ```false``` postcss-copy need to use the **postcss** option ```to```.
+<br/>
+If ```to``` is not setted it will use the `dest` path.
+<br/>
+***Another thing...*** gulp-postcss by default set the `to` option with the path of `from` so be careful [L36](https://github.com/postcss/gulp-postcss/blob/master/index.js#L36). Te best way is if you are using gulp-postcss always set the `to` option based on the pipe.dest of your stream. (see [Using copy with postcss-import](#using-postcss-import))
 
 ##### <a name="using-transform"></a> transform
 Extend the copy method to apply a transform in the contents (e.g: optimize images).
@@ -144,8 +150,8 @@ gulp.task('buildCss', function () {
 
     return gulp
         .src('src/index.css')
-        .pipe(postcss(processors))
-        .pipe(gulp.dest('dist'));
+        .pipe(postcss(processors, {to: 'dist/css/index.css'}))
+        .pipe(gulp.dest('dist/css'));
 });
 ```
 
