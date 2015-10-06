@@ -117,6 +117,10 @@ function copyFile(fileMeta, transform) {
  */
 function getFileMeta(dirname, value, opts) {
     const parseUrl = url.parse(path.resolve(dirname, value), true);
+    const extra = (parseUrl.search ? parseUrl.search : '') +
+        (parseUrl.hash ? parseUrl.hash : '');
+    parseUrl.pathname = path.resolve(dirname, value).replace(extra, '');
+
     const fileMeta = {};
 
     // path between the basePath and the filename
@@ -156,8 +160,8 @@ function getFileMeta(dirname, value, opts) {
                     .replace(fileMeta.src, '')
                     .replace(fileMeta.fullName, '')
                     .replace(/^\/+|\/+$/gm, '');
-                fileMeta.extra = (parseUrl.search ? parseUrl.search : '') +
-                    (parseUrl.hash ? parseUrl.hash : '');
+
+                fileMeta.extra = extra;
 
                 resolve(fileMeta);
             }
