@@ -146,13 +146,17 @@ function getFileMeta(dirname, value, opts) {
                 fileMeta.contents = contents;
                 fileMeta.hash = opts.hashFunction(fileMeta.contents);
                 fileMeta.fullName = path.basename(pathName);
+                fileMeta.ext = path.extname(pathName);
+
                 // name without extension
                 fileMeta.name = path.basename(
                     pathName,
-                    path.extname(pathName)
+                    fileMeta.ext
                 );
+
                 // extension without the '.'
-                fileMeta.ext = path.extname(pathName).replace('.', '');
+                fileMeta.ext = fileMeta.ext.replace('.', '');
+
                 // the absolute path without the #hash param
                 fileMeta.absolutePath = pathName;
 
