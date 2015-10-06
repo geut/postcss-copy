@@ -224,10 +224,9 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
             const resultUrl = path.relative(
                 opts.keepRelativePath
                     ? dirname.replace(fileMeta.src, opts.dest)
-                    : opts.dest,
+                    : opts.to,
                 fileMeta.resultAbsolutePath
             ) + fileMeta.extra;
-
             return updateUrl(decl, oldValue, urlMeta, resultUrl);
         })
         .catch((err) => {
@@ -299,6 +298,14 @@ function init(userOpts = {}) {
             opts.dest = path.resolve(opts.dest);
         } else {
             throw new Error('Option `dest` is required in postcss-copy');
+        }
+
+        if (!(opts.keepRelativePath)) {
+            if (result.opts && result.opts.to) {
+                opts.to = path.dirname(path.resolve(result.opts.to));
+            } else {
+                opts.to = opts.dest;
+            }
         }
 
         return new Promise((resolve, reject) => {
