@@ -1,3 +1,11 @@
+<a name="2.2.13"></a>
+## 2.2.13 (2015-10-06)
+
+
+* minor refactory pathName ([84138f3](https://github.com/geut/postcss-copy/commit/84138f3))
+
+
+
 <a name="2.2.12"></a>
 ## 2.2.12 (2015-10-06)
 
