@@ -1,3 +1,15 @@
+<a name="2.2.11"></a>
+## 2.2.11 (2015-10-06)
+
+
+* add stable node version (node 4.1.0) to travis ([584a106](https://github.com/geut/postcss-copy/commit/584a106))
+* Merge branch 'master' of github.com:geut/postcss-copy ([ca6e9d3](https://github.com/geut/postcss-copy/commit/ca6e9d3))
+* minor fix error using postcss-import and keepRelativePath ([db8e65a](https://github.com/geut/postcss-copy/commit/db8e65a))
+* update readme ([32b6c01](https://github.com/geut/postcss-copy/commit/32b6c01))
+* vertical section contents ([54da3d4](https://github.com/geut/postcss-copy/commit/54da3d4))
+
+
+
 <a name="2.2.10"></a>
 ## 2.2.10 (2015-09-18)
 
