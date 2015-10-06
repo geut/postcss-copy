@@ -1,3 +1,11 @@
+<a name="2.2.12"></a>
+## 2.2.12 (2015-10-06)
+
+
+* fix error with the parse url (pathname) when the directories has empty spaces ([2d1e802](https://github.com/geut/postcss-copy/commit/2d1e802))
+
+
+
 <a name="2.2.11"></a>
 ## 2.2.11 (2015-10-06)
 
