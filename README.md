@@ -1,8 +1,17 @@
 # postcss-copy [![Build Status](https://travis-ci.org/geut/postcss-copy.svg?branch=master)](https://travis-ci.org/geut/postcss-copy)
 > An **async** postcss plugin to copy all assets referenced in CSS files to a custom destination folder and updating the URLs.
 
-[Install](#install) | [Quick Start](#quick-start) | [Options](#options) | [Custom Hash Function](#custom-hash-function) | [Transform](#using-transform) | [Using postcss-import](#using-postcss-import) | [Roadmap](#roadmap) | [Credits](#credits) |
---- | --- | --- | --- | --- | --- | --- | --- |
+Sections |
+--- |
+[Install](#install) | 
+[Quick Start](#quick-start) | 
+[Options](#options) | 
+[Custom Hash Function](#custom-hash-function) | 
+[Transform](#using-transform) | 
+[Using postcss-import](#using-postcss-import) | 
+[Roadmap](#roadmap) | 
+[Credits](#credits) |
+
 
 ## <a name="install"></a> Install
 
