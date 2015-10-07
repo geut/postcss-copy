@@ -85,7 +85,7 @@ By default the copy process keep the relative path between each ```asset``` and 
 <br/>
 If ```to``` is not setted it will use the `dest` path.
 <br/>
-***Another thing...*** gulp-postcss by default set the `to` option with the path of `from` so be careful [L36](https://github.com/postcss/gulp-postcss/blob/master/index.js#L36). Te best way is if you are using gulp-postcss always set the `to` option based on the pipe.dest of your stream. (see [Using copy with postcss-import](#using-postcss-import))
+***Another thing...*** gulp-postcss by default set the `to` option with the path of `from` so be careful [L36](https://github.com/postcss/gulp-postcss/blob/master/index.js#L36). The best way is if you are using gulp-postcss always set the `to` option based on the pipe.dest of your stream. (see [Using copy with postcss-import](#using-postcss-import))
 
 ##### <a name="using-transform"></a> transform
 Extend the copy method to apply a transform in the contents (e.g: optimize images).
