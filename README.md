@@ -7,6 +7,7 @@ Sections |
 [Quick Start](#quick-start) |
 [Options](#options) |
 [Custom Hash Function](#custom-hash-function) |
+[Transform Path](#transform-path) |
 [Transform](#using-transform) |
 [Using postcss-import](#using-postcss-import) |
 [Roadmap](#roadmap) |
@@ -74,6 +75,19 @@ var copyOpts = {
             .replace(/\//g, '_')
             .replace(/=/g, '')
             .replace(/^[+-]+/g, '');
+    }
+};
+```
+
+##### <a name="transform-path"></a> transformPath
+Define a custom transform to get the path (dirname) of your CSS file.
+
+```js
+var copyOpts = {
+    ...,
+    transformPath(decl) {
+        // this is the transform by default
+        return path.dirname(decl.source.input.file);
     }
 };
 ```

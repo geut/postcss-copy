@@ -214,7 +214,7 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
      * dirname of the read file css
      * @type {String}
      */
-    const dirname = path.dirname(decl.source.input.file);
+    const dirname = opts.transformPath(decl);
 
     return getFileMeta(dirname, urlMeta.value, opts)
         .then((fileMeta) => {
@@ -289,6 +289,9 @@ function init(userOpts = {}) {
         },
         transform(fileMeta) {
             return fileMeta;
+        },
+        transformPath(decl) {
+            return path.dirname(decl.source.input.file);
         }
     };
     opts = _extend(opts, userOpts);
