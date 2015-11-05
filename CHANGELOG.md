@@ -1,3 +1,14 @@
+<a name="2.3.0"></a>
+# 2.3.0 (2015-11-05)
+
+
+* add some helpful things about keepRelativePath in README.md ([7d02d29](https://github.com/geut/postcss-copy/commit/7d02d29))
+* add transformPath option ([b092c19](https://github.com/geut/postcss-copy/commit/b092c19))
+* fix grammar error in readme ([1f43983](https://github.com/geut/postcss-copy/commit/1f43983))
+* minor refactory ([cf1f17e](https://github.com/geut/postcss-copy/commit/cf1f17e))
+
+
+
 <a name="2.2.13"></a>
 ## 2.2.13 (2015-10-06)
 
