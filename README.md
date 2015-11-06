@@ -7,7 +7,7 @@ Sections |
 [Quick Start](#quick-start) |
 [Options](#options) |
 [Custom Hash Function](#custom-hash-function) |
-[Transform Path](#transform-path) |
+[Input Path](#input-path) |
 [Transform](#using-transform) |
 [Using postcss-import](#using-postcss-import) |
 [Roadmap](#roadmap) |
@@ -79,13 +79,20 @@ var copyOpts = {
 };
 ```
 
-##### <a name="transform-path"></a> transformPath
-Define a custom transform to get the path (dirname) of your CSS file.
+##### <a name="input-path"></a> inputPath
+**inputPath** define a custom setter to define the path (dirname) of your CSS file.
+
+postcss-copy use the ```decl.source.input.file``` to get the path of your file
+and then with that information copy your assets and rewrite the urls. But some
+postcss plugins
+(e.g [css-modules-loader-core](https://github.com/css-modules/css-modules-loader-core)
+change this attribute in here execution, soo you need to fix the path of your
+read files by your own.
 
 ```js
 var copyOpts = {
     ...,
-    transformPath(decl) {
+    inputPath(decl) {
         // this is the transform by default
         return path.dirname(decl.source.input.file);
     }

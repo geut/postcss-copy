@@ -162,8 +162,8 @@ commonTests.forEach((cTest) => {
                     .replace(/^[+-]+/g, '');
             };
         }
-        if (cTest.opts.transformPath) {
-            cTest.opts.transformPath = (decl) => {
+        if (cTest.opts.inputPath) {
+            cTest.opts.inputPath = (decl) => {
                 return path.dirname(decl.source.input.file);
             };
         }

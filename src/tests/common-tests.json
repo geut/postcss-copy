@@ -274,10 +274,10 @@
     "no-modified": "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg"
   }
 }, {
-  "name": "process test => template: 'assets/[hash].[ext]', transformPath: {custom}",
+  "name": "process test => template: 'assets/[hash].[ext]', inputPath: {custom}",
   "opts": {
     "template": "assets/[hash].[ext]",
-    "transformPath": true
+    "inputPath": true
   },
   "assertions": {
     "index": [{
