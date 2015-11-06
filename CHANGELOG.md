@@ -1,3 +1,11 @@
+<a name="2.3.2"></a>
+## 2.3.2 (2015-11-06)
+
+
+* rename transformPath to inputPath ([73d543b](https://github.com/geut/postcss-copy/commit/73d543b))
+
+
+
 <a name="2.3.1"></a>
 ## 2.3.1 (2015-11-06)
 
