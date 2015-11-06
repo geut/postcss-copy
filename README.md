@@ -85,7 +85,7 @@ var copyOpts = {
 postcss-copy use the ```decl.source.input.file``` to get the path of your file
 and then with that information copy your assets and rewrite the urls. But some
 postcss plugins
-(e.g [css-modules-loader-core](https://github.com/css-modules/css-modules-loader-core)
+(e.g [css-modules-loader-core](https://github.com/css-modules/css-modules-loader-core))
 change this attribute in here execution, soo you need to fix the path of your
 read files by your own.
 
@@ -93,7 +93,7 @@ read files by your own.
 var copyOpts = {
     ...,
     inputPath(decl) {
-        // this is the transform by default
+        // this is the input path by default
         return path.dirname(decl.source.input.file);
     }
 };
