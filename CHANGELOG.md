@@ -1,3 +1,11 @@
+<a name="2.3.6"></a>
+## 2.3.6 (2015-11-06)
+
+
+* fix export default ([966394a](https://github.com/geut/postcss-copy/commit/966394a))
+
+
+
 <a name="2.3.5"></a>
 ## 2.3.5 (2015-11-06)
 
