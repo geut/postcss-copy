@@ -1,3 +1,11 @@
+<a name="2.3.4"></a>
+## 2.3.4 (2015-11-06)
+
+
+* fix error with babel 6 ([0425220](https://github.com/geut/postcss-copy/commit/0425220))
+
+
+
 <a name="2.3.3"></a>
 ## 2.3.3 (2015-11-06)
 
