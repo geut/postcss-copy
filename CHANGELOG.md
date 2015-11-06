@@ -1,3 +1,12 @@
+<a name="2.3.5"></a>
+## 2.3.5 (2015-11-06)
+
+
+* add new travis test 4.2 ([307aec2](https://github.com/geut/postcss-copy/commit/307aec2))
+* fix other error from babel 6 ([78f8bb5](https://github.com/geut/postcss-copy/commit/78f8bb5))
+
+
+
 <a name="2.3.4"></a>
 ## 2.3.4 (2015-11-06)
 
