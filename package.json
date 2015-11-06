@@ -29,7 +29,7 @@
   "scripts": {
     "test": "eslint src/** && babel-tape-runner \"src/tests/index.js\" | tap-spec",
     "clean": "rm -rf dist",
-    "build": "npm run clean && babel src --source-maps --out-dir dist --ignore /tests/",
+    "build": "npm run clean && babel src --source-maps --out-dir dist --ignore /tests/ --presets es2015",
     "start": "babel src --watch --source-maps --out-dir dist --ignore /tests/",
     "prepublish": "npm run build",
     "debug": "iron-node tests/index.js"
