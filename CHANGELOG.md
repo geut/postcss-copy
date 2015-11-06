@@ -1,3 +1,12 @@
+<a name="2.3.3"></a>
+## 2.3.3 (2015-11-06)
+
+
+* fix readme ([ce7e74b](https://github.com/geut/postcss-copy/commit/ce7e74b))
+* freeze dependencies ([ff3d644](https://github.com/geut/postcss-copy/commit/ff3d644))
+
+
+
 <a name="2.3.2"></a>
 ## 2.3.2 (2015-11-06)
 
