@@ -1,3 +1,12 @@
+<a name="2.3.1"></a>
+## 2.3.1 (2015-11-06)
+
+
+* add babel-cli as dev dependency ([45116ca](https://github.com/geut/postcss-copy/commit/45116ca))
+* fix dependencies ([57da763](https://github.com/geut/postcss-copy/commit/57da763))
+
+
+
 <a name="2.3.0"></a>
 # 2.3.0 (2015-11-05)
 
