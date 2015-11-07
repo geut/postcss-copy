@@ -1,3 +1,11 @@
+<a name="2.3.8"></a>
+## 2.3.8 (2015-11-07)
+
+
+* test before publish ([55978a6](https://github.com/geut/postcss-copy/commit/55978a6))
+
+
+
 <a name="2.3.7"></a>
 ## 2.3.7 (2015-11-07)
 
