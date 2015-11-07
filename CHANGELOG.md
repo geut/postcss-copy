@@ -1,3 +1,11 @@
+<a name="2.3.7"></a>
+## 2.3.7 (2015-11-07)
+
+
+* add conventional changelog ([d3722cc](https://github.com/geut/postcss-copy/commit/d3722cc))
+
+
+
 <a name="2.3.6"></a>
 ## 2.3.6 (2015-11-06)
 
