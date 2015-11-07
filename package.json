@@ -32,7 +32,7 @@
     "clean": "rm -rf dist",
     "build": "npm run clean && babel src --source-maps --out-dir dist --ignore /tests/ --presets es2015",
     "start": "babel src --watch --source-maps --out-dir dist --ignore /tests/",
-    "prepublish": "npm run build",
+    "prepublish": "npm run test && npm run build",
     "version": "conventional-changelog -i CHANGELOG.md --overwrite && git add CHANGELOG.md",
     "debug": "iron-node tests/index.js"
   },
