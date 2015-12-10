@@ -1,3 +1,12 @@
+<a name="2.3.9"></a>
+## 2.3.9 (2015-12-10)
+
+
+* add new test to check the issue #3 ([27109e5](https://github.com/geut/postcss-copy/commit/27109e5))
+* fix for the issue #3 ([320507e](https://github.com/geut/postcss-copy/commit/320507e)), closes [#3](https://github.com/geut/postcss-copy/issues/3)
+
+
+
 <a name="2.3.8"></a>
 ## 2.3.8 (2015-11-07)
 
