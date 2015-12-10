@@ -27,9 +27,6 @@ function processStyle(filename, opts = {}) {
         .use(copy(opts))
         .process(file, {
             from: filename
-        })
-        .then((result) => {
-            return result.css;
         });
 }
 
@@ -102,10 +99,10 @@ test('options test', (t) => {
             dest: dest
         }
     )
-    .catch((err) => {
+    .then((result) => {
         t.pass(
-            `Throw an exception if the filename not belongs
-            to the "src" option. ${err}`
+            `Warning if the filename not belongs
+            to the "src" option. ${result.warnings()[0]}`
         );
     });
 });
@@ -119,7 +116,8 @@ test(`invalid url() test`, (t) => {
     };
 
     processStyle(path.join(src, 'invalid.css'), copyOpts)
-        .then((css) => {
+        .then((result) => {
+            const css = result.css;
             t.ok(
                 css.match(makeRegex('assets/b6c8f21e92b50900.jpg')) &&
                 css.match(makeRegex('data:image/gif;base64,R0lGOD')),
@@ -131,7 +129,8 @@ test(`invalid url() test`, (t) => {
         });
 
     processStyle(path.join(src, 'not-found.css'), copyOpts)
-        .then((css) => {
+        .then((result) => {
+            const css = result.css;
             t.ok(
                 css.match(makeRegex('assets/b6c8f21e92b50900.jpg')) &&
                 css.match(makeRegex('images/image-not-found.jpg')),
@@ -177,7 +176,8 @@ commonTests.forEach((cTest) => {
         let newTime;
 
         processStyle(path.join(src, 'index.css'), copyOpts)
-            .then((css) => {
+            .then((result) => {
+                const css = result.css;
                 cTest.assertions.index.forEach((assertion) => {
                     t.ok(
                         css.match(makeRegex(
@@ -201,7 +201,8 @@ commonTests.forEach((cTest) => {
                     copyOpts
                 );
             })
-            .then((css) => {
+            .then((result) => {
+                const css = result.css;
                 cTest.assertions.component.forEach((assertion) => {
                     t.ok(
                         css.match(makeRegex(
@@ -226,7 +227,8 @@ commonTests.forEach((cTest) => {
                     copyOpts
                 );
             })
-            .then((css) => {
+            .then((result) => {
+                const css = result.css;
                 cTest.assertions.external_libs.forEach((assertion) => {
                     t.ok(
                         css.match(makeRegex(
