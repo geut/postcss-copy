@@ -133,15 +133,14 @@ function getFileMeta(dirname, value, opts) {
         i++;
     }
 
-    if (!(fileMeta.src)) {
-        throw new Error('Error in postcss-copy: "src" ' +
-        `not found in ${pathName}`);
-    }
-
     return new Promise((resolve, reject) => {
         fs.readFile(pathName, (err, contents) => {
             if (err) {
-                reject(`Can't read the file in ${pathName}`);
+                reject(`Warning in postcss-copy:
+                    Can't read the file in ${pathName}`);
+            } else if (!(fileMeta.src)) {
+                reject(`Warning in postcss-copy:
+                    "src" not found in ${pathName}`);
             } else {
                 fileMeta.contents = contents;
                 fileMeta.hash = opts.hashFunction(fileMeta.contents);
