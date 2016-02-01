@@ -1,3 +1,11 @@
+<a name="2.4.0"></a>
+# 2.4.0 (2016-02-01)
+
+
+* Correct parse/replace url - fix issue #4 ([dd9dff2](https://github.com/geut/postcss-copy/commit/dd9dff2)), closes [#4](https://github.com/geut/postcss-copy/issues/4)
+
+
+
 <a name="2.3.9"></a>
 ## 2.3.9 (2015-12-10)
 
