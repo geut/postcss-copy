@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import pathExists from 'path-exists';
 import mkdirp from 'mkdirp';
 import {_extend} from 'util';
+import escapeStringRegexp from 'escape-string-regexp';
 
 const tags = [
     'path',
@@ -182,9 +183,12 @@ function getFileMeta(dirname, value, opts) {
  * @return {Object} return decl postcss declaration with url updated
  */
 function updateUrl(decl, oldValue, urlMeta, resultUrl) {
+    const expression = new RegExp(
+        '(\\()(' + escapeStringRegexp(oldValue) + ')(\\))', 'g'
+    );
     decl.value = decl.value.replace(
-        oldValue,
-        createUrl(urlMeta, resultUrl)
+        expression,
+        '$1' + createUrl(urlMeta, resultUrl) + '$3'
     );
     return decl.value;
 }

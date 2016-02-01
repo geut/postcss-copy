@@ -7,6 +7,7 @@ import fs from 'fs';
 import crypto from 'crypto';
 import {_extend} from 'util';
 import Imagemin from 'imagemin';
+import escapeStringRegexp from 'escape-string-regexp';
 
 const src = 'src/tests/src';
 const libSrc = 'src/tests/external_libs';
@@ -35,16 +36,9 @@ function makeRegex(str, simple = false) {
     if (simple) {
         value = str;
     } else {
-        value = '\'' + str + '\'';
+        value = '(\'' + str + '\')';
     }
-    return new RegExp(
-        value
-        .replace(/\(/g, '\\(')
-        .replace(/\)/g, '\\)')
-        .replace(/\//g, '\\\/')
-        .replace(/\./g, '\\.')
-        .replace(/\?/g, '\\?')
-    );
+    return new RegExp(escapeStringRegexp(value));
 }
 
 function testFileExists(t, file) {
@@ -296,6 +290,27 @@ test('check-transform', (t) => {
             t.ok(
                 newSize < oldSize,
                 'Optimize bigimage.jpg'
+            );
+        });
+});
+
+
+test('check-correct-parse-url', (t) => {
+    t.plan(1);
+
+    const copyOpts = {
+        src: src,
+        dest: dest,
+        template: '[path]/[name].[ext]'
+    };
+
+    processStyle(path.join(src, 'correct-parse-url.css'), copyOpts)
+        .then((result) => {
+            const css = result.css;
+            t.ok(
+                css.match(makeRegex('fonts/MaterialIcons-Regular.woff')) &&
+                css.match(makeRegex('fonts/MaterialIcons-Regular.woff2')),
+                'Parse url: correct'
             );
         });
 });
