@@ -1,0 +1,11 @@
+body {
+    background: url('!images/test.jpg?#iefix&v=4.4.0');
+}
+
+div {
+    background: url('images/other.jpg');
+}
+
+span {
+    background: url('images/noignore.jpg');
+}

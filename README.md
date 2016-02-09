@@ -54,12 +54,40 @@ Define the base src path of your CSS files.
 ##### dest ({string} required)
 Define the dest path of your CSS files and assets.
 
-##### template (default = 'assets/[hash].[ext]')
+##### template ({string | function} default = 'assets/[hash].[ext]')
 Define a template name for your final url assets.
-* **[hash]**: Let you use a hash name based on the contents of the file.
-* **[name]**: Real name of your asset.
-* **[path]**: Original relative path of your asset.
-* **[ext]**: Extension of the asset.
+* string template
+    * **[hash]**: Let you use a hash name based on the contents of the file.
+    * **[name]**: Real name of your asset.
+    * **[path]**: Original relative path of your asset.
+    * **[ext]**: Extension of the asset.
+* function template
+```js
+var copyOpts = {
+    ...,
+    template(fileMeta) {
+        return 'assets/custom-name-' + fileMeta.name + '.' + fileMeta.ext;
+    }
+}
+```
+
+#### ignore ({string[] | function} default = [])
+Define a list or a custom function to ignore assets.
+```js
+// ignore with array
+var copyOpts = {
+    ...,
+    ignore: ['images/button.jpg', 'images/background.jpg']
+}
+// ignore function
+var copyOpts = {
+    ...,
+    ignore(filename, extra) {
+        return (filename.indexOf('images/button.jpg') ||
+                filename.indexOf('images/background.jpg'));
+    }
+}
+```
 
 ##### <a name="custom-hash-function"></a> hashFunction
 Define a custom function to create the hash name.

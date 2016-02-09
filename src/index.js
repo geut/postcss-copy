@@ -123,6 +123,16 @@ function getFileMeta(dirname, value, opts) {
         (parseUrl.hash ? parseUrl.hash : '');
     pathName = pathName.replace(extra, '');
 
+    // ignore option
+    const filename = value.replace(extra, '');
+    if ( ((typeof opts.ignore === 'function') &&
+            opts.ignore(filename, extra)) ||
+        ((opts.ignore instanceof Array) &&
+            opts.ignore.indexOf(filename) !== -1)
+        ) {
+        return Promise.reject(`${filename} ignored.`);
+    }
+
     const fileMeta = {};
 
     // path between the basePath and the filename
@@ -135,6 +145,7 @@ function getFileMeta(dirname, value, opts) {
     }
 
     return new Promise((resolve, reject) => {
+        // ignore option
         fs.readFile(pathName, (err, contents) => {
             if (err) {
                 reject(`Warning in postcss-copy:
@@ -204,7 +215,15 @@ function updateUrl(decl, oldValue, urlMeta, resultUrl) {
  * @return {String} new url
  */
 function processCopy(result, urlMeta, opts, decl, oldValue) {
-    // ignore absolute urls, hasshes or data uris
+    // ignore absolute urls, hasshes, data uris or by **ignore option**
+    if (urlMeta.value.indexOf('!') === 0) {
+        return updateUrl(
+            decl,
+            oldValue,
+            urlMeta,
+            urlMeta.value.slice(1, urlMeta.value.length)
+        );
+    }
     if (urlMeta.value.indexOf('/') === 0 ||
         urlMeta.value.indexOf('data:') === 0 ||
         urlMeta.value.indexOf('#') === 0 ||
@@ -222,12 +241,17 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
     return getFileMeta(dirname, urlMeta.value, opts)
         .then((fileMeta) => {
             let tpl = opts.template;
-            tags.forEach((tag) => {
-                tpl = tpl.replace(
-                    '[' + tag + ']',
-                    fileMeta[tag] ? fileMeta[tag] : opts[tag]
-                );
-            });
+            if (typeof tpl === 'function') {
+                tpl = tpl(fileMeta);
+            } else {
+                tags.forEach((tag) => {
+                    tpl = tpl.replace(
+                        '[' + tag + ']',
+                        fileMeta[tag] ? fileMeta[tag] : opts[tag]
+                    );
+                });
+            }
+
             fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
 
             return copyFile(fileMeta, opts.transform);
@@ -295,7 +319,8 @@ function init(userOpts = {}) {
         },
         inputPath(decl) {
             return path.dirname(decl.source.input.file);
-        }
+        },
+        ignore: []
     };
     opts = _extend(opts, userOpts);
 

@@ -310,7 +310,73 @@ test('check-correct-parse-url', (t) => {
             t.ok(
                 css.match(makeRegex('fonts/MaterialIcons-Regular.woff')) &&
                 css.match(makeRegex('fonts/MaterialIcons-Regular.woff2')),
-                'Parse url: correct'
+                'Parse url'
+            );
+        });
+});
+
+test('check-function-template', (t) => {
+    t.plan(1);
+
+    const copyOpts = {
+        src: src,
+        dest: dest,
+        template(fileMeta) {
+            return 'custom-path/custom-name-' +
+            fileMeta.name + '.' + fileMeta.ext;
+        }
+    };
+
+    processStyle(path.join(src, 'index.css'), copyOpts)
+        .then((result) => {
+            const css = result.css;
+            t.ok(
+                css.match(makeRegex('custom-path/custom-name-test.jpg' +
+                '?#iefix&v=4.4.0')) &&
+                css.match(makeRegex('custom-path/custom-name-other.jpg')),
+                'Function template'
+            );
+        });
+});
+
+test('check-ignore-option', (t) => {
+    t.plan(2);
+
+    const copyOptsArray = {
+        src: src,
+        dest: dest,
+        template: 'ignore-path-array/[path]/[name].[ext]',
+        ignore: ['images/other.jpg']
+    };
+
+    processStyle(path.join(src, 'ignore.css'), copyOptsArray)
+        .then((result) => {
+            const css = result.css;
+            t.ok(
+                css.match(makeRegex('images/test.jpg?#iefix&v=4.4.0')) &&
+                css.match(makeRegex('images/other.jpg')) &&
+                css.match(makeRegex('ignore-path-array/images/noignore.jpg')),
+                'Ignore files with array<string> of paths'
+            );
+        });
+
+    const copyOptsFunc = {
+        src: src,
+        dest: dest,
+        template: 'ignore-path-func/[path]/[name].[ext]',
+        ignore(filename) {
+            return (filename === 'images/other.jpg');
+        }
+    };
+
+    processStyle(path.join(src, 'ignore.css'), copyOptsFunc)
+        .then((result) => {
+            const css = result.css;
+            t.ok(
+                css.match(makeRegex('images/test.jpg?#iefix&v=4.4.0')) &&
+                css.match(makeRegex('images/other.jpg')) &&
+                css.match(makeRegex('ignore-path-func/images/noignore.jpg')),
+                'Ignore files with custom function'
             );
         });
 });
