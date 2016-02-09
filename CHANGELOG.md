@@ -1,3 +1,11 @@
+<a name="2.4.1"></a>
+## 2.4.1 (2016-02-09)
+
+
+* fix dependency issue #5 ([32926cf](https://github.com/geut/postcss-copy/commit/32926cf)), closes [#5](https://github.com/geut/postcss-copy/issues/5)
+
+
+
 <a name="2.4.0"></a>
 # 2.4.0 (2016-02-01)
 
