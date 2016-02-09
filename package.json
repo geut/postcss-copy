@@ -4,6 +4,7 @@
   "description": "A postcss plugin to copy all assets referenced in CSS to a custom destination folder and updating the URLs.",
   "main": "index.js",
   "dependencies": {
+    "escape-string-regexp": "^1.0.4",
     "mkdirp": "~0.5.1",
     "path-exists": "~2.0.0",
     "postcss": "~5.0.10",
@@ -16,7 +17,6 @@
     "babel-preset-es2015": "~6.1.2",
     "babel-tape-runner": "~1.3.0",
     "conventional-changelog": "^0.5.1",
-    "escape-string-regexp": "^1.0.4",
     "eslint": "~1.8.0",
     "eslint-config-airbnb": "~0.1.0",
     "eslint-config-tinchoz49": "~1.0.3",
