@@ -72,7 +72,18 @@ var copyOpts = {
 ```
 
 #### ignore ({string[] | function} default = [])
-Define a list or a custom function to ignore assets.
+Define a list of files, a custom function or using the char ```!``` in your CSS to ignore assets.
+
+##### In your CSS:
+```css
+.btn {
+    background-image: url('!images/button.jpg');
+}
+.background {
+    background-image: url('!images/background.jpg');
+}
+```
+##### In your JS configuration:
 ```js
 // ignore with array
 var copyOpts = {
