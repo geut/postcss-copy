@@ -1,3 +1,11 @@
+<a name="2.5.0"></a>
+# 2.5.0 (2016-02-09)
+
+
+* new features, add ignore assets option #6, add func template option #7, new tests ([4c319ef](https://github.com/geut/postcss-copy/commit/4c319ef))
+
+
+
 <a name="2.4.1"></a>
 ## 2.4.1 (2016-02-09)
 
