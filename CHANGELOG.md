@@ -1,3 +1,12 @@
+<a name="2.6.0"></a>
+# 2.6.0 (2016-02-10)
+
+
+* add information in the readme about the char `!` to ignore assets ([1feab82](https://github.com/geut/postcss-copy/commit/1feab82))
+* add minimatch support for ignore option ([3b8c9c6](https://github.com/geut/postcss-copy/commit/3b8c9c6))
+
+
+
 <a name="2.5.0"></a>
 # 2.5.0 (2016-02-09)
 
