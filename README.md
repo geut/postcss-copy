@@ -71,10 +71,10 @@ var copyOpts = {
 }
 ```
 
-#### ignore ({string[] | function} default = [])
-Define a list of files, a custom function or using the char ```!``` in your CSS to ignore assets.
+#### ignore ({string | string[] | function} default = [])
+Option to ignore assets in your CSS file.
 
-##### In your CSS:
+##### Using the ```!``` key in your CSS:
 ```css
 .btn {
     background-image: url('!images/button.jpg');
@@ -83,13 +83,21 @@ Define a list of files, a custom function or using the char ```!``` in your CSS 
     background-image: url('!images/background.jpg');
 }
 ```
-##### In your JS configuration:
+##### Using a string or array with minimatch support to ignore files:
 ```js
+// ignore with string
+var copyOpts = {
+    ...,
+    ignore: 'images/*.jpg'
+}
 // ignore with array
 var copyOpts = {
     ...,
-    ignore: ['images/button.jpg', 'images/background.jpg']
+    ignore: ['images/button.+(jpg|png)', 'images/background.jpg']
 }
+```
+##### Using a custom function:
+```js
 // ignore function
 var copyOpts = {
     ...,

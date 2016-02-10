@@ -340,7 +340,25 @@ test('check-function-template', (t) => {
 });
 
 test('check-ignore-option', (t) => {
-    t.plan(2);
+    t.plan(3);
+
+    const copyOptsString = {
+        src: src,
+        dest: dest,
+        template: 'ignore-path-array/[path]/[name].[ext]',
+        ignore: 'images/other.+(jpg|png)'
+    };
+
+    processStyle(path.join(src, 'ignore.css'), copyOptsString)
+        .then((result) => {
+            const css = result.css;
+            t.ok(
+                css.match(makeRegex('images/test.jpg?#iefix&v=4.4.0')) &&
+                css.match(makeRegex('images/other.jpg')) &&
+                css.match(makeRegex('ignore-path-array/images/noignore.jpg')),
+                'Ignore files with string expression'
+            );
+        });
 
     const copyOptsArray = {
         src: src,

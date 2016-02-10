@@ -8,6 +8,7 @@ import pathExists from 'path-exists';
 import mkdirp from 'mkdirp';
 import {_extend} from 'util';
 import escapeStringRegexp from 'escape-string-regexp';
+import minimatch from 'minimatch';
 
 const tags = [
     'path',
@@ -105,6 +106,38 @@ function copyFile(fileMeta, transform) {
         });
 }
 
+
+/**
+ * getFileMeta
+ *
+ * Helper function to ignore files
+ *
+ * @param  {string} filename
+ * @param  {string} extra
+ * @param  {Object} options
+ * @return {boolean} meta information from the resource
+ */
+function ignore(filename, extra, opts) {
+    // ignore option
+    if (typeof opts.ignore === 'function') {
+        return opts.ignore(filename, extra);
+    } else if (opts.ignore instanceof Array) {
+        const list = opts.ignore;
+        const len = list.length;
+        let toIgnore = false;
+        for (let i = 0; i < len; i++) {
+            if (minimatch(filename + extra, list[i])) {
+                toIgnore = true;
+                break;
+            }
+        }
+        return toIgnore;
+    }
+
+
+    return false;
+}
+
 /**
  * getFileMeta
  *
@@ -123,13 +156,9 @@ function getFileMeta(dirname, value, opts) {
         (parseUrl.hash ? parseUrl.hash : '');
     pathName = pathName.replace(extra, '');
 
-    // ignore option
     const filename = value.replace(extra, '');
-    if ( ((typeof opts.ignore === 'function') &&
-            opts.ignore(filename, extra)) ||
-        ((opts.ignore instanceof Array) &&
-            opts.ignore.indexOf(filename) !== -1)
-        ) {
+
+    if (ignore(filename, extra, opts)) {
         return Promise.reject(`${filename} ignored.`);
     }
 
@@ -346,6 +375,9 @@ function init(userOpts = {}) {
             } else {
                 opts.to = opts.dest;
             }
+        }
+        if (typeof opts.ignore === 'string') {
+            opts.ignore = [opts.ignore];
         }
 
         return new Promise((resolve, reject) => {
