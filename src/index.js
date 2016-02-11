@@ -6,7 +6,6 @@ import url from 'url';
 import crypto from 'crypto';
 import pathExists from 'path-exists';
 import mkdirp from 'mkdirp';
-import {_extend} from 'util';
 import escapeStringRegexp from 'escape-string-regexp';
 import minimatch from 'minimatch';
 
@@ -334,7 +333,7 @@ function processDecl(result, decl, opts) {
  * }
  */
 function init(userOpts = {}) {
-    let opts = {
+    const opts = Object.assign({
         template: 'assets/[hash].[ext]',
         keepRelativePath: true,
         hashFunction(contents) {
@@ -350,8 +349,7 @@ function init(userOpts = {}) {
             return path.dirname(decl.source.input.file);
         },
         ignore: []
-    };
-    opts = _extend(opts, userOpts);
+    }, userOpts);
 
     return (style, result) => {
         if (opts.src) {
