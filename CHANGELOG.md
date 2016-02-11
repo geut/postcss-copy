@@ -1,3 +1,11 @@
+<a name="2.6.1"></a>
+## 2.6.1 (2016-02-11)
+
+
+* replace _extend by Object.assign ([046c4e4](https://github.com/geut/postcss-copy/commit/046c4e4))
+
+
+
 <a name="2.6.0"></a>
 # 2.6.0 (2016-02-10)
 
