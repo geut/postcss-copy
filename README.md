@@ -151,7 +151,7 @@ By default the copy process keep the relative path between each ```asset``` and 
 <br/>
 **IMPORTANT:** If keepRelativePath is ```false``` postcss-copy need to use the **postcss** option ```to```.
 <br/>
-If ```to``` is not setted it will use the `dest` path.
+If ```to``` is not setted or is equal to the ```from``` option (see below how it works gulp-postcss) it will use the `dest` path.
 <br/>
 ***Another thing...*** gulp-postcss by default set the `to` option with the path of `from` so be careful [L36](https://github.com/postcss/gulp-postcss/blob/master/index.js#L36). The best way is if you are using gulp-postcss always set the `to` option based on the pipe.dest of your stream. (see [Using copy with postcss-import](#using-postcss-import))
 

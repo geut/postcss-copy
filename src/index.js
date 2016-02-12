@@ -288,7 +288,7 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
             const resultUrl = path.relative(
                 opts.keepRelativePath
                     ? dirname.replace(fileMeta.src, opts.dest)
-                    : opts.to,
+                    : opts.dest,
                 fileMeta.resultAbsolutePath
             ) + fileMeta.extra;
             return updateUrl(decl, oldValue, urlMeta, resultUrl);
@@ -368,7 +368,9 @@ function init(userOpts = {}) {
         }
 
         if (!(opts.keepRelativePath)) {
-            if (result.opts && result.opts.to) {
+            if (result.opts &&
+                result.opts.to &&
+                (result.opts.to !== result.opts.from) ) {
                 opts.to = path.dirname(path.resolve(result.opts.to));
             } else {
                 opts.to = opts.dest;
