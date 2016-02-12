@@ -1,3 +1,11 @@
+<a name="3.0.0"></a>
+# 3.0.0 (2016-02-12)
+
+
+* replace keepRelativePath by relativePath custom function ([275e39a](https://github.com/geut/postcss-copy/commit/275e39a))
+
+
+
 <a name="2.6.3"></a>
 ## 2.6.3 (2016-02-12)
 
