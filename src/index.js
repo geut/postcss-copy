@@ -288,7 +288,7 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
             const resultUrl = path.relative(
                 opts.keepRelativePath
                     ? dirname.replace(fileMeta.src, opts.dest)
-                    : opts.dest,
+                    : opts.to,
                 fileMeta.resultAbsolutePath
             ) + fileMeta.extra;
             return updateUrl(decl, oldValue, urlMeta, resultUrl);
