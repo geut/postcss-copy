@@ -1,3 +1,11 @@
+<a name="2.6.3"></a>
+## 2.6.3 (2016-02-12)
+
+
+* minor change ([a18879c](https://github.com/geut/postcss-copy/commit/a18879c))
+
+
+
 <a name="2.6.2"></a>
 ## 2.6.2 (2016-02-12)
 
