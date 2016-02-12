@@ -1,3 +1,11 @@
+<a name="2.6.2"></a>
+## 2.6.2 (2016-02-12)
+
+
+* if result.opts.to === result.opts.from use the dest option ([0241249](https://github.com/geut/postcss-copy/commit/0241249))
+
+
+
 <a name="2.6.1"></a>
 ## 2.6.1 (2016-02-11)
 
