@@ -285,10 +285,11 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
             return copyFile(fileMeta, opts.transform);
         })
         .then((fileMeta) => {
+            const destFilename = _path2.default.join(opts.dest, opts.relativeBase);
             const resultUrl = path.relative(
                 opts.keepRelativePath
                     ? dirname.replace(fileMeta.src, opts.dest)
-                    : opts.dest,
+                    : destFilename,
                 fileMeta.resultAbsolutePath
             ) + fileMeta.extra;
             return updateUrl(decl, oldValue, urlMeta, resultUrl);
@@ -334,6 +335,7 @@ function processDecl(result, decl, opts) {
  */
 function init(userOpts = {}) {
     const opts = Object.assign({
+        base: process.cwd(),
         template: 'assets/[hash].[ext]',
         keepRelativePath: true,
         hashFunction(contents) {
@@ -375,6 +377,8 @@ function init(userOpts = {}) {
             } else {
                 opts.to = opts.dest;
             }
+            
+            opts.relativeBase = path.relative(path.resolve(opts.base), path.dirname(path.resolve(result.opts.to)));
         }
         if (typeof opts.ignore === 'string') {
             opts.ignore = [opts.ignore];
