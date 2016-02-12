@@ -285,7 +285,10 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
             return copyFile(fileMeta, opts.transform);
         })
         .then((fileMeta) => {
-            const destFilename = _path2.default.join(opts.dest, opts.relativeBase);
+            const destFilename = path.join(
+                opts.dest, 
+                opts.relativeBase
+            );
             const resultUrl = path.relative(
                 opts.keepRelativePath
                     ? dirname.replace(fileMeta.src, opts.dest)
@@ -377,8 +380,11 @@ function init(userOpts = {}) {
             } else {
                 opts.to = opts.dest;
             }
-            
-            opts.relativeBase = path.relative(path.resolve(opts.base), path.dirname(path.resolve(result.opts.to)));
+
+            opts.relativeBase = path.relative(
+                path.resolve(opts.base), 
+                path.dirname(path.resolve(result.opts.to))
+            );
         }
         if (typeof opts.ignore === 'string') {
             opts.ignore = [opts.ignore];
