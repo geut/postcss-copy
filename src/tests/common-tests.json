@@ -164,9 +164,9 @@
     "no-modified": "images/test.jpg"
   }
 },{
-  "name": "process test => template: 'assets/[hash].[ext]', keepRelativePath: false",
+  "name": "process test => template: 'assets/[hash].[ext]', relativePath from the to option",
   "opts": {
-    "keepRelativePath": false
+    "relativePath": false
   },
   "assertions": {
     "index": [{

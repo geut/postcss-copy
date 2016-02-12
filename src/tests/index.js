@@ -161,6 +161,11 @@ commonTests.forEach((cTest) => {
             };
         }
 
+        if (cTest.opts.relativePath === false) {
+            cTest.opts.relativePath = (dirname, fileMeta, result, options) => {
+                return result.opts.to || options.dest;
+            };
+        }
         const copyOpts = _extend({
             src: src,
             dest: dest

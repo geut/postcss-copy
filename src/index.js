@@ -285,10 +285,15 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
             return copyFile(fileMeta, opts.transform);
         })
         .then((fileMeta) => {
+            const relativePath = opts.relativePath(
+                dirname,
+                fileMeta,
+                result,
+                opts
+            );
+
             const resultUrl = path.relative(
-                opts.keepRelativePath
-                    ? dirname.replace(fileMeta.src, opts.dest)
-                    : opts.to,
+                relativePath,
                 fileMeta.resultAbsolutePath
             ) + fileMeta.extra;
             return updateUrl(decl, oldValue, urlMeta, resultUrl);
@@ -335,7 +340,9 @@ function processDecl(result, decl, opts) {
 function init(userOpts = {}) {
     const opts = Object.assign({
         template: 'assets/[hash].[ext]',
-        keepRelativePath: true,
+        relativePath(dirname, fileMeta, result, options) {
+            return dirname.replace(fileMeta.src, options.dest);
+        },
         hashFunction(contents) {
             return crypto.createHash('sha1')
                 .update(contents)
@@ -367,15 +374,6 @@ function init(userOpts = {}) {
             throw new Error('Option `dest` is required in postcss-copy');
         }
 
-        if (!(opts.keepRelativePath)) {
-            if (result.opts &&
-                result.opts.to &&
-                (result.opts.to !== result.opts.from) ) {
-                opts.to = path.dirname(path.resolve(result.opts.to));
-            } else {
-                opts.to = opts.dest;
-            }
-        }
         if (typeof opts.ignore === 'string') {
             opts.ignore = [opts.ignore];
         }
