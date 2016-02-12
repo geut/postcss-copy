@@ -286,7 +286,7 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
         })
         .then((fileMeta) => {
             const destFilename = path.join(
-                opts.dest, 
+                opts.dest,
                 opts.relativeBase
             );
             const resultUrl = path.relative(
@@ -382,7 +382,7 @@ function init(userOpts = {}) {
             }
 
             opts.relativeBase = path.relative(
-                path.resolve(opts.base), 
+                path.resolve(opts.base),
                 path.dirname(path.resolve(result.opts.to))
             );
         }
