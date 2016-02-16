@@ -5,7 +5,7 @@ import pathExists from 'path-exists';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
-import Imagemin from 'imagemin';
+import Jimp from 'jimp';
 import escapeStringRegexp from 'escape-string-regexp';
 import del from 'del';
 
@@ -248,23 +248,30 @@ test('check-transform', (t) => {
         dest,
         template: '[path]/[name].[ext]',
         transform(fileMeta) {
+            const ext = {
+                png: Jimp.MIME_PNG,
+                jpg: Jimp.MIME_JPEG
+            };
             if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
                 return fileMeta;
             }
-            return new Promise((resolve, reject) => {
-                new Imagemin()
-                    .src(fileMeta.contents)
-                    .use(Imagemin.jpegtran({
-                        progressive: true
-                    }))
-                    .run((err, files) => {
-                        if (err) {
-                            reject(err);
-                        }
-                        fileMeta.contents = files[0].contents;
-                        resolve(fileMeta);
+            return Jimp
+                .read(fileMeta.contents)
+                .then((lenna) => {
+                    return new Promise((resolve, reject) => {
+                        lenna
+                        .resize(10, 10)
+                        .quality(60)
+                        .getBuffer(ext[fileMeta.ext], (err, buffer) => {
+                            if (err) {
+                                reject(err);
+                            }
+                            fileMeta.contents = buffer;
+                            console.error(fileMeta.contents);
+                            return resolve(fileMeta);
+                        });
                     });
-            });
+                });
         }
     };
 

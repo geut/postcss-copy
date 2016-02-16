@@ -22,7 +22,7 @@
     "eslint": "^2.1.0",
     "eslint-config-postcss": "^2.0.0",
     "eslint-config-tinchoz49": "^2.0.1",
-    "imagemin": "~4.0.0",
+    "jimp": "^0.2.21",
     "tap-spec": "^4.1.1",
     "tape": "^4.4.0"
   },
