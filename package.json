@@ -36,7 +36,7 @@
     "build": "npm run clean && babel src --source-maps --out-dir dist --ignore /tests/",
     "start": "babel src --watch --source-maps --out-dir dist --ignore /tests/",
     "prepublish": "npm run test && npm run build",
-    "version": "node_modules/.bin/conventional-changelog -i CHANGELOG.md --same-file && git add CHANGELOG.md"
+    "version": "conventional-changelog -i CHANGELOG.md --same-file && git add CHANGELOG.md"
   },
   "eslintConfig": {
     "extends": "tinchoz49"
