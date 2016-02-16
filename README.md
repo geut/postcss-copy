@@ -154,7 +154,10 @@ var copyOpts = {
     ...,
     relativePath(dirname, fileMeta, result, opts) {
         // this is the relative path by default
-        return dirname.replace(fileMeta.src, opts.dest);
+        return path.join(
+            options.dest,
+            path.relative(fileMeta.src, dirname)
+        );
     }
 };
 ```
