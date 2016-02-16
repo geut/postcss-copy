@@ -1,4 +1,4 @@
-# postcss-copy [![Build Status](https://travis-ci.org/geut/postcss-copy.svg?branch=master)](https://travis-ci.org/geut/postcss-copy)
+# postcss-copy [![Build Status](https://travis-ci.org/geut/postcss-copy.svg?branch=master)](https://travis-ci.org/geut/postcss-copy) [![Build status](https://ci.appveyor.com/api/projects/status/hx0tmjv1qi0au9oy?svg=true)](https://ci.appveyor.com/project/tinchoz49/postcss-copy)
 > An **async** postcss plugin to copy all assets referenced in CSS files to a custom destination folder and updating the URLs.
 
 Sections |
