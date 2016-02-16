@@ -5,7 +5,6 @@ import pathExists from 'path-exists';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
-import {_extend} from 'util';
 import Imagemin from 'imagemin';
 import escapeStringRegexp from 'escape-string-regexp';
 import del from 'del';
@@ -153,7 +152,7 @@ commonTests.forEach((cTest) => {
                 return result.opts.to || options.dest;
             };
         }
-        const copyOpts = _extend({
+        const copyOpts = Object.assign({
             src: src,
             dest: dest
         }, cTest.opts);
