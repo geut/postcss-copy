@@ -5,9 +5,9 @@ import pathExists from 'path-exists';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
-import {_extend} from 'util';
 import Imagemin from 'imagemin';
 import escapeStringRegexp from 'escape-string-regexp';
+import del from 'del';
 
 const src = 'src/tests/src';
 const libSrc = 'src/tests/external_libs';
@@ -48,21 +48,7 @@ function testFileExists(t, file) {
         });
 }
 
-function deleteDest(pathDest = 'src/tests/dest') {
-    if (fs.existsSync(pathDest)) {
-        fs.readdirSync(pathDest).forEach((file) => {
-            const curPath = pathDest + '/' + file;
-            if (fs.lstatSync(curPath).isDirectory()) { // recurse
-                deleteDest(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(pathDest);
-    }
-}
-
-deleteDest();
+del.sync('src/tests/dest');
 
 test('options test', (t) => {
     t.plan(3);
@@ -166,7 +152,7 @@ commonTests.forEach((cTest) => {
                 return result.opts.to || options.dest;
             };
         }
-        const copyOpts = _extend({
+        const copyOpts = Object.assign({
             src: src,
             dest: dest
         }, cTest.opts);
