@@ -37,10 +37,10 @@ function getUrlMetaData(string) {
 
     const urlMeta = {
         before: string.slice(0, string.indexOf(quote)),
-        quote: quote,
+        quote,
         value: quote ?
-            trimedString.substr(1, trimedString.length - 2)
-            : trimedString,
+            trimedString.substr(1, trimedString.length - 2) :
+            trimedString,
         after: string.slice(string.lastIndexOf(quote) + 1)
     };
     return urlMeta;
@@ -177,7 +177,7 @@ function getFileMeta(dirname, value, opts) {
         fs.readFile(pathName, (err, contents) => {
             if (err) {
                 reject(`Can't read the file in ${pathName}`);
-            } else if (!(fileMeta.src)) {
+            } else if (!fileMeta.src) {
                 reject(`"src" not found in ${pathName}`);
             } else {
                 fileMeta.contents = contents;

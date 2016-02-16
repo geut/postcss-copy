@@ -75,8 +75,8 @@ test('options test', (t) => {
     processStyle(
         path.join(libSrc, 'bootstrap/css/bootstrap.css'),
         {
-            src: src,
-            dest: dest
+            src,
+            dest
         }
     )
     .then((result) => {
@@ -87,12 +87,12 @@ test('options test', (t) => {
     });
 });
 
-test(`invalid url() test`, (t) => {
+test('invalid url() test', (t) => {
     t.plan(2);
 
     const copyOpts = {
-        src: src,
-        dest: dest
+        src,
+        dest
     };
 
     processStyle(path.join(src, 'invalid.css'), copyOpts)
@@ -137,7 +137,7 @@ commonTests.forEach((cTest) => {
                     .digest('base64')
                     .replace(/\+/g, '-')
                     .replace(/\//g, '_')
-                    .replace(/=/g, '')
+                    .replace(/\=/g, '')
                     .replace(/^[+-]+/g, '');
             };
         }
@@ -153,8 +153,8 @@ commonTests.forEach((cTest) => {
             };
         }
         const copyOpts = Object.assign({
-            src: src,
-            dest: dest
+            src,
+            dest
         }, cTest.opts);
 
         let oldTime;
@@ -244,8 +244,8 @@ test('check-transform', (t) => {
     t.plan(1);
 
     const copyOpts = {
-        src: src,
-        dest: dest,
+        src,
+        dest,
         template: '[path]/[name].[ext]',
         transform(fileMeta) {
             if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
@@ -290,8 +290,8 @@ test('check-correct-parse-url', (t) => {
     t.plan(1);
 
     const copyOpts = {
-        src: src,
-        dest: dest,
+        src,
+        dest,
         template: '[path]/[name].[ext]'
     };
 
@@ -310,8 +310,8 @@ test('check-function-template', (t) => {
     t.plan(1);
 
     const copyOpts = {
-        src: src,
-        dest: dest,
+        src,
+        dest,
         template(fileMeta) {
             return 'custom-path/custom-name-' +
             fileMeta.name + '.' + fileMeta.ext;
@@ -334,8 +334,8 @@ test('check-ignore-option', (t) => {
     t.plan(3);
 
     const copyOptsString = {
-        src: src,
-        dest: dest,
+        src,
+        dest,
         template: 'ignore-path-array/[path]/[name].[ext]',
         ignore: 'images/other.+(jpg|png)'
     };
@@ -352,8 +352,8 @@ test('check-ignore-option', (t) => {
         });
 
     const copyOptsArray = {
-        src: src,
-        dest: dest,
+        src,
+        dest,
         template: 'ignore-path-array/[path]/[name].[ext]',
         ignore: ['images/other.jpg']
     };
@@ -370,11 +370,11 @@ test('check-ignore-option', (t) => {
         });
 
     const copyOptsFunc = {
-        src: src,
-        dest: dest,
+        src,
+        dest,
         template: 'ignore-path-func/[path]/[name].[ext]',
         ignore(filename) {
-            return (filename === 'images/other.jpg');
+            return filename === 'images/other.jpg';
         }
     };
 

@@ -14,15 +14,12 @@
   "devDependencies": {
     "babel-cli": "~6.1.2",
     "babel-core": "~5.8.33",
-    "babel-eslint": "~4.1.4",
     "babel-preset-es2015": "~6.1.2",
     "babel-tape-runner": "~1.3.0",
-    "conventional-changelog": "^0.5.1",
+    "conventional-changelog-cli": "^1.1.1",
     "del": "^2.2.0",
-    "eslint": "~1.8.0",
-    "eslint-config-airbnb": "~0.1.0",
-    "eslint-config-tinchoz49": "~1.0.3",
-    "eslint-plugin-react": "~3.7.1",
+    "eslint": "^2.1.0",
+    "eslint-config-tinchoz49": "^2.0.1",
     "imagemin": "~4.0.0",
     "tap-spec": "~4.1.0",
     "tape": "~4.2.2"
@@ -37,7 +34,7 @@
     "build": "npm run clean && babel src --source-maps --out-dir dist --ignore /tests/ --presets es2015",
     "start": "babel src --watch --source-maps --out-dir dist --ignore /tests/",
     "prepublish": "npm run test && npm run build",
-    "version": "conventional-changelog -i CHANGELOG.md --overwrite && git add CHANGELOG.md",
+    "version": "node_modules/.bin/conventional-changelog -i CHANGELOG.md --same-file && git add CHANGELOG.md",
     "debug": "iron-node tests/index.js"
   },
   "repository": {
