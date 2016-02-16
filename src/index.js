@@ -199,11 +199,10 @@ function getFileMeta(dirname, value, opts) {
                 // the absolute path without the #hash param
                 fileMeta.absolutePath = pathName;
 
-                fileMeta.path = fileMeta
-                    .absolutePath
-                    .replace(fileMeta.src, '')
-                    .replace(fileMeta.fullName, '')
-                    .replace(/^\/+|\/+$/gm, '');
+                fileMeta.path = path.relative(
+                    fileMeta.src,
+                    path.dirname(pathName)
+                );
 
                 fileMeta.extra = extra;
 
@@ -295,7 +294,7 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
             const resultUrl = path.relative(
                 relativePath,
                 fileMeta.resultAbsolutePath
-            ) + fileMeta.extra;
+            ).split('\\').join('/') + fileMeta.extra;
             return updateUrl(decl, oldValue, urlMeta, resultUrl);
         })
         .catch((err) => {
@@ -341,7 +340,10 @@ function init(userOpts = {}) {
     const opts = Object.assign({
         template: 'assets/[hash].[ext]',
         relativePath(dirname, fileMeta, result, options) {
-            return dirname.replace(fileMeta.src, options.dest);
+            return path.join(
+                options.dest,
+                path.relative(fileMeta.src, dirname)
+            );
         },
         hashFunction(contents) {
             return crypto.createHash('sha1')
