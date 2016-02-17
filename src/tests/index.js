@@ -9,9 +9,7 @@ import Jimp from 'jimp';
 import escapeStringRegexp from 'escape-string-regexp';
 import del from 'del';
 
-const src = 'src/tests/src';
-const libSrc = 'src/tests/external_libs';
-const dest = 'src/tests/dest';
+process.chdir('src/tests');
 
 /**
  * processStyle
@@ -42,47 +40,52 @@ function makeRegex(str, simple = false) {
 }
 
 function testFileExists(t, file) {
-    pathExists(path.join(dest, file))
+    return pathExists(path.join('dest', file))
         .then((exists) => {
             t.ok(exists, `File "${file}" created.`);
         });
 }
 
-del.sync('src/tests/dest');
+del.sync('dest');
 
 test('options test', (t) => {
-    t.plan(3);
-
-    processStyle(path.join(src, 'index.css'))
-        .catch((err) => {
-            t.pass(
-                `Throw an exception if the "src" option is not setted. ${err}`
-            );
-        });
+    t.plan(4);
 
     processStyle(
-        path.join(src, 'index.css'),
+        'src/index.css'
+    )
+    .then(() => {
+        t.fail('Throw an exception if the "src" option is not setted.');
+    }, () => {
+        t.pass('Throw an exception if the "src" option is not setted.');
+    });
+
+    processStyle(
+        'src/index.css',
         {
             src: 'setted'
         }
     )
-    .catch((err) => {
-        t.pass(
-            `Throw an exception if the "dest" option is not setted. ${err}`
-        );
+    .then(() => {
+        t.fail('Throw an exception if the "dest" option is not setted.');
+    }, () => {
+        t.pass('Throw an exception if the "dest" option is not setted.');
     });
 
     processStyle(
-        path.join(libSrc, 'bootstrap/css/bootstrap.css'),
+        'external_libs/bootstrap/css/bootstrap.css',
         {
-            src,
-            dest
+            src: 'src',
+            dest: 'dest'
         }
     )
     .then((result) => {
-        t.pass(
-            `Warning if the filename not belongs
-            to the "src" option. ${result.warnings()[0]}`
+        const warnings = result.warnings();
+        t.equal(warnings.length, 6);
+        t.equal(
+            warnings[0].text.indexOf('"src" not found in '),
+            0,
+            'Warning if the filename not belongs to the "src" option.'
         );
     });
 });
@@ -91,11 +94,11 @@ test('invalid url() test', (t) => {
     t.plan(2);
 
     const copyOpts = {
-        src,
-        dest
+        src: 'src',
+        dest: 'dest'
     };
 
-    processStyle(path.join(src, 'invalid.css'), copyOpts)
+    processStyle('src/invalid.css', copyOpts)
         .then((result) => {
             const css = result.css;
             t.ok(
@@ -108,7 +111,7 @@ test('invalid url() test', (t) => {
             t.fail(`@invalid.css => ${err}`);
         });
 
-    processStyle(path.join(src, 'not-found.css'), copyOpts)
+    processStyle('src/not-found.css', copyOpts)
         .then((result) => {
             const css = result.css;
             t.ok(
@@ -122,6 +125,7 @@ test('invalid url() test', (t) => {
             t.fail(`@not-found.css => ${err}`);
         });
 });
+
 
 import commonTests from './common-tests.json';
 
@@ -153,14 +157,14 @@ commonTests.forEach((cTest) => {
             };
         }
         const copyOpts = Object.assign({
-            src,
-            dest
+            src: 'src',
+            dest: 'dest'
         }, cTest.opts);
 
         let oldTime;
         let newTime;
 
-        processStyle(path.join(src, 'index.css'), copyOpts)
+        processStyle('src/index.css', copyOpts)
             .then((result) => {
                 const css = result.css;
                 cTest.assertions.index.forEach((assertion) => {
@@ -174,15 +178,17 @@ commonTests.forEach((cTest) => {
                 });
 
                 oldTime = fs.statSync(
-                    path.join(dest, cTest.assertions['no-modified'])
+                    path.join('dest', cTest.assertions['no-modified'])
                 ).mtime.getTime();
 
-                copyOpts.src = [src, libSrc];
+                copyOpts.src = ['src', 'external_libs'];
                 t.comment('*************************************************');
-                t.comment('from now testing with multiple src: [src, libSrc]');
+                t.comment(`from now testing with multiple src: ${
+                    JSON.stringify(copyOpts.src)
+                }`);
                 t.comment('*************************************************');
                 return processStyle(
-                    path.join(src, 'component/index.css'),
+                    'src/component/index.css',
                     copyOpts
                 );
             })
@@ -199,7 +205,7 @@ commonTests.forEach((cTest) => {
                 });
 
                 newTime = fs.statSync(
-                    path.join(dest, cTest.assertions['no-modified'])
+                    path.join('dest', cTest.assertions['no-modified'])
                 ).mtime.getTime();
 
                 t.ok(
@@ -208,7 +214,7 @@ commonTests.forEach((cTest) => {
                 );
 
                 return processStyle(
-                    path.join(libSrc, 'bootstrap/css/bootstrap.css'),
+                    'external_libs/bootstrap/css/bootstrap.css',
                     copyOpts
                 );
             })
@@ -225,7 +231,7 @@ commonTests.forEach((cTest) => {
                 });
 
                 newTime = fs.statSync(
-                    path.join(dest, cTest.assertions['no-modified'])
+                    path.join('dest', cTest.assertions['no-modified'])
                 ).mtime.getTime();
 
                 t.ok(
@@ -236,6 +242,9 @@ commonTests.forEach((cTest) => {
                 cTest.assertions.exists.forEach((file) => {
                     testFileExists(t, file);
                 });
+            })
+            .catch((err) => {
+                t.fail(err);
             });
     });
 });
@@ -244,8 +253,8 @@ test('check-transform', (t) => {
     t.plan(1);
 
     const copyOpts = {
-        src,
-        dest,
+        src: 'src',
+        dest: 'dest',
         template: '[path]/[name].[ext]',
         transform(fileMeta) {
             const ext = {
@@ -267,7 +276,6 @@ test('check-transform', (t) => {
                                 reject(err);
                             }
                             fileMeta.contents = buffer;
-                            console.error(fileMeta.contents);
                             return resolve(fileMeta);
                         });
                     });
@@ -275,14 +283,14 @@ test('check-transform', (t) => {
         }
     };
 
-    processStyle(path.join(src, 'check-transform.css'), copyOpts)
+    processStyle('src/check-transform.css', copyOpts)
         .then(() => {
             const oldSize = fs
-                .statSync(path.join(src, 'images/bigimage.jpg'))
+                .statSync('src/images/bigimage.jpg')
                 .size;
 
             const newSize = fs
-                .statSync(path.join(dest, 'images/bigimage.jpg'))
+                .statSync('dest/images/bigimage.jpg')
                 .size;
 
             t.ok(
@@ -292,17 +300,16 @@ test('check-transform', (t) => {
         });
 });
 
-
 test('check-correct-parse-url', (t) => {
     t.plan(1);
 
     const copyOpts = {
-        src,
-        dest,
+        src: 'src',
+        dest: 'dest',
         template: '[path]/[name].[ext]'
     };
 
-    processStyle(path.join(src, 'correct-parse-url.css'), copyOpts)
+    processStyle('src/correct-parse-url.css', copyOpts)
         .then((result) => {
             const css = result.css;
             t.ok(
@@ -317,15 +324,15 @@ test('check-function-template', (t) => {
     t.plan(1);
 
     const copyOpts = {
-        src,
-        dest,
+        src: 'src',
+        dest: 'dest',
         template(fileMeta) {
             return 'custom-path/custom-name-' +
             fileMeta.name + '.' + fileMeta.ext;
         }
     };
 
-    processStyle(path.join(src, 'index.css'), copyOpts)
+    processStyle('src/index.css', copyOpts)
         .then((result) => {
             const css = result.css;
             t.ok(
@@ -341,13 +348,13 @@ test('check-ignore-option', (t) => {
     t.plan(3);
 
     const copyOptsString = {
-        src,
-        dest,
+        src: 'src',
+        dest: 'dest',
         template: 'ignore-path-array/[path]/[name].[ext]',
         ignore: 'images/other.+(jpg|png)'
     };
 
-    processStyle(path.join(src, 'ignore.css'), copyOptsString)
+    processStyle('src/ignore.css', copyOptsString)
         .then((result) => {
             const css = result.css;
             t.ok(
@@ -359,13 +366,13 @@ test('check-ignore-option', (t) => {
         });
 
     const copyOptsArray = {
-        src,
-        dest,
+        src: 'src',
+        dest: 'dest',
         template: 'ignore-path-array/[path]/[name].[ext]',
         ignore: ['images/other.jpg']
     };
 
-    processStyle(path.join(src, 'ignore.css'), copyOptsArray)
+    processStyle('src/ignore.css', copyOptsArray)
         .then((result) => {
             const css = result.css;
             t.ok(
@@ -377,15 +384,15 @@ test('check-ignore-option', (t) => {
         });
 
     const copyOptsFunc = {
-        src,
-        dest,
+        src: 'src',
+        dest: 'dest',
         template: 'ignore-path-func/[path]/[name].[ext]',
         ignore(filename) {
             return filename === 'images/other.jpg';
         }
     };
 
-    processStyle(path.join(src, 'ignore.css'), copyOptsFunc)
+    processStyle('src/ignore.css', copyOptsFunc)
         .then((result) => {
             const css = result.css;
             t.ok(
