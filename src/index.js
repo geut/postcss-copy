@@ -219,6 +219,9 @@ function getFileMeta(dirname, value, opts) {
  * @return {Object} return decl postcss declaration with url updated
  */
 function updateUrl(decl, oldValue, urlMeta, resultUrl) {
+    if (!resultUrl) {
+        return decl.value;
+    }
     const expression = new RegExp(
         '(\\()(' + escapeStringRegexp(oldValue) + ')(\\))', 'g'
     );
