@@ -313,17 +313,15 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
  * @return {void}
  */
 function processDecl(result, decl, opts) {
-    return new Promise((resolve, reject) => {
-        const promises = [];
+    const promises = [];
 
-        reduceFunctionCall(decl.value, 'url', (value) => {
-            const urlMeta = getUrlMetaData(value);
+    reduceFunctionCall(decl.value, 'url', (value) => {
+        const urlMeta = getUrlMetaData(value);
 
-            promises.push(processCopy(result, urlMeta, opts, decl, value));
-        });
-
-        Promise.all(promises).then(resolve, reject);
+        promises.push(processCopy(result, urlMeta, opts, decl, value));
     });
+
+    return Promise.all(promises);
 }
 
 /**
@@ -381,15 +379,13 @@ function init(userOpts = {}) {
             opts.ignore = [opts.ignore];
         }
 
-        return new Promise((resolve, reject) => {
-            const promises = [];
-            style.walkDecls(decl => {
-                if (decl.value && decl.value.indexOf('url(') > -1) {
-                    promises.push(processDecl(result, decl, opts));
-                }
-            });
-            Promise.all(promises).then(resolve, reject);
+        const promises = [];
+        style.walkDecls(decl => {
+            if (decl.value && decl.value.indexOf('url(') > -1) {
+                promises.push(processDecl(result, decl, opts));
+            }
         });
+        return Promise.all(promises);
     };
 }
 
