@@ -1,12 +1,11 @@
 import postcss from 'postcss';
 import path from 'path';
-import reduceFunctionCall from 'reduce-function-call';
+import valueParser from 'postcss-value-parser';
 import fs from 'fs';
 import url from 'url';
 import crypto from 'crypto';
 import pathExists from 'path-exists';
 import mkdirp from 'mkdirp';
-import escapeStringRegexp from 'escape-string-regexp';
 import minimatch from 'minimatch';
 
 const tags = [
@@ -15,51 +14,6 @@ const tags = [
     'hash',
     'ext'
 ];
-
-/**
- * return quote type
- *
- * @param  {String} string quoted (or not) value
- * @return {String} quote if any, or empty string
- */
-function getUrlMetaData(string) {
-    let quote = '';
-    const quotes = ['\"', '\''];
-    const trimedString = string.trim();
-    quotes.forEach((q) => {
-        if (
-            trimedString.charAt(0) === q &&
-            trimedString.charAt(trimedString.length - 1) === q
-        ) {
-            quote = q;
-        }
-    });
-
-    const urlMeta = {
-        before: string.slice(0, string.indexOf(quote)),
-        quote,
-        value: quote ?
-            trimedString.substr(1, trimedString.length - 2) :
-            trimedString,
-        after: string.slice(string.lastIndexOf(quote) + 1)
-    };
-    return urlMeta;
-}
-
-/**
- * Create an css url() from a path and a quote style
- *
- * @param {String} urlMeta url meta data
- * @param {String} newPath url path
- * @return {String} new url()
- */
-function createUrl(urlMeta, newPath) {
-    return urlMeta.before +
-        urlMeta.quote +
-        (newPath || urlMeta.value) +
-        urlMeta.quote +
-        urlMeta.after;
-}
 
 /**
  * writeFile
@@ -210,27 +164,6 @@ function getFileMeta(dirname, value, opts) {
     });
 }
 
-/**
- * update the url result
- * @param {Object} decl postcss declaration
- * @param {string} old value
- * @param {Object} urlMeta url meta data
- * @param  {String} new url
- * @return {Object} return decl postcss declaration with url updated
- */
-function updateUrl(decl, oldValue, urlMeta, resultUrl) {
-    if (!resultUrl) {
-        return decl.value;
-    }
-    const expression = new RegExp(
-        '(\\()(' + escapeStringRegexp(oldValue) + ')(\\))', 'g'
-    );
-    decl.value = decl.value.replace(
-        expression,
-        '$1' + createUrl(urlMeta, resultUrl) + '$3'
-    );
-    return decl.value;
-}
 
 /**
  * processCopy
@@ -242,22 +175,18 @@ function updateUrl(decl, oldValue, urlMeta, resultUrl) {
  * @param {string} old value
  * @return {String} new url
  */
-function processCopy(result, urlMeta, opts, decl, oldValue) {
+function processCopy(result, decl, node, opts) {
     // ignore absolute urls, hasshes, data uris or by **ignore option**
-    if (urlMeta.value.indexOf('!') === 0) {
-        return updateUrl(
-            decl,
-            oldValue,
-            urlMeta,
-            urlMeta.value.slice(1, urlMeta.value.length)
-        );
+    if (node.value.indexOf('!') === 0) {
+        node.value = node.value.slice(1);
+        return Promise.resolve();
     }
-    if (urlMeta.value.indexOf('/') === 0 ||
-        urlMeta.value.indexOf('data:') === 0 ||
-        urlMeta.value.indexOf('#') === 0 ||
-        /^[a-z]+:\/\//.test(urlMeta.value)
+    if (node.value.indexOf('/') === 0 ||
+        node.value.indexOf('data:') === 0 ||
+        node.value.indexOf('#') === 0 ||
+        /^[a-z]+:\/\//.test(node.value)
     ) {
-        return updateUrl(decl, oldValue, urlMeta);
+        return Promise.resolve();
     }
 
     /**
@@ -266,8 +195,8 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
      */
     const dirname = opts.inputPath(decl);
 
-    return getFileMeta(dirname, urlMeta.value, opts)
-        .then((fileMeta) => {
+    return getFileMeta(dirname, node.value, opts)
+        .then(fileMeta => {
             let tpl = opts.template;
             if (typeof tpl === 'function') {
                 tpl = tpl(fileMeta);
@@ -284,7 +213,7 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
 
             return copyFile(fileMeta, opts.transform);
         })
-        .then((fileMeta) => {
+        .then(fileMeta => {
             const relativePath = opts.relativePath(
                 dirname,
                 fileMeta,
@@ -292,15 +221,13 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
                 opts
             );
 
-            const resultUrl = path.relative(
+            node.value = path.relative(
                 relativePath,
                 fileMeta.resultAbsolutePath
             ).split('\\').join('/') + fileMeta.extra;
-            return updateUrl(decl, oldValue, urlMeta, resultUrl);
         })
-        .catch((err) => {
+        .catch(err => {
             decl.warn(result, err);
-            return updateUrl(decl, oldValue, urlMeta);
         });
 }
 
@@ -313,17 +240,21 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
  * @return {void}
  */
 function processDecl(result, decl, opts) {
-    return new Promise((resolve, reject) => {
-        const promises = [];
+    const promises = [];
 
-        reduceFunctionCall(decl.value, 'url', (value) => {
-            const urlMeta = getUrlMetaData(value);
+    decl.value = valueParser(decl.value).walk(node => {
+        if (
+            node.type !== 'function' ||
+            node.value !== 'url' ||
+            node.nodes.length === 0
+        ) {
+            return;
+        }
 
-            promises.push(processCopy(result, urlMeta, opts, decl, value));
-        });
-
-        Promise.all(promises).then(resolve, reject);
+        promises.push(processCopy(result, decl, node.nodes[0], opts));
     });
+
+    return Promise.all(promises).then(() => decl);
 }
 
 /**
@@ -381,15 +312,17 @@ function init(userOpts = {}) {
             opts.ignore = [opts.ignore];
         }
 
-        return new Promise((resolve, reject) => {
-            const promises = [];
-            style.walkDecls(decl => {
-                if (decl.value && decl.value.indexOf('url(') > -1) {
-                    promises.push(processDecl(result, decl, opts));
-                }
-            });
-            Promise.all(promises).then(resolve, reject);
+        const promises = [];
+        style.walkDecls(decl => {
+            if (decl.value && decl.value.indexOf('url(') > -1) {
+                promises.push(processDecl(result, decl, opts));
+            }
         });
+        return Promise.all(promises).then(decls =>
+            decls.forEach(decl => {
+                decl.value = String(decl.value);
+            })
+        );
     };
 }
 

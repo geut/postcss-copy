@@ -53,11 +53,12 @@ commonTests.forEach(item => {
             .then(result => {
                 const css = result.css;
                 item.assertions.index.forEach(assertion => {
-                    t.ok(
-                        css.match(makeRegex(
+                    t.regex(
+                        css,
+                        makeRegex(
                             assertion.match,
                             assertion['regex-simple']
-                        )),
+                        ),
                         assertion.desc
                     );
                 });
@@ -75,11 +76,12 @@ commonTests.forEach(item => {
             .then(result => {
                 const css = result.css;
                 item.assertions.component.forEach(assertion => {
-                    t.ok(
-                        css.match(makeRegex(
+                    t.regex(
+                        css,
+                        makeRegex(
                             assertion.match,
                             assertion['regex-simple']
-                        )),
+                        ),
                         assertion.desc
                     );
                 });
@@ -102,11 +104,12 @@ commonTests.forEach(item => {
             .then(result => {
                 const css = result.css;
                 item.assertions.external_libs.forEach(assertion => {
-                    t.ok(
-                        css.match(makeRegex(
+                    t.regex(
+                        css,
+                        makeRegex(
                             assertion.match,
                             assertion['regex-simple']
-                        )),
+                        ),
                         assertion.desc
                     );
                 });

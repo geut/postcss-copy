@@ -4,15 +4,14 @@
   "description": "A postcss plugin to copy all assets referenced in CSS to a custom destination folder and updating the URLs.",
   "main": "dist/index.js",
   "dependencies": {
-    "escape-string-regexp": "^1.0.4",
     "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
     "path-exists": "^2.1.0",
     "postcss": "^5.0.10",
-    "reduce-function-call": "^1.0.1"
+    "postcss-value-parser": "^3.3.0"
   },
   "devDependencies": {
-    "ava": "^0.11.0",
+    "ava": "^0.12.0",
     "babel-cli": "^6.5.1",
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-plugin-transform-object-assign": "^6.5.0",
@@ -20,6 +19,7 @@
     "babel-register": "^6.5.2",
     "conventional-changelog-cli": "^1.1.1",
     "del-cli": "^0.2.0",
+    "escape-string-regexp": "^1.0.4",
     "eslint": "^2.1.0",
     "eslint-config-postcss": "^2.0.0",
     "eslint-config-tinchoz49": "^2.0.1",
