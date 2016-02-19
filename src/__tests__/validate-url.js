@@ -1,12 +1,13 @@
 import test from 'ava';
 import path from 'path';
-import processStyle from './helpers/process-style.js';
-import makeRegex from './helpers/make-regex.js';
+import randomFolder from './helpers/random-folder';
+import processStyle from './helpers/process-style';
+import makeRegex from './helpers/make-regex';
 
 test('should correctly parse url', t => {
     return processStyle('src/correct-parse-url.css', {
         src: 'src',
-        dest: 'dest',
+        dest: randomFolder('dest', t.title),
         template: '[path]/[name].[ext]'
     })
     .then(result => {
@@ -19,7 +20,7 @@ test('should correctly parse url', t => {
 test('should ignore if the url() is not valid', t => {
     return processStyle('src/invalid.css', {
         src: 'src',
-        dest: 'dest'
+        dest: randomFolder('dest', t.title)
     })
     .then(result => {
         const css = result.css;
@@ -32,7 +33,7 @@ test('should ignore if the url() is not valid', t => {
 test('should ignore if the asset is not found in the src path', t => {
     return processStyle('src/not-found.css', {
         src: 'src',
-        dest: 'dest'
+        dest: randomFolder('dest', t.title)
     })
     .then(result => {
         const css = result.css;

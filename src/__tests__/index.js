@@ -3,12 +3,13 @@ import pathExists from 'path-exists';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
-import processStyle from './helpers/process-style.js';
-import makeRegex from './helpers/make-regex.js';
+import randomFolder from './helpers/random-folder';
+import processStyle from './helpers/process-style';
+import makeRegex from './helpers/make-regex';
 import commonTests from './common-tests.json';
 
 function testFileExists(t, file) {
-    return pathExists(path.join('dest', file))
+    return pathExists(file)
         .then(exists => {
             t.ok(exists, `File "${file}" created.`);
         });
@@ -41,9 +42,10 @@ commonTests.forEach(item => {
     }
 
     test(item.name, t => {
+        const tempFolder = randomFolder('dest', t.title);
         const copyOpts = Object.assign({
             src: 'src',
-            dest: 'dest'
+            dest: tempFolder
         }, item.opts);
 
         let oldTime;
@@ -64,7 +66,7 @@ commonTests.forEach(item => {
                 });
 
                 oldTime = fs.statSync(
-                    path.join('dest', item.assertions['no-modified'])
+                    path.join(tempFolder, item.assertions['no-modified'])
                 ).mtime.getTime();
 
                 copyOpts.src = ['src', 'external_libs'];
@@ -87,7 +89,7 @@ commonTests.forEach(item => {
                 });
 
                 newTime = fs.statSync(
-                    path.join('dest', item.assertions['no-modified'])
+                    path.join(tempFolder, item.assertions['no-modified'])
                 ).mtime.getTime();
 
                 t.is(
@@ -115,7 +117,7 @@ commonTests.forEach(item => {
                 });
 
                 newTime = fs.statSync(
-                    path.join('dest', item.assertions['no-modified'])
+                    path.join(tempFolder, item.assertions['no-modified'])
                 ).mtime.getTime();
 
                 t.is(
@@ -125,7 +127,7 @@ commonTests.forEach(item => {
                 );
 
                 return Promise.all(item.assertions.exists.map(file => {
-                    return testFileExists(t, file);
+                    return testFileExists(t, path.join(tempFolder, file));
                 }));
             });
     });

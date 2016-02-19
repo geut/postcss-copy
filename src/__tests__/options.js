@@ -1,9 +1,10 @@
 import test from 'ava';
-import processStyle from './helpers/process-style.js';
+import randomFolder from './helpers/random-folder';
+import processStyle from './helpers/process-style';
 
 test('should throw an error if the "src" option is not setted', t => {
     return processStyle('src/index.css', {
-        dest: 'dest'
+        dest: randomFolder('dest', t.title)
     })
     .then(() => t.fail())
     .catch(err => {
@@ -24,7 +25,7 @@ test('should throw an error if the "dest" option is not setted', t => {
 test('should warn if the filename not belongs to the "src" option', t => {
     return processStyle('external_libs/bootstrap/css/bootstrap.css', {
         src: 'src',
-        dest: 'dest'
+        dest: randomFolder('dest', t.title)
     })
     .then(result => {
         const warnings = result.warnings();

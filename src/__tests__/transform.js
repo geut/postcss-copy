@@ -1,12 +1,15 @@
 import test from 'ava';
 import fs from 'fs';
 import Jimp from 'jimp';
-import processStyle from './helpers/process-style.js';
+import path from 'path';
+import randomFolder from './helpers/random-folder';
+import processStyle from './helpers/process-style';
 
 test('should process assets via transform', t => {
+    const tempFolder = randomFolder('dest', t.title);
     return processStyle('src/check-transform.css', {
         src: 'src',
-        dest: 'dest',
+        dest: tempFolder,
         template: '[path]/[name].[ext]',
         transform(fileMeta) {
             const ext = {
@@ -36,11 +39,11 @@ test('should process assets via transform', t => {
     })
     .then(() => {
         const oldSize = fs
-            .statSync('src/images/bigimage.jpg')
+            .statSync(path.join('src', 'images', 'bigimage.jpg'))
             .size;
 
         const newSize = fs
-            .statSync('dest/images/bigimage.jpg')
+            .statSync(path.join(tempFolder, 'images', 'bigimage.jpg'))
             .size;
 
         t.ok(newSize < oldSize);

@@ -1,11 +1,12 @@
 import test from 'ava';
-import processStyle from './helpers/process-style.js';
-import makeRegex from './helpers/make-regex.js';
+import randomFolder from './helpers/random-folder';
+import processStyle from './helpers/process-style';
+import makeRegex from './helpers/make-regex';
 
 test('should ignore files with string expression', t => {
     return processStyle('src/ignore.css', {
         src: 'src',
-        dest: 'dest',
+        dest: randomFolder('dest', t.title),
         template: 'ignore-path-array/[path]/[name].[ext]',
         ignore: 'images/other.+(jpg|png)'
     })
@@ -20,7 +21,7 @@ test('should ignore files with string expression', t => {
 test('should ignore files with array of paths', t => {
     return processStyle('src/ignore.css', {
         src: 'src',
-        dest: 'dest',
+        dest: randomFolder('dest', t.title),
         template: 'ignore-path-array/[path]/[name].[ext]',
         ignore: ['images/other.jpg']
     })
@@ -35,7 +36,7 @@ test('should ignore files with array of paths', t => {
 test('should ignore files with custom function', t => {
     return processStyle('src/ignore.css', {
         src: 'src',
-        dest: 'dest',
+        dest: randomFolder('dest', t.title),
         template: 'ignore-path-func/[path]/[name].[ext]',
         ignore(filename) {
             return filename === 'images/other.jpg';
