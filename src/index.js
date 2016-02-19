@@ -16,12 +16,10 @@ const tags = [
 ];
 
 /**
- * writeFile
- *
  * function to write the asset file in dest
  *
  * @param  {object} fileMeta
- * @return {contents|boolean}
+ * @return {Promise} resolve => fileMeta | reject => error message
  */
 function writeFile(fileMeta) {
     return new Promise((resolve, reject) => {
@@ -36,9 +34,10 @@ function writeFile(fileMeta) {
 }
 
 /**
- * [fileExists description]
- * @param  {[type]} filepath [description]
- * @return {[type]}          [description]
+ * copy low level process
+ * @param  {object} fileMeta information about the asset file
+ * @param  {function} transform custom function to transform the buffer content
+ * @return {Promise} resolve => fileMeta | reject => error message
  */
 function copyFile(fileMeta, transform) {
     return pathExists(fileMeta.resultAbsolutePath)
@@ -59,16 +58,13 @@ function copyFile(fileMeta, transform) {
         });
 }
 
-
 /**
- * getFileMeta
- *
  * Helper function to ignore files
  *
  * @param  {string} filename
  * @param  {string} extra
- * @param  {Object} options
- * @return {boolean} meta information from the resource
+ * @param  {Object} opts plugin options
+ * @return {boolean}
  */
 function ignore(filename, extra, opts) {
     // ignore option
@@ -92,15 +88,13 @@ function ignore(filename, extra, opts) {
 }
 
 /**
- * getFileMeta
- *
  * Helper function that reads the file ang get some helpful information
  * to the copy process.
  *
- * @param  {string} dirname
- * @param  {string} value
- * @param  {Object} options
- * @return {Object} meta information from the resource
+ * @param  {string} dirname path of the read file css
+ * @param  {string} value url
+ * @param  {Object} opts plugin options
+ * @return {Promise} resolve => fileMeta | reject => error message
  */
 function getFileMeta(dirname, value, opts) {
     let pathName = path.resolve(dirname, value);
@@ -166,14 +160,14 @@ function getFileMeta(dirname, value, opts) {
 
 
 /**
- * processCopy
+ * process to copy an asset based on the css file, destination
+ * and the url value
  *
  * @param {Object} result
- * @param {Object} urlMeta url meta data
- * @param {Object} options
  * @param {Object} decl postcss declaration
- * @param {string} old value
- * @return {String} new url
+ * @param {Object} node postcss-value-parser
+ * @param {Object} opts plugin options
+ * @return {Promise}
  */
 function processCopy(result, decl, node, opts) {
     // ignore absolute urls, hasshes, data uris or by **ignore option**
@@ -232,12 +226,12 @@ function processCopy(result, decl, node, opts) {
 }
 
 /**
- * Processes one declaration
+ * Processes each declaration using postcss-value-parser
  *
  * @param {Object} result
- * @param {Object} decl  postcss declaration
- * @param {Object} options plugin options
- * @return {void}
+ * @param {Object} decl postcss declaration
+ * @param {Object} opts plugin options
+ * @return {Promise}
  */
 function processDecl(result, decl, opts) {
     const promises = [];
@@ -260,13 +254,7 @@ function processDecl(result, decl, opts) {
 /**
  * Initialize the postcss-copy plugin
  * @param  {Object} plugin options
- * @return {void}
- *
- * userOpts = {
- * 		src: {String} optional
- * 		dest: {String} optional
- *      template: {String} optional (default 'assets/[hash].[ext]')
- * }
+ * @return {plugin}
  */
 function init(userOpts = {}) {
     const opts = Object.assign({

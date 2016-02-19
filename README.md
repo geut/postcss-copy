@@ -242,6 +242,7 @@ nothing for now :)
 * Thanks to @conradz and his rework plugin [rework-assets](https://github.com/conradz/rework-assets) my inspiration in this plugin.
 * Thanks to @MoOx for let me create the copy function in his [postcss-url](https://github.com/postcss/postcss-url) plugin.
 * Thanks to @webpack, i take the idea of define templates from his awesome [file-loader](https://github.com/webpack/file-loader)
+* Huge thanks to @TrySound for his work in this project.
 
 ## License
 
