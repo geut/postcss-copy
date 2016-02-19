@@ -11,9 +11,9 @@ test('should ignore files with string expression', t => {
     })
     .then(result => {
         const css = result.css;
-        t.ok(css.match(makeRegex('images/test.jpg?#iefix&v=4.4.0')));
-        t.ok(css.match(makeRegex('images/other.jpg')));
-        t.ok(css.match(makeRegex('ignore-path-array/images/noignore.jpg')));
+        t.regex(css, makeRegex('images/test.jpg?#iefix&v=4.4.0'));
+        t.regex(css, makeRegex('images/other.jpg'));
+        t.regex(css, makeRegex('ignore-path-array/images/noignore.jpg'));
     });
 });
 
@@ -26,9 +26,9 @@ test('should ignore files with array of paths', t => {
     })
     .then(result => {
         const css = result.css;
-        t.ok(css.match(makeRegex('images/test.jpg?#iefix&v=4.4.0')));
-        t.ok(css.match(makeRegex('images/other.jpg')));
-        t.ok(css.match(makeRegex('ignore-path-array/images/noignore.jpg')));
+        t.regex(css, makeRegex('images/test.jpg?#iefix&v=4.4.0'));
+        t.regex(css, makeRegex('images/other.jpg'));
+        t.regex(css, makeRegex('ignore-path-array/images/noignore.jpg'));
     });
 });
 
@@ -43,8 +43,8 @@ test('should ignore files with custom function', t => {
     })
     .then((result) => {
         const css = result.css;
-        t.ok(css.match(makeRegex('images/test.jpg?#iefix&v=4.4.0')));
-        t.ok(css.match(makeRegex('images/other.jpg')));
-        t.ok(css.match(makeRegex('ignore-path-func/images/noignore.jpg')));
+        t.regex(css, makeRegex('images/test.jpg?#iefix&v=4.4.0'));
+        t.regex(css, makeRegex('images/other.jpg'));
+        t.regex(css, makeRegex('ignore-path-func/images/noignore.jpg'));
     });
 });

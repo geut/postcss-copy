@@ -13,9 +13,9 @@ test('should rename assets via template function', (t) => {
     .then(result => {
         const css = result.css;
         t.is(result.warnings().length, 0);
-        t.ok(css.match(makeRegex(
+        t.regex(css, makeRegex(
             'custom-path/custom-name-test.jpg?#iefix&v=4.4.0'
-        )));
-        t.ok(css.match(makeRegex('custom-path/custom-name-other.jpg')));
+        ));
+        t.regex(css, makeRegex('custom-path/custom-name-other.jpg'));
     });
 });
