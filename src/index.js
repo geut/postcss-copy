@@ -1,6 +1,6 @@
 import postcss from 'postcss';
 import path from 'path';
-import reduceFunctionCall from 'reduce-function-call';
+import valueParser from 'postcss-value-parser';
 import fs from 'fs';
 import url from 'url';
 import crypto from 'crypto';
@@ -315,7 +315,15 @@ function processCopy(result, urlMeta, opts, decl, oldValue) {
 function processDecl(result, decl, opts) {
     const promises = [];
 
-    reduceFunctionCall(decl.value, 'url', (value) => {
+    valueParser(decl.value).walk(node => {
+        if (
+            node.type !== 'function' ||
+            node.value !== 'url' ||
+            node.nodes.length === 0
+        ) {
+            return;
+        }
+        const value = valueParser.stringify(node.nodes[0]);
         const urlMeta = getUrlMetaData(value);
 
         promises.push(processCopy(result, urlMeta, opts, decl, value));

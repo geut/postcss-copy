@@ -9,7 +9,7 @@
     "mkdirp": "^0.5.1",
     "path-exists": "^2.1.0",
     "postcss": "^5.0.10",
-    "reduce-function-call": "^1.0.1"
+    "postcss-value-parser": "^3.3.0"
   },
   "devDependencies": {
     "ava": "^0.11.0",
