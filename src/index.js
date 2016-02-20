@@ -1,12 +1,11 @@
 import postcss from 'postcss';
 import path from 'path';
 import valueParser from 'postcss-value-parser';
-import fs from 'fs';
 import url from 'url';
 import crypto from 'crypto';
 import pathExists from 'path-exists';
-import mkdirp from 'mkdirp';
 import minimatch from 'minimatch';
+import { readFile, writeFile } from './lib/fs';
 
 const tags = [
     'path',
@@ -16,24 +15,6 @@ const tags = [
 ];
 
 /**
- * function to write the asset file in dest
- *
- * @param  {object} fileMeta
- * @return {Promise} resolve => fileMeta | reject => error message
- */
-function writeFile(fileMeta) {
-    return new Promise((resolve, reject) => {
-        fs.writeFile(fileMeta.resultAbsolutePath, fileMeta.contents, (err) => {
-            if (err) {
-                reject(`Can't write in ${fileMeta.resultAbsolutePath}`);
-            } else {
-                resolve(fileMeta);
-            }
-        });
-    });
-}
-
-/**
  * copy low level process
  * @param  {object} fileMeta information about the asset file
  * @param  {function} transform custom function to transform the buffer content
@@ -41,20 +22,26 @@ function writeFile(fileMeta) {
  */
 function copyFile(fileMeta, transform) {
     return pathExists(fileMeta.resultAbsolutePath)
-        .then((exists) => {
+        .then(exists => {
             fileMeta.exists = exists;
             if (exists) {
                 return fileMeta;
             }
 
-            mkdirp.sync(path.dirname(fileMeta.resultAbsolutePath));
             return transform(fileMeta);
         })
-        .then((fmTransform) => {
+        .then(fmTransform => {
             if (fmTransform.exists) {
                 return fmTransform;
             }
-            return writeFile(fmTransform);
+
+            return writeFile(
+                fmTransform.resultAbsolutePath,
+                fmTransform.contents
+            )
+            .then(() => {
+                return fmTransform;
+            });
         });
 }
 
@@ -120,41 +107,36 @@ function getFileMeta(dirname, value, opts) {
         i++;
     }
 
-    return new Promise((resolve, reject) => {
-        // ignore option
-        fs.readFile(pathName, (err, contents) => {
-            if (err) {
-                reject(`Can't read the file in ${pathName}`);
-            } else if (!fileMeta.src) {
-                reject(`"src" not found in ${pathName}`);
-            } else {
-                fileMeta.contents = contents;
-                fileMeta.hash = opts.hashFunction(fileMeta.contents);
-                fileMeta.fullName = path.basename(pathName);
-                fileMeta.ext = path.extname(pathName);
+    if (!fileMeta.src) {
+        return Promise.reject(`"src" not found in ${pathName}`);
+    }
 
-                // name without extension
-                fileMeta.name = path.basename(
-                    pathName,
-                    fileMeta.ext
-                );
+    return readFile(pathName).then(contents => {
+        fileMeta.contents = contents;
+        fileMeta.hash = opts.hashFunction(fileMeta.contents);
+        fileMeta.fullName = path.basename(pathName);
+        fileMeta.ext = path.extname(pathName);
 
-                // extension without the '.'
-                fileMeta.ext = fileMeta.ext.replace('.', '');
+        // name without extension
+        fileMeta.name = path.basename(
+            pathName,
+            fileMeta.ext
+        );
 
-                // the absolute path without the #hash param
-                fileMeta.absolutePath = pathName;
+        // extension without the '.'
+        fileMeta.ext = fileMeta.ext.replace('.', '');
 
-                fileMeta.path = path.relative(
-                    fileMeta.src,
-                    path.dirname(pathName)
-                );
+        // the absolute path without the #hash param
+        fileMeta.absolutePath = pathName;
 
-                fileMeta.extra = extra;
+        fileMeta.path = path.relative(
+            fileMeta.src,
+            path.dirname(pathName)
+        );
 
-                resolve(fileMeta);
-            }
-        });
+        fileMeta.extra = extra;
+
+        return fileMeta;
     });
 }
 
