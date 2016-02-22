@@ -37,9 +37,6 @@
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
       "match": "../../assets/ca35b697d99cae4d.woff2"
-    }, {
-      "desc": "@external_libs/bootstrap.css => process url fonts svg",
-      "match": "../../assets/de51a8494180a6db.svg#glyphicons_halflingsregular"
     }],
     "exists": [
       "assets/b6c8f21e92b50900.jpg",
@@ -48,8 +45,7 @@
       "assets/44bc1850f5709722.ttf",
       "assets/86b6f62b7853e67d.eot",
       "assets/278e49a86e634da6.woff",
-      "assets/ca35b697d99cae4d.woff2",
-      "assets/de51a8494180a6db.svg"
+      "assets/ca35b697d99cae4d.woff2"
     ],
     "no-modified": "assets/0ed7c955a2951f04.jpg"
   }
@@ -92,9 +88,6 @@
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
       "match": "../fonts/ca35b697d99cae4d.woff2"
-    }, {
-      "desc": "@external_libs/bootstrap.css => process url fonts svg",
-      "match": "../fonts/de51a8494180a6db.svg#glyphicons_halflingsregular"
     }],
     "exists": [
       "images/b6c8f21e92b50900.jpg",
@@ -103,8 +96,7 @@
       "bootstrap/fonts/44bc1850f5709722.ttf",
       "bootstrap/fonts/86b6f62b7853e67d.eot",
       "bootstrap/fonts/278e49a86e634da6.woff",
-      "bootstrap/fonts/ca35b697d99cae4d.woff2",
-      "bootstrap/fonts/de51a8494180a6db.svg"
+      "bootstrap/fonts/ca35b697d99cae4d.woff2"
     ],
     "no-modified": "images/0ed7c955a2951f04.jpg"
   }
@@ -147,9 +139,6 @@
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
       "match": "../fonts/glyphicons-halflings-regular.woff2"
-    }, {
-      "desc": "@external_libs/bootstrap.css => process url fonts svg",
-      "match": "../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular"
     }],
     "exists": [
       "images/other.jpg",
@@ -158,8 +147,7 @@
       "bootstrap/fonts/glyphicons-halflings-regular.ttf",
       "bootstrap/fonts/glyphicons-halflings-regular.eot",
       "bootstrap/fonts/glyphicons-halflings-regular.woff",
-      "bootstrap/fonts/glyphicons-halflings-regular.woff2",
-      "bootstrap/fonts/glyphicons-halflings-regular.svg"
+      "bootstrap/fonts/glyphicons-halflings-regular.woff2"
     ],
     "no-modified": "images/test.jpg"
   }
@@ -202,9 +190,6 @@
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
       "match": "assets/ca35b697d99cae4d.woff2"
-    }, {
-      "desc": "@external_libs/bootstrap.css => process url fonts svg",
-      "match": "assets/de51a8494180a6db.svg#glyphicons_halflingsregular"
     }],
     "exists": [
       "assets/b6c8f21e92b50900.jpg",
@@ -213,8 +198,7 @@
       "assets/44bc1850f5709722.ttf",
       "assets/86b6f62b7853e67d.eot",
       "assets/278e49a86e634da6.woff",
-      "assets/ca35b697d99cae4d.woff2",
-      "assets/de51a8494180a6db.svg"
+      "assets/ca35b697d99cae4d.woff2"
     ],
     "no-modified": "assets/0ed7c955a2951f04.jpg"
   }
@@ -257,9 +241,6 @@
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
       "match": "../../assets/yjW2l9mcrk0bYPLWD803dxmH6wc.woff2"
-    }, {
-      "desc": "@external_libs/bootstrap.css => process url fonts svg",
-      "match": "../../assets/3lGoSUGAptsHSvLe4jg_CjY8Wwg.svg#glyphicons_halflingsregular"
     }],
     "exists": [
       "assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg",
@@ -268,8 +249,7 @@
       "assets/RLwYUPVwlyJnsWmuGPHLBrYR_6I.ttf",
       "assets/hrb2K3hT5n0-Y19lEqWl78WOo8M.eot",
       "assets/J45JqG5jTabyoC87R92dKo8mIQ8.woff",
-      "assets/yjW2l9mcrk0bYPLWD803dxmH6wc.woff2",
-      "assets/3lGoSUGAptsHSvLe4jg_CjY8Wwg.svg"
+      "assets/yjW2l9mcrk0bYPLWD803dxmH6wc.woff2"
     ],
     "no-modified": "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg"
   }
@@ -313,9 +293,6 @@
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
       "match": "../../assets/ca35b697d99cae4d.woff2"
-    }, {
-      "desc": "@external_libs/bootstrap.css => process url fonts svg",
-      "match": "../../assets/de51a8494180a6db.svg#glyphicons_halflingsregular"
     }],
     "exists": [
       "assets/b6c8f21e92b50900.jpg",
@@ -324,8 +301,7 @@
       "assets/44bc1850f5709722.ttf",
       "assets/86b6f62b7853e67d.eot",
       "assets/278e49a86e634da6.woff",
-      "assets/ca35b697d99cae4d.woff2",
-      "assets/de51a8494180a6db.svg"
+      "assets/ca35b697d99cae4d.woff2"
     ],
     "no-modified": "assets/0ed7c955a2951f04.jpg"
   }
