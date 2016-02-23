@@ -6,7 +6,6 @@
   "dependencies": {
     "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
-    "path-exists": "^2.1.0",
     "pify": "^2.3.0",
     "postcss": "^5.0.10",
     "postcss-value-parser": "^3.3.0"
@@ -25,7 +24,8 @@
     "eslint-config-postcss": "^2.0.0",
     "eslint-config-tinchoz49": "^2.0.1",
     "hasha": "^2.2.0",
-    "jimp": "^0.2.21"
+    "jimp": "^0.2.21",
+    "path-exists": "^2.1.0"
   },
   "files": [
     "dist"

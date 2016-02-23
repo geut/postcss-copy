@@ -29,7 +29,10 @@ function write(file, contents) {
 export default function copy(input, output, transform) {
     let isModified;
 
-    return stat(input).then(stats => {
+    return stat(input).catch(() => {
+        throw Error(`Can't read the file in ${input}`);
+    })
+    .then(stats => {
         const item = cache[input];
         const mtime = stats.mtime.getTime();
 

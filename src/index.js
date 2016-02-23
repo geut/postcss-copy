@@ -3,9 +3,8 @@ import path from 'path';
 import valueParser from 'postcss-value-parser';
 import url from 'url';
 import crypto from 'crypto';
-import pathExists from 'path-exists';
 import minimatch from 'minimatch';
-import { readFile, writeFile } from './lib/fs';
+import copy from './lib/copy';
 
 const tags = [
     'path',
@@ -13,37 +12,6 @@ const tags = [
     'hash',
     'ext'
 ];
-
-/**
- * copy low level process
- * @param  {object} fileMeta information about the asset file
- * @param  {function} transform custom function to transform the buffer content
- * @return {Promise} resolve => fileMeta | reject => error message
- */
-function copyFile(fileMeta, transform) {
-    return pathExists(fileMeta.resultAbsolutePath)
-        .then(exists => {
-            fileMeta.exists = exists;
-            if (exists) {
-                return fileMeta;
-            }
-
-            return transform(fileMeta);
-        })
-        .then(fmTransform => {
-            if (fmTransform.exists) {
-                return fmTransform;
-            }
-
-            return writeFile(
-                fmTransform.resultAbsolutePath,
-                fmTransform.contents
-            )
-            .then(() => {
-                return fmTransform;
-            });
-        });
-}
 
 /**
  * Helper function to ignore files
@@ -149,42 +117,50 @@ function processCopy(result, decl, node, opts) {
         return getFileMeta(dirname, node.value, opts);
     })
     .then(fileMeta => {
-        return readFile(fileMeta.absolutePath).then(contents => {
-            fileMeta.contents = contents;
-            fileMeta.hash = opts.hashFunction(contents);
+        return copy(
+            fileMeta.absolutePath,
+            () => {
+                return fileMeta.resultAbsolutePath;
+            },
+            contents => {
+                fileMeta.contents = contents;
+                fileMeta.hash = opts.hashFunction(contents);
+                let tpl = opts.template;
+                if (typeof tpl === 'function') {
+                    tpl = tpl(fileMeta);
+                } else {
+                    tags.forEach(tag => {
+                        tpl = tpl.replace(
+                            '[' + tag + ']',
+                            fileMeta[tag] || opts[tag]
+                        );
+                    });
+                }
 
-            return fileMeta;
+                fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
+
+                return Promise.resolve(
+                    opts.transform(fileMeta)
+                )
+                .then(transformed => {
+                    fileMeta = transformed || {};
+                    return fileMeta.contents;
+                });
+            }
+        )
+        .then(() => {
+            const relativePath = opts.relativePath(
+                dirname,
+                fileMeta,
+                result,
+                opts
+            );
+
+            node.value = path.relative(
+                relativePath,
+                fileMeta.resultAbsolutePath
+            ).split('\\').join('/') + fileMeta.extra;
         });
-    })
-    .then(fileMeta => {
-        let tpl = opts.template;
-        if (typeof tpl === 'function') {
-            tpl = tpl(fileMeta);
-        } else {
-            tags.forEach(tag => {
-                tpl = tpl.replace(
-                    '[' + tag + ']',
-                    fileMeta[tag] || opts[tag]
-                );
-            });
-        }
-
-        fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
-
-        return copyFile(fileMeta, opts.transform);
-    })
-    .then(fileMeta => {
-        const relativePath = opts.relativePath(
-            dirname,
-            fileMeta,
-            result,
-            opts
-        );
-
-        node.value = path.relative(
-            relativePath,
-            fileMeta.resultAbsolutePath
-        ).split('\\').join('/') + fileMeta.extra;
     })
     .catch(err => {
         decl.warn(result, err.message);
