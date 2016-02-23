@@ -84,57 +84,38 @@ function ignore(filename, extra, opts) {
  * @return {Promise} resolve => fileMeta | reject => error message
  */
 function getFileMeta(dirname, value, opts) {
-    let pathName = path.resolve(dirname, value);
-    const parseUrl = url.parse(pathName, true);
-    const extra = (parseUrl.search ? parseUrl.search : '') +
-        (parseUrl.hash ? parseUrl.hash : '');
-    pathName = pathName.replace(extra, '');
-
-    const filename = value.replace(extra, '');
+    const parsedUrl = url.parse(value, true);
+    const filename = parsedUrl.pathname;
+    const pathname = path.resolve(dirname, filename);
+    const extra = (parsedUrl.search || '') + (parsedUrl.hash || '');
 
     if (ignore(filename, extra, opts)) {
         return Promise.reject(`${filename} ignored.`);
     }
 
-    const fileMeta = {};
-
     // path between the basePath and the filename
-    let i = 0;
-    while (!fileMeta.src && i < opts.src.length) {
-        if (pathName.indexOf(opts.src[i]) !== -1) {
-            fileMeta.src = opts.src[i];
-        }
-        i++;
+    const src = opts.src.filter(item => pathname.indexOf(item) !== -1)[0];
+    if (!src) {
+        return Promise.reject(`"src" not found in ${pathname}`);
     }
 
-    if (!fileMeta.src) {
-        return Promise.reject(`"src" not found in ${pathName}`);
-    }
-
-    return readFile(pathName).then(contents => {
-        fileMeta.contents = contents;
-        fileMeta.hash = opts.hashFunction(fileMeta.contents);
-        fileMeta.fullName = path.basename(pathName);
-        fileMeta.ext = path.extname(pathName);
-
+    const ext = path.extname(pathname);
+    const fileMeta = {
+        // the absolute path without the #hash param and ?query
+        absolutePath: pathname,
+        fullName: path.basename(pathname),
+        path: path.relative(src, path.dirname(pathname)),
         // name without extension
-        fileMeta.name = path.basename(
-            pathName,
-            fileMeta.ext
-        );
-
+        name: path.basename(pathname, ext),
         // extension without the '.'
-        fileMeta.ext = fileMeta.ext.replace('.', '');
+        ext: ext.slice(1),
+        extra,
+        src
+    };
 
-        // the absolute path without the #hash param
-        fileMeta.absolutePath = pathName;
-
-        fileMeta.path = path.relative(
-            fileMeta.src,
-            path.dirname(pathName)
-        );
-
-        fileMeta.extra = extra;
+    return readFile(pathname).then(contents => {
+        fileMeta.contents = contents;
+        fileMeta.hash = opts.hashFunction(contents);
 
         return fileMeta;
     });
