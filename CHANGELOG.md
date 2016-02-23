@@ -1,3 +1,43 @@
+<a name="3.1.0"></a>
+# 3.1.0 (2016-02-23)
+
+
+* add appveyor build status to the readme ([a376b0d](https://github.com/geut/postcss-copy/commit/a376b0d))
+* Add appveyor config ([be08c4f](https://github.com/geut/postcss-copy/commit/be08c4f))
+* Add copy module ([52b6fb2](https://github.com/geut/postcss-copy/commit/52b6fb2))
+* add dependency status in readme ([f45d3d7](https://github.com/geut/postcss-copy/commit/f45d3d7))
+* add eslint-config-postcss as devDependency ([04b8f9b](https://github.com/geut/postcss-copy/commit/04b8f9b))
+* Add output function support in copy module ([a9db64f](https://github.com/geut/postcss-copy/commit/a9db64f))
+* Fix path resolving ([cbfe55c](https://github.com/geut/postcss-copy/commit/cbfe55c))
+* if the url is not valid return the oldValue without apply a regexp ([e90cd4c](https://github.com/geut/postcss-copy/commit/e90cd4c))
+* Improve travis config ([5a595df](https://github.com/geut/postcss-copy/commit/5a595df))
+* Improve value-parser using ([d992d15](https://github.com/geut/postcss-copy/commit/d992d15))
+* Integrate copy module ([2c5e01d](https://github.com/geut/postcss-copy/commit/2c5e01d))
+* isolate dest path by each test ([638a9b9](https://github.com/geut/postcss-copy/commit/638a9b9))
+* minor change with the conventional-changelog ([ba2518b](https://github.com/geut/postcss-copy/commit/ba2518b))
+* Prevent linting non-js ([1d29407](https://github.com/geut/postcss-copy/commit/1d29407))
+* Prevent linting non-js ([f9f6160](https://github.com/geut/postcss-copy/commit/f9f6160))
+* Read file in processCopy ([a0daedf](https://github.com/geut/postcss-copy/commit/a0daedf))
+* Reduce warning messages ([abe18ec](https://github.com/geut/postcss-copy/commit/abe18ec))
+* Remove svg tests ([2e87684](https://github.com/geut/postcss-copy/commit/2e87684))
+* replace imagemin by jimp ([caaea94](https://github.com/geut/postcss-copy/commit/caaea94))
+* Simplify promises ([2720abb](https://github.com/geut/postcss-copy/commit/2720abb))
+* Simplify url parsing ([a19a158](https://github.com/geut/postcss-copy/commit/a19a158))
+* Test refactor ([dece9f9](https://github.com/geut/postcss-copy/commit/dece9f9))
+* update eslint and conventional-changelog ([ebf6ba8](https://github.com/geut/postcss-copy/commit/ebf6ba8))
+* update jsdoc, add new thanks in readme ([8edd4df](https://github.com/geut/postcss-copy/commit/8edd4df))
+* update readme ([b40b199](https://github.com/geut/postcss-copy/commit/b40b199))
+* Upgrade ava ([ec73234](https://github.com/geut/postcss-copy/commit/ec73234))
+* Upgrade es2015 build ([5d55d6a](https://github.com/geut/postcss-copy/commit/5d55d6a))
+* Use ava ([e007cf6](https://github.com/geut/postcss-copy/commit/e007cf6))
+* Use custom promisified fs ([a09773a](https://github.com/geut/postcss-copy/commit/a09773a))
+* Use del ([314262b](https://github.com/geut/postcss-copy/commit/314262b))
+* Use error constructor ([3ad08da](https://github.com/geut/postcss-copy/commit/3ad08da))
+* Use object-assign ([04709fc](https://github.com/geut/postcss-copy/commit/04709fc))
+* Use postcss-value-parser ([1bb2652](https://github.com/geut/postcss-copy/commit/1bb2652))
+
+
+
 <a name="3.0.0"></a>
 # 3.0.0 (2016-02-12)
 
