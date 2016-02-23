@@ -17,6 +17,19 @@ test('should copy file', t => {
     });
 });
 
+test('should copy file with dynamical dest', t => {
+    const tempFolder = randomFolder('dest', t.title);
+    const srcFile = 'src/images/test.jpg';
+    const destFile = path.join(tempFolder, 'test.jpg');
+
+    return copy(srcFile, () => destFile).then(() => {
+        const srcBuffer = fs.readFileSync(srcFile);
+        const destBuffer = fs.readFileSync(destFile);
+        const compared = Buffer.compare(srcBuffer, destBuffer);
+        t.is(compared, 0);
+    });
+});
+
 test('should copy and transform file', t => {
     const tempFolder = randomFolder('dest', t.title);
     const srcFile = 'src/images/test.jpg';

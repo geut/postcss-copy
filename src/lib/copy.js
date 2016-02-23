@@ -20,45 +20,38 @@ function read(file, mtime) {
     return contents;
 }
 
-function readCached(file) {
-    return stat(file).then(stats => {
-        const item = cache[file];
+function write(file, contents) {
+    return mkdir(path.dirname(file)).then(() => {
+        return writeFile(file, contents);
+    });
+}
+
+export default function copy(input, output, transform) {
+    let isModified;
+
+    return stat(input).then(stats => {
+        const item = cache[input];
         const mtime = stats.mtime.getTime();
 
         if (item && item.mtime === mtime) {
             return item.contents;
         }
 
-        return read(file, mtime);
-    });
-}
-
-function write(file, contents, transform) {
-    return mkdir(path.dirname(file)).then(() => {
-        return transform ? transform(contents) : contents;
+        isModified = true;
+        return read(input, mtime);
     })
-    .then(transformedContens => {
-        return writeFile(file, transformedContens);
-    });
-}
-
-export default function copy(input, output, transform) {
-    return stat(output).then(() => {
-        return stat(input).then(stats => {
-            const item = cache[input];
-            const mtime = stats.mtime.getTime();
-
-            if (item && item.mtime === mtime) {
-                return Promise.resolve();
-            }
-
-            return read(input, mtime).then(contents => {
-                return write(output, contents, transform);
-            });
-        });
-    }, () => {
-        return readCached(input).then(contents => {
-            return write(output, contents, transform);
+    .then(contents => transform ? transform(contents) : contents)
+    .then(contents => {
+        if (typeof output === 'function') {
+            output = output();
+        }
+        if (isModified) {
+            return write(output, contents);
+        }
+        return stat(output).then(() => {
+            return;
+        }, () => {
+            return write(output, contents);
         });
     });
 }
