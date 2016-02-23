@@ -21,7 +21,8 @@ const tags = [
  * @return {Promise} resolve => fileMeta | reject => error message
  */
 function copyFile(fileMeta, transform) {
-    return pathExists(fileMeta.resultAbsolutePath)
+    let fileAbsolutePath = fileMeta.resultAbsolutePath.split('?')[0];
+    return pathExists(fileAbsolutePath)
         .then(exists => {
             fileMeta.exists = exists;
             if (exists) {
@@ -36,7 +37,7 @@ function copyFile(fileMeta, transform) {
             }
 
             return writeFile(
-                fmTransform.resultAbsolutePath,
+                fileAbsolutePath,
                 fmTransform.contents
             )
             .then(() => {
