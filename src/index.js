@@ -90,13 +90,13 @@ function getFileMeta(dirname, value, opts) {
     const extra = (parsedUrl.search || '') + (parsedUrl.hash || '');
 
     if (ignore(filename, extra, opts)) {
-        return Promise.reject(`${filename} ignored.`);
+        return Promise.reject(Error(`${filename} ignored.`));
     }
 
     // path between the basePath and the filename
     const src = opts.src.filter(item => pathname.indexOf(item) !== -1)[0];
     if (!src) {
-        return Promise.reject(`"src" not found in ${pathname}`);
+        return Promise.reject(Error(`"src" not found in ${pathname}`));
     }
 
     const ext = path.extname(pathname);
@@ -184,7 +184,7 @@ function processCopy(result, decl, node, opts) {
             ).split('\\').join('/') + fileMeta.extra;
         })
         .catch(err => {
-            decl.warn(result, err);
+            decl.warn(result, err.message);
         });
 }
 
