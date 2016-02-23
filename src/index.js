@@ -90,17 +90,17 @@ function getFileMeta(dirname, value, opts) {
     const extra = (parsedUrl.search || '') + (parsedUrl.hash || '');
 
     if (ignore(filename, extra, opts)) {
-        return Promise.reject(Error(`${filename} ignored.`));
+        throw Error(`${filename} ignored.`);
     }
 
     // path between the basePath and the filename
     const src = opts.src.filter(item => pathname.indexOf(item) !== -1)[0];
     if (!src) {
-        return Promise.reject(Error(`"src" not found in ${pathname}`));
+        throw Error(`"src" not found in ${pathname}`);
     }
 
     const ext = path.extname(pathname);
-    const fileMeta = {
+    return {
         // the absolute path without the #hash param and ?query
         absolutePath: pathname,
         fullName: path.basename(pathname),
@@ -112,13 +112,6 @@ function getFileMeta(dirname, value, opts) {
         extra,
         src
     };
-
-    return readFile(pathname).then(contents => {
-        fileMeta.contents = contents;
-        fileMeta.hash = opts.hashFunction(contents);
-
-        return fileMeta;
-    });
 }
 
 
@@ -152,40 +145,50 @@ function processCopy(result, decl, node, opts) {
      */
     const dirname = opts.inputPath(decl);
 
-    return getFileMeta(dirname, node.value, opts)
-        .then(fileMeta => {
-            let tpl = opts.template;
-            if (typeof tpl === 'function') {
-                tpl = tpl(fileMeta);
-            } else {
-                tags.forEach((tag) => {
-                    tpl = tpl.replace(
-                        '[' + tag + ']',
-                        fileMeta[tag] ? fileMeta[tag] : opts[tag]
-                    );
-                });
-            }
+    return Promise.resolve().then(() => {
+        return getFileMeta(dirname, node.value, opts);
+    })
+    .then(fileMeta => {
+        return readFile(fileMeta.absolutePath).then(contents => {
+            fileMeta.contents = contents;
+            fileMeta.hash = opts.hashFunction(contents);
 
-            fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
-
-            return copyFile(fileMeta, opts.transform);
-        })
-        .then(fileMeta => {
-            const relativePath = opts.relativePath(
-                dirname,
-                fileMeta,
-                result,
-                opts
-            );
-
-            node.value = path.relative(
-                relativePath,
-                fileMeta.resultAbsolutePath
-            ).split('\\').join('/') + fileMeta.extra;
-        })
-        .catch(err => {
-            decl.warn(result, err.message);
+            return fileMeta;
         });
+    })
+    .then(fileMeta => {
+        let tpl = opts.template;
+        if (typeof tpl === 'function') {
+            tpl = tpl(fileMeta);
+        } else {
+            tags.forEach(tag => {
+                tpl = tpl.replace(
+                    '[' + tag + ']',
+                    fileMeta[tag] || opts[tag]
+                );
+            });
+        }
+
+        fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
+
+        return copyFile(fileMeta, opts.transform);
+    })
+    .then(fileMeta => {
+        const relativePath = opts.relativePath(
+            dirname,
+            fileMeta,
+            result,
+            opts
+        );
+
+        node.value = path.relative(
+            relativePath,
+            fileMeta.resultAbsolutePath
+        ).split('\\').join('/') + fileMeta.extra;
+    })
+    .catch(err => {
+        decl.warn(result, err.message);
+    });
 }
 
 /**
