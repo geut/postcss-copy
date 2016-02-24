@@ -1,344 +1,78 @@
-<a name="3.1.0"></a>
-# 3.1.0 (2016-02-23)
+# Change Log
+All notable changes to this project will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- Replace minimatch by micromatch.
+- Use keepachangelog format.
 
-* add appveyor build status to the readme ([a376b0d](https://github.com/geut/postcss-copy/commit/a376b0d))
-* Add appveyor config ([be08c4f](https://github.com/geut/postcss-copy/commit/be08c4f))
-* Add copy module ([52b6fb2](https://github.com/geut/postcss-copy/commit/52b6fb2))
-* add dependency status in readme ([f45d3d7](https://github.com/geut/postcss-copy/commit/f45d3d7))
-* add eslint-config-postcss as devDependency ([04b8f9b](https://github.com/geut/postcss-copy/commit/04b8f9b))
-* Add output function support in copy module ([a9db64f](https://github.com/geut/postcss-copy/commit/a9db64f))
-* Fix path resolving ([cbfe55c](https://github.com/geut/postcss-copy/commit/cbfe55c))
-* if the url is not valid return the oldValue without apply a regexp ([e90cd4c](https://github.com/geut/postcss-copy/commit/e90cd4c))
-* Improve travis config ([5a595df](https://github.com/geut/postcss-copy/commit/5a595df))
-* Improve value-parser using ([d992d15](https://github.com/geut/postcss-copy/commit/d992d15))
-* Integrate copy module ([2c5e01d](https://github.com/geut/postcss-copy/commit/2c5e01d))
-* isolate dest path by each test ([638a9b9](https://github.com/geut/postcss-copy/commit/638a9b9))
-* minor change with the conventional-changelog ([ba2518b](https://github.com/geut/postcss-copy/commit/ba2518b))
-* Prevent linting non-js ([1d29407](https://github.com/geut/postcss-copy/commit/1d29407))
-* Prevent linting non-js ([f9f6160](https://github.com/geut/postcss-copy/commit/f9f6160))
-* Read file in processCopy ([a0daedf](https://github.com/geut/postcss-copy/commit/a0daedf))
-* Reduce warning messages ([abe18ec](https://github.com/geut/postcss-copy/commit/abe18ec))
-* Remove svg tests ([2e87684](https://github.com/geut/postcss-copy/commit/2e87684))
-* replace imagemin by jimp ([caaea94](https://github.com/geut/postcss-copy/commit/caaea94))
-* Simplify promises ([2720abb](https://github.com/geut/postcss-copy/commit/2720abb))
-* Simplify url parsing ([a19a158](https://github.com/geut/postcss-copy/commit/a19a158))
-* Test refactor ([dece9f9](https://github.com/geut/postcss-copy/commit/dece9f9))
-* update eslint and conventional-changelog ([ebf6ba8](https://github.com/geut/postcss-copy/commit/ebf6ba8))
-* update jsdoc, add new thanks in readme ([8edd4df](https://github.com/geut/postcss-copy/commit/8edd4df))
-* update readme ([b40b199](https://github.com/geut/postcss-copy/commit/b40b199))
-* Upgrade ava ([ec73234](https://github.com/geut/postcss-copy/commit/ec73234))
-* Upgrade es2015 build ([5d55d6a](https://github.com/geut/postcss-copy/commit/5d55d6a))
-* Use ava ([e007cf6](https://github.com/geut/postcss-copy/commit/e007cf6))
-* Use custom promisified fs ([a09773a](https://github.com/geut/postcss-copy/commit/a09773a))
-* Use del ([314262b](https://github.com/geut/postcss-copy/commit/314262b))
-* Use error constructor ([3ad08da](https://github.com/geut/postcss-copy/commit/3ad08da))
-* Use object-assign ([04709fc](https://github.com/geut/postcss-copy/commit/04709fc))
-* Use postcss-value-parser ([1bb2652](https://github.com/geut/postcss-copy/commit/1bb2652))
+## [3.1.0] - 2016-02-23
+### Added
+- Appveyor support @TrySound
+- Cache support @TrySound
+### Changed
+- Refactory source code @TrySound
+- Refactory tests. Replace tape by ava @TrySound
+- Improve package.json @TrySound
+- Update dependencies and devDependencies @TrySound
+### Fixed
+- Fix path resolving
 
+## [3.0.0] - 2016-02-12
+### Changed
+- replace keepRelativePath by relativePath custom function
 
+## [2.6.3] - 2016-02-12 [YANKED]
 
-<a name="3.0.0"></a>
-# 3.0.0 (2016-02-12)
+## [2.6.2] - 2016-02-12 [YANKED]
 
+## [2.6.1] - 2016-02-11
+### Changed
+- replace ```_extend``` by ```Object.assign```
 
-* replace keepRelativePath by relativePath custom function ([275e39a](https://github.com/geut/postcss-copy/commit/275e39a))
+## [2.6.0] - 2016-02-10 [YANKED]
 
+## [2.5.0] - 2016-02-09
+### Added
+- minimatch support for ignore option
 
+## [2.4.1] - 2016-02-09 [YANKED]
 
-<a name="2.6.3"></a>
-## 2.6.3 (2016-02-12)
+## [2.4.0] - 2016-02-01
+### Fixed
+- Correct parse/replace url - issue [#4](https://github.com/geut/postcss-copy/issues/4)
 
+## [2.3.9] - 2015-12-10
+### Fixed
+- issue #3 ([320507e](https://github.com/geut/postcss-copy/commit/320507e))
 
-* minor change ([a18879c](https://github.com/geut/postcss-copy/commit/a18879c))
+## [2.3.8] - 2015-11-07 [YANKED]
 
+## [2.3.7] - 2015-11-07
+### Added
+- add conventional changelog
 
+## [2.3.6] - 2015-11-06 [YANKED]
 
-<a name="2.6.2"></a>
-## 2.6.2 (2016-02-12)
+## [2.3.5] - 2015-11-06 [YANKED]
 
+## [2.3.4] - 2015-11-06 [YANKED]
 
-* if result.opts.to === result.opts.from use the dest option ([0241249](https://github.com/geut/postcss-copy/commit/0241249))
+## [2.3.3] - 2015-11-06 [YANKED]
 
+## [2.3.2] - 2015-11-06
+### Changed
+- rename transformPath to inputPath
 
+## [2.3.1] - 2015-11-06 [YANKED]
 
-<a name="2.6.1"></a>
-## 2.6.1 (2016-02-11)
+## [2.3.0] - 2015-11-05
+### Changed
+- Refactory source code
 
+## [2.2.13] - 2015-10-06 [YANKED]
 
-* replace _extend by Object.assign ([046c4e4](https://github.com/geut/postcss-copy/commit/046c4e4))
-
-
-
-<a name="2.6.0"></a>
-# 2.6.0 (2016-02-10)
-
-
-* add information in the readme about the char `!` to ignore assets ([1feab82](https://github.com/geut/postcss-copy/commit/1feab82))
-* add minimatch support for ignore option ([3b8c9c6](https://github.com/geut/postcss-copy/commit/3b8c9c6))
-
-
-
-<a name="2.5.0"></a>
-# 2.5.0 (2016-02-09)
-
-
-* new features, add ignore assets option #6, add func template option #7, new tests ([4c319ef](https://github.com/geut/postcss-copy/commit/4c319ef))
-
-
-
-<a name="2.4.1"></a>
-## 2.4.1 (2016-02-09)
-
-
-* fix dependency issue #5 ([32926cf](https://github.com/geut/postcss-copy/commit/32926cf)), closes [#5](https://github.com/geut/postcss-copy/issues/5)
-
-
-
-<a name="2.4.0"></a>
-# 2.4.0 (2016-02-01)
-
-
-* Correct parse/replace url - fix issue #4 ([dd9dff2](https://github.com/geut/postcss-copy/commit/dd9dff2)), closes [#4](https://github.com/geut/postcss-copy/issues/4)
-
-
-
-<a name="2.3.9"></a>
-## 2.3.9 (2015-12-10)
-
-
-* add new test to check the issue #3 ([27109e5](https://github.com/geut/postcss-copy/commit/27109e5))
-* fix for the issue #3 ([320507e](https://github.com/geut/postcss-copy/commit/320507e)), closes [#3](https://github.com/geut/postcss-copy/issues/3)
-
-
-
-<a name="2.3.8"></a>
-## 2.3.8 (2015-11-07)
-
-
-* test before publish ([55978a6](https://github.com/geut/postcss-copy/commit/55978a6))
-
-
-
-<a name="2.3.7"></a>
-## 2.3.7 (2015-11-07)
-
-
-* add conventional changelog ([d3722cc](https://github.com/geut/postcss-copy/commit/d3722cc))
-
-
-
-<a name="2.3.6"></a>
-## 2.3.6 (2015-11-06)
-
-
-* fix export default ([966394a](https://github.com/geut/postcss-copy/commit/966394a))
-
-
-
-<a name="2.3.5"></a>
-## 2.3.5 (2015-11-06)
-
-
-* add new travis test 4.2 ([307aec2](https://github.com/geut/postcss-copy/commit/307aec2))
-* fix other error from babel 6 ([78f8bb5](https://github.com/geut/postcss-copy/commit/78f8bb5))
-
-
-
-<a name="2.3.4"></a>
-## 2.3.4 (2015-11-06)
-
-
-* fix error with babel 6 ([0425220](https://github.com/geut/postcss-copy/commit/0425220))
-
-
-
-<a name="2.3.3"></a>
-## 2.3.3 (2015-11-06)
-
-
-* fix readme ([ce7e74b](https://github.com/geut/postcss-copy/commit/ce7e74b))
-* freeze dependencies ([ff3d644](https://github.com/geut/postcss-copy/commit/ff3d644))
-
-
-
-<a name="2.3.2"></a>
-## 2.3.2 (2015-11-06)
-
-
-* rename transformPath to inputPath ([73d543b](https://github.com/geut/postcss-copy/commit/73d543b))
-
-
-
-<a name="2.3.1"></a>
-## 2.3.1 (2015-11-06)
-
-
-* add babel-cli as dev dependency ([45116ca](https://github.com/geut/postcss-copy/commit/45116ca))
-* fix dependencies ([57da763](https://github.com/geut/postcss-copy/commit/57da763))
-
-
-
-<a name="2.3.0"></a>
-# 2.3.0 (2015-11-05)
-
-
-* add some helpful things about keepRelativePath in README.md ([7d02d29](https://github.com/geut/postcss-copy/commit/7d02d29))
-* add transformPath option ([b092c19](https://github.com/geut/postcss-copy/commit/b092c19))
-* fix grammar error in readme ([1f43983](https://github.com/geut/postcss-copy/commit/1f43983))
-* minor refactory ([cf1f17e](https://github.com/geut/postcss-copy/commit/cf1f17e))
-
-
-
-<a name="2.2.13"></a>
-## 2.2.13 (2015-10-06)
-
-
-* minor refactory pathName ([84138f3](https://github.com/geut/postcss-copy/commit/84138f3))
-
-
-
-<a name="2.2.12"></a>
-## 2.2.12 (2015-10-06)
-
-
-* fix error with the parse url (pathname) when the directories has empty spaces ([2d1e802](https://github.com/geut/postcss-copy/commit/2d1e802))
-
-
-
-<a name="2.2.11"></a>
-## 2.2.11 (2015-10-06)
-
-
-* add stable node version (node 4.1.0) to travis ([584a106](https://github.com/geut/postcss-copy/commit/584a106))
-* Merge branch 'master' of github.com:geut/postcss-copy ([ca6e9d3](https://github.com/geut/postcss-copy/commit/ca6e9d3))
-* minor fix error using postcss-import and keepRelativePath ([db8e65a](https://github.com/geut/postcss-copy/commit/db8e65a))
-* update readme ([32b6c01](https://github.com/geut/postcss-copy/commit/32b6c01))
-* vertical section contents ([54da3d4](https://github.com/geut/postcss-copy/commit/54da3d4))
-
-
-
-<a name="2.2.10"></a>
-## 2.2.10 (2015-09-18)
-
-
-* Merge pull request #2 from wbinnssmith/patch-1 ([d8107ff](https://github.com/geut/postcss-copy/commit/d8107ff))
-* return early when processing data/absolute/hash urls ([67f674d](https://github.com/geut/postcss-copy/commit/67f674d))
-* update readme ([45375c4](https://github.com/geut/postcss-copy/commit/45375c4))
-
-
-
-<a name="2.2.9"></a>
-## 2.2.9 (2015-09-16)
-
-
-* - fix error with multiple urls in one line, e.g fonts of bootstrap ([f1dc542](https://github.com/geut/postcss-copy/commit/f1dc542))
-* added new tests ([feeb657](https://github.com/geut/postcss-copy/commit/feeb657))
-* update test for the transform function, update example of the transform in the readme ([544e5b8](https://github.com/geut/postcss-copy/commit/544e5b8))
-
-
-
-<a name="2.2.2"></a>
-## 2.2.2 (2015-09-14)
-
-
-* fix issue #1: allow extra rules before/after url ([3ab7cff](https://github.com/geut/postcss-copy/commit/3ab7cff)), closes [#1](https://github.com/geut/postcss-copy/issues/1)
-* simple refactory in copyFile func ([40c3f88](https://github.com/geut/postcss-copy/commit/40c3f88))
-
-
-
-<a name="2.2.1"></a>
-## 2.2.1 (2015-09-14)
-
-
-* fix issue: transform if the file not exist in the dest path ([d1deb43](https://github.com/geut/postcss-copy/commit/d1deb43))
-
-
-
-<a name="2.2.0"></a>
-# 2.2.0 (2015-09-14)
-
-
-* add eslint to the test script, remove test node 0.10 from travis ([02cbcd4](https://github.com/geut/postcss-copy/commit/02cbcd4))
-* fix readme ([61f22c8](https://github.com/geut/postcss-copy/commit/61f22c8))
-* fix readme ([87ec0ae](https://github.com/geut/postcss-copy/commit/87ec0ae))
-* new option/feature: transform and add test for it ([131e1a3](https://github.com/geut/postcss-copy/commit/131e1a3))
-
-
-
-<a name="2.1.7"></a>
-## 2.1.7 (2015-09-13)
-
-
-* don't rewrite the assets if the file exists and add test to check this feature ([3fec4f0](https://github.com/geut/postcss-copy/commit/3fec4f0))
-* format code ([8d88b62](https://github.com/geut/postcss-copy/commit/8d88b62))
-* format code ([f9874ef](https://github.com/geut/postcss-copy/commit/f9874ef))
-* refactory common tests ([83b2861](https://github.com/geut/postcss-copy/commit/83b2861))
-
-
-
-<a name="2.1.3"></a>
-## 2.1.3 (2015-09-07)
-
-
-* added new tests, fix minor error ([dc9cc41](https://github.com/geut/postcss-copy/commit/dc9cc41))
-* remove async task from roadmap in the readme ([cf4bd3a](https://github.com/geut/postcss-copy/commit/cf4bd3a))
-
-
-
-<a name="2.1.1"></a>
-## 2.1.1 (2015-09-07)
-
-
-* replace Object.assign by _extend ([69b7c33](https://github.com/geut/postcss-copy/commit/69b7c33))
-
-
-
-<a name="2.1.0"></a>
-# 2.1.0 (2015-09-07)
-
-
-* delete option babel runtime ([3cf371b](https://github.com/geut/postcss-copy/commit/3cf371b))
-
-
-
-<a name="2.0.1"></a>
-## 2.0.1 (2015-09-07)
-
-
-* minor fix in package.json ([db04fe1](https://github.com/geut/postcss-copy/commit/db04fe1))
-
-
-
-<a name="2.0.0"></a>
-# 2.0.0 (2015-09-07)
-
-
-* major change: Switch to PostCSS Async, remove the fs-extra dependency ([87167e1](https://github.com/geut/postcss-copy/commit/87167e1))
-
-
-
-<a name="1.1.3"></a>
-## 1.1.3 (2015-09-06)
-
-
-* add roadmap section ([632ea4a](https://github.com/geut/postcss-copy/commit/632ea4a))
-* fix readme ([8eddbc2](https://github.com/geut/postcss-copy/commit/8eddbc2))
-
-
-
-<a name="1.1.2"></a>
-## 1.1.2 (2015-09-05)
-
-
-* add build status to the readme file ([6e95368](https://github.com/geut/postcss-copy/commit/6e95368))
-* add new comments in functions ([deae00f](https://github.com/geut/postcss-copy/commit/deae00f))
-* remove the assetsPath option, complete the README.md ([3f8949b](https://github.com/geut/postcss-copy/commit/3f8949b))
-
-
-
-<a name="1.1.0"></a>
-# 1.1.0 (2015-09-05)
-
-
-* add tests, minor changes in the process ([5ee401a](https://github.com/geut/postcss-copy/commit/5ee401a))
+## [2.2.12] - 2015-10-06
+### Fixed
+- fix error with the parse url (pathname) when the directories has empty spaces
