@@ -29,18 +29,20 @@ test('should rename files via custom template', t => {
     return processStyle('src/index.css', {
         src: 'src',
         dest: tempFolder,
-        template: '[path]/[name].[ext]'
+        template: '[path]/[name]-[hash].[ext]'
     })
     .then(result => {
         const css = result.css;
 
         t.is(result.warnings().length, 0);
 
-        t.regex(css, makeRegex('images/test.jpg?#iefix&v=4.4.0'));
-        t.ok(exists(join(tempFolder, 'images/test.jpg')));
+        t.regex(css, makeRegex(
+            'images/test-0ed7c955a2951f04.jpg?#iefix&v=4.4.0'
+        ));
+        t.ok(exists(join(tempFolder, 'images/test-0ed7c955a2951f04.jpg')));
 
-        t.regex(css, makeRegex('images/other.jpg'));
-        t.ok(exists(join(tempFolder, 'images/other.jpg')));
+        t.regex(css, makeRegex('images/other-b6c8f21e92b50900.jpg'));
+        t.ok(exists(join(tempFolder, 'images/other-b6c8f21e92b50900.jpg')));
     });
 });
 
