@@ -87,7 +87,7 @@ Option to ignore assets in your CSS file.
     background-image: url('!images/background.jpg');
 }
 ```
-##### Using a string or array with minimatch support to ignore files:
+##### Using a string or array with [micromatch](https://github.com/jonschlinkert/micromatch) support to ignore files:
 ```js
 // ignore with string
 var copyOpts = {

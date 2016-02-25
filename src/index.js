@@ -3,7 +3,7 @@ import path from 'path';
 import valueParser from 'postcss-value-parser';
 import url from 'url';
 import crypto from 'crypto';
-import minimatch from 'minimatch';
+import micromatch from 'micromatch';
 import copy from './lib/copy';
 
 const tags = [
@@ -22,22 +22,13 @@ const tags = [
  * @return {boolean}
  */
 function ignore(filename, extra, opts) {
-    // ignore option
     if (typeof opts.ignore === 'function') {
         return opts.ignore(filename, extra);
-    } else if (opts.ignore instanceof Array) {
-        const list = opts.ignore;
-        const len = list.length;
-        let toIgnore = false;
-        for (let i = 0; i < len; i++) {
-            if (minimatch(filename + extra, list[i])) {
-                toIgnore = true;
-                break;
-            }
-        }
-        return toIgnore;
     }
 
+    if (typeof opts.ignore === 'string' || Array.isArray(opts.ignore)) {
+        return micromatch.any(filename + extra, opts.ignore);
+    }
 
     return false;
 }
@@ -236,10 +227,6 @@ function init(userOpts = {}) {
             opts.dest = path.resolve(opts.dest);
         } else {
             throw new Error('Option `dest` is required in postcss-copy');
-        }
-
-        if (typeof opts.ignore === 'string') {
-            opts.ignore = [opts.ignore];
         }
 
         const promises = [];
