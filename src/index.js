@@ -193,7 +193,7 @@ function processDecl(result, decl, opts) {
  */
 function init(userOpts = {}) {
     const opts = Object.assign({
-        template: 'assets/[hash].[ext]',
+        template: '[hash].[ext]',
         relativePath(dirname, fileMeta, result, options) {
             return path.join(
                 options.dest,

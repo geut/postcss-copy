@@ -152,106 +152,106 @@
     "no-modified": "images/test.jpg"
   }
 },{
-  "name": "process test => template: 'assets/[hash].[ext]', relativePath from the to option",
+  "name": "process test => template: '[hash].[ext]', relativePath from the to option",
   "opts": {
     "relativePath": false
   },
   "assertions": {
     "index": [{
       "desc": "@index.css => process url image (simple)",
-      "match": "assets/b6c8f21e92b50900.jpg"
+      "match": "b6c8f21e92b50900.jpg"
     }, {
       "desc": "@index.css => process url image (with parameters)",
-      "match": "assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+      "match": "0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
     }, {
       "desc": "@index.css => extra rules in image (simple)",
-      "match": "url('assets/b6c8f21e92b50900.jpg') center center",
+      "match": "url('b6c8f21e92b50900.jpg') center center",
       "regex-simple": true
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
-      "match": "assets/27da26a06634b050.jpg"
+      "match": "27da26a06634b050.jpg"
     }, {
       "desc": "@component/index.css => process url image (with parameters)",
-      "match": "assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+      "match": "0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
     }],
     "external_libs": [{
       "desc": "@external_libs/bootstrap.css => process url fonts ttf",
-      "match": "assets/44bc1850f5709722.ttf"
+      "match": "44bc1850f5709722.ttf"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot",
-      "match": "assets/86b6f62b7853e67d.eot"
+      "match": "86b6f62b7853e67d.eot"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot?#iefix",
-      "match": "assets/86b6f62b7853e67d.eot?#iefix"
+      "match": "86b6f62b7853e67d.eot?#iefix"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff",
-      "match": "assets/278e49a86e634da6.woff"
+      "match": "278e49a86e634da6.woff"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
-      "match": "assets/ca35b697d99cae4d.woff2"
+      "match": "ca35b697d99cae4d.woff2"
     }],
     "exists": [
-      "assets/b6c8f21e92b50900.jpg",
-      "assets/0ed7c955a2951f04.jpg",
-      "assets/27da26a06634b050.jpg",
-      "assets/44bc1850f5709722.ttf",
-      "assets/86b6f62b7853e67d.eot",
-      "assets/278e49a86e634da6.woff",
-      "assets/ca35b697d99cae4d.woff2"
+      "b6c8f21e92b50900.jpg",
+      "0ed7c955a2951f04.jpg",
+      "27da26a06634b050.jpg",
+      "44bc1850f5709722.ttf",
+      "86b6f62b7853e67d.eot",
+      "278e49a86e634da6.woff",
+      "ca35b697d99cae4d.woff2"
     ],
-    "no-modified": "assets/0ed7c955a2951f04.jpg"
+    "no-modified": "0ed7c955a2951f04.jpg"
   }
 },{
-  "name": "process test => template: 'assets/[hash].[ext]', hashFunction: {custom}",
+  "name": "process test => template: '[hash].[ext]', hashFunction: {custom}",
   "opts": {
     "hashFunction": "custom"
   },
   "assertions": {
     "index": [{
       "desc": "@index.css => process url image (simple)",
-      "match": "assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg"
+      "match": "tsjyHpK1CQAzLrWA3hok0f01nks.jpg"
     }, {
       "desc": "@index.css => process url image (with parameters)",
-      "match": "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0"
+      "match": "DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0"
     }, {
       "desc": "@index.css => extra rules in image (simple)",
-      "match": "url('assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg') center center",
+      "match": "url('tsjyHpK1CQAzLrWA3hok0f01nks.jpg') center center",
       "regex-simple": true
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
-      "match": "../assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg"
+      "match": "../J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg"
     }, {
       "desc": "@component/index.css => process url image (with parameters)",
-      "match": "../assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0"
+      "match": "../DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0"
     }],
     "external_libs": [{
       "desc": "@external_libs/bootstrap.css => process url fonts ttf",
-      "match": "../../assets/RLwYUPVwlyJnsWmuGPHLBrYR_6I.ttf"
+      "match": "../../RLwYUPVwlyJnsWmuGPHLBrYR_6I.ttf"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot",
-      "match": "../../assets/hrb2K3hT5n0-Y19lEqWl78WOo8M.eot"
+      "match": "../../hrb2K3hT5n0-Y19lEqWl78WOo8M.eot"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot?#iefix",
-      "match": "../../assets/hrb2K3hT5n0-Y19lEqWl78WOo8M.eot?#iefix"
+      "match": "../../hrb2K3hT5n0-Y19lEqWl78WOo8M.eot?#iefix"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff",
-      "match": "../../assets/J45JqG5jTabyoC87R92dKo8mIQ8.woff"
+      "match": "../../J45JqG5jTabyoC87R92dKo8mIQ8.woff"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
-      "match": "../../assets/yjW2l9mcrk0bYPLWD803dxmH6wc.woff2"
+      "match": "../../yjW2l9mcrk0bYPLWD803dxmH6wc.woff2"
     }],
     "exists": [
-      "assets/tsjyHpK1CQAzLrWA3hok0f01nks.jpg",
-      "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg",
-      "assets/J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg",
-      "assets/RLwYUPVwlyJnsWmuGPHLBrYR_6I.ttf",
-      "assets/hrb2K3hT5n0-Y19lEqWl78WOo8M.eot",
-      "assets/J45JqG5jTabyoC87R92dKo8mIQ8.woff",
-      "assets/yjW2l9mcrk0bYPLWD803dxmH6wc.woff2"
+      "tsjyHpK1CQAzLrWA3hok0f01nks.jpg",
+      "DtfJVaKVHwRz_PkVXOweAq13S0o.jpg",
+      "J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg",
+      "RLwYUPVwlyJnsWmuGPHLBrYR_6I.ttf",
+      "hrb2K3hT5n0-Y19lEqWl78WOo8M.eot",
+      "J45JqG5jTabyoC87R92dKo8mIQ8.woff",
+      "yjW2l9mcrk0bYPLWD803dxmH6wc.woff2"
     ],
-    "no-modified": "assets/DtfJVaKVHwRz_PkVXOweAq13S0o.jpg"
+    "no-modified": "DtfJVaKVHwRz_PkVXOweAq13S0o.jpg"
   }
 }, {
   "name": "process test => template: 'assets/[hash].[ext]', inputPath: {custom}",
