@@ -17,7 +17,6 @@
     "babel-plugin-transform-object-assign": "^6.5.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-register": "^6.5.2",
-    "conventional-changelog-cli": "^1.1.1",
     "del-cli": "^0.2.0",
     "escape-string-regexp": "^1.0.4",
     "eslint": "^2.1.0",
@@ -36,8 +35,7 @@
     "posttest": "eslint src",
     "build": "del-cli dist && babel src --out-dir dist --ignore __tests__",
     "start": "babel src --watch --source-maps --out-dir dist --ignore __tests__",
-    "prepublish": "npm run test && npm run build",
-    "version": "conventional-changelog -i CHANGELOG.md --same-file && git add CHANGELOG.md"
+    "prepublish": "npm run test && npm run build"
   },
   "eslintConfig": {
     "extends": "tinchoz49"
