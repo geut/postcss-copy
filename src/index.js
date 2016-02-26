@@ -84,12 +84,13 @@ function getFileMeta(dirname, value, opts) {
  * @param {Object} opts plugin options
  * @return {Promise}
  */
-function processCopy(result, decl, node, opts) {
+function processUrl(result, decl, node, opts) {
     // ignore absolute urls, hasshes, data uris or by **ignore option**
     if (node.value.indexOf('!') === 0) {
         node.value = node.value.slice(1);
         return Promise.resolve();
     }
+
     if (node.value.indexOf('/') === 0 ||
         node.value.indexOf('data:') === 0 ||
         node.value.indexOf('#') === 0 ||
@@ -104,57 +105,51 @@ function processCopy(result, decl, node, opts) {
      */
     const dirname = opts.inputPath(decl);
 
-    return Promise.resolve().then(() => {
-        return getFileMeta(dirname, node.value, opts);
-    })
-    .then(fileMeta => {
-        return copy(
-            fileMeta.absolutePath,
-            () => {
-                return fileMeta.resultAbsolutePath;
-            },
-            contents => {
-                fileMeta.contents = contents;
-                fileMeta.hash = opts.hashFunction(contents);
-                let tpl = opts.template;
-                if (typeof tpl === 'function') {
-                    tpl = tpl(fileMeta);
-                } else {
-                    tags.forEach(tag => {
-                        tpl = tpl.replace(
-                            '[' + tag + ']',
-                            fileMeta[tag] || opts[tag]
-                        );
-                    });
-                }
+    let fileMeta = getFileMeta(dirname, node.value, opts);
 
-                fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
-
-                return Promise.resolve(
-                    opts.transform(fileMeta)
-                )
-                .then(transformed => {
-                    fileMeta = transformed || {};
-                    return fileMeta.contents;
+    return copy(
+        fileMeta.absolutePath,
+        () => {
+            return fileMeta.resultAbsolutePath;
+        },
+        contents => {
+            fileMeta.contents = contents;
+            fileMeta.hash = opts.hashFunction(contents);
+            let tpl = opts.template;
+            if (typeof tpl === 'function') {
+                tpl = tpl(fileMeta);
+            } else {
+                tags.forEach(tag => {
+                    tpl = tpl.replace(
+                        '[' + tag + ']',
+                        fileMeta[tag] || opts[tag]
+                    );
                 });
             }
-        )
-        .then(() => {
-            const relativePath = opts.relativePath(
-                dirname,
-                fileMeta,
-                result,
-                opts
-            );
 
-            node.value = path.relative(
-                relativePath,
-                fileMeta.resultAbsolutePath
-            ).split('\\').join('/') + fileMeta.extra;
-        });
-    })
-    .catch(err => {
-        decl.warn(result, err.message);
+            fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
+
+            return Promise.resolve(
+                opts.transform(fileMeta)
+            )
+            .then(transformed => {
+                fileMeta = transformed || {};
+                return fileMeta.contents;
+            });
+        }
+    )
+    .then(() => {
+        const relativePath = opts.relativePath(
+            dirname,
+            fileMeta,
+            result,
+            opts
+        );
+
+        node.value = path.relative(
+            relativePath,
+            fileMeta.resultAbsolutePath
+        ).split('\\').join('/') + fileMeta.extra;
     });
 }
 
@@ -178,7 +173,14 @@ function processDecl(result, decl, opts) {
             return;
         }
 
-        promises.push(processCopy(result, decl, node.nodes[0], opts));
+        const promise = Promise.resolve().then(() => {
+            return processUrl(result, decl, node.nodes[0], opts);
+        })
+        .catch(err => {
+            decl.warn(result, err.message);
+        });
+
+        promises.push(promise);
     });
 
     return Promise.all(promises).then(() => decl);
