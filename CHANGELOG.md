@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Changed
+- Change default template with `'[hash].[ext]'`.
 - Replace minimatch by micromatch.
 - Use keepachangelog format.
 

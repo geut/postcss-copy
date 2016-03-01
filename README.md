@@ -58,7 +58,7 @@ Define the base src path of your CSS files.
 #### dest ({string} required)
 Define the dest path of your CSS files and assets.
 
-#### template ({string | function} default = 'assets/[hash].[ext]')
+#### template ({string | function} default = '[hash].[ext]')
 Define a template name for your final url assets.
 * string template
     * **[hash]**: Let you use a hash name based on the contents of the file.
