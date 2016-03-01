@@ -16,11 +16,11 @@ test('should rename files via default template', t => {
 
         t.is(result.warnings().length, 0);
 
-        t.regex(css, makeRegex('assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0'));
-        t.ok(exists(join(tempFolder, 'assets/0ed7c955a2951f04.jpg')));
+        t.regex(css, makeRegex('0ed7c955a2951f04.jpg?#iefix&v=4.4.0'));
+        t.ok(exists(join(tempFolder, '0ed7c955a2951f04.jpg')));
 
-        t.regex(css, makeRegex('assets/b6c8f21e92b50900.jpg'));
-        t.ok(exists(join(tempFolder, 'assets/b6c8f21e92b50900.jpg')));
+        t.regex(css, makeRegex('b6c8f21e92b50900.jpg'));
+        t.ok(exists(join(tempFolder, 'b6c8f21e92b50900.jpg')));
     });
 });
 
