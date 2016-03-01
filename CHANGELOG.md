@@ -11,11 +11,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Appveyor support @TrySound
 - Cache support wth watcher ability. Before nothing copy if dest exists @TrySound
+
 ### Changed
 - Refactory source code @TrySound
 - Refactory tests. Replace tape by ava @TrySound
 - Improve package.json @TrySound
 - Update dependencies and devDependencies @TrySound
+
 ### Fixed
 - Fix path resolving
 
@@ -81,6 +83,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Update travis
 - Update readme with vertical section contents and more examples
+
 ### Fixed
 - Minor error using postcss-copy with postcss-import
 
@@ -91,12 +94,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.2.9] - 2015-09-16
 ### Added
 - new tests to check the correct multiple url parser
+
 ### Fixed
 - error with multiple urls in one line, e.g fonts of bootstrap
 
 ## [2.2.2] - 2015-09-14
 ### Changed
 - simple refactory in copyFile func
+
 ### Fixed
 - issue allow extra rules before/after url [#1](https://github.com/geut/postcss-copy/issues/1)
 
