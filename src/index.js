@@ -21,13 +21,13 @@ const tags = [
  * @param  {Object} opts plugin options
  * @return {boolean}
  */
-function ignore(filename, extra, opts) {
+function ignore(fileMeta, opts) {
     if (typeof opts.ignore === 'function') {
-        return opts.ignore(filename, extra);
+        return opts.ignore(fileMeta, opts);
     }
 
     if (typeof opts.ignore === 'string' || Array.isArray(opts.ignore)) {
-        return micromatch.any(filename + extra, opts.ignore);
+        return micromatch.any(fileMeta.filename + fileMeta.extra, opts.ignore);
     }
 
     return false;
@@ -48,10 +48,6 @@ function getFileMeta(dirname, value, opts) {
     const pathname = path.resolve(dirname, filename);
     const extra = (parsedUrl.search || '') + (parsedUrl.hash || '');
 
-    if (ignore(filename, extra, opts)) {
-        throw Error(`${filename} ignored.`);
-    }
-
     // path between the basePath and the filename
     const src = opts.src.filter(item => pathname.indexOf(item) !== -1)[0];
     if (!src) {
@@ -59,7 +55,8 @@ function getFileMeta(dirname, value, opts) {
     }
 
     const ext = path.extname(pathname);
-    return {
+    const fileMeta = {
+        filename,
         // the absolute path without the #hash param and ?query
         absolutePath: pathname,
         fullName: path.basename(pathname),
@@ -71,6 +68,12 @@ function getFileMeta(dirname, value, opts) {
         extra,
         src
     };
+
+    if (ignore(fileMeta, opts)) {
+        throw Error(`${fileMeta.filename} ignored.`);
+    }
+
+    return fileMeta;
 }
 
 
