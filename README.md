@@ -177,7 +177,7 @@ var copyOpts = {
     transform(fileMeta) {
         return new Promise((resolve, reject) => {
             if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
-                return fileMeta;
+                return resolve(fileMeta);
             }
             new Imagemin()
                 .src(fileMeta.contents)
