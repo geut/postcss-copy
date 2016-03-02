@@ -105,9 +105,9 @@ var copyOpts = {
 // ignore function
 var copyOpts = {
     ...,
-    ignore(filename, extra) {
-        return (filename.indexOf('images/button.jpg') ||
-                filename.indexOf('images/background.jpg'));
+    ignore(fileMeta, opts) {
+        return (fileMeta.filename.indexOf('images/button.jpg') ||
+                fileMeta.filename.indexOf('images/background.jpg'));
     }
 }
 ```

@@ -38,8 +38,8 @@ test('should ignore files with custom function', t => {
         src: 'src',
         dest: randomFolder('dest', t.title),
         template: 'ignore-path-func/[path]/[name].[ext]',
-        ignore(filename) {
-            return filename === 'images/other.jpg';
+        ignore(fileMeta) {
+            return fileMeta.filename === 'images/other.jpg';
         }
     })
     .then((result) => {
