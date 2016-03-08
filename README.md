@@ -1,5 +1,7 @@
 # postcss-copy
-[![Build Status](https://travis-ci.org/geut/postcss-copy.svg?branch=master)](https://travis-ci.org/geut/postcss-copy) [![Build status](https://ci.appveyor.com/api/projects/status/hx0tmjv1qi0au9oy?svg=true)](https://ci.appveyor.com/project/tinchoz49/postcss-copy)
+[![Build Status](https://travis-ci.org/geut/postcss-copy.svg?branch=master)](https://travis-ci.org/geut/postcss-copy)
+[![Build status](https://ci.appveyor.com/api/projects/status/hx0tmjv1qi0au9oy?svg=true)](https://ci.appveyor.com/project/tinchoz49/postcss-copy)
+[![Coverage Status](https://coveralls.io/repos/github/geut/postcss-copy/badge.svg?branch=coverage)](https://coveralls.io/github/geut/postcss-copy?branch=coverage)
 [![Dependency Status](https://david-dm.org/geut/postcss-copy.svg)](https://david-dm.org/geut/postcss-copy)
 [![devDependency Status](https://david-dm.org/geut/postcss-copy/dev-status.svg)](https://david-dm.org/geut/postcss-copy#info=devDependencies)
 > An **async** postcss plugin to copy all assets referenced in CSS files to a custom destination folder and updating the URLs.
