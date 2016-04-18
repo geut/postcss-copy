@@ -10,6 +10,7 @@ deploy: off
 
 install:
   - ps: Install-Product node $env:nodejs_version
+  - npm cache clean
   - npm install
 
 test_script:
