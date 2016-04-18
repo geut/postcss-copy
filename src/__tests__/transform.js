@@ -46,6 +46,6 @@ test('should process assets via transform', t => {
             .statSync(path.join(tempFolder, 'images', 'bigimage.jpg'))
             .size;
 
-        t.ok(newSize < oldSize);
+        t.truthy(newSize < oldSize);
     });
 });

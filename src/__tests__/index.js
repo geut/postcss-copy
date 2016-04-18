@@ -11,7 +11,7 @@ import commonTests from './common-tests.json';
 function testFileExists(t, file) {
     return pathExists(file)
         .then(exists => {
-            t.ok(exists, `File "${file}" created.`);
+            t.truthy(exists, `File "${file}" created.`);
         });
 }
 
