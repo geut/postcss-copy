@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.1] - 2016-04-21
+### Removed
+- warning for ignore files
+
 ## [4.0.0] - 2016-04-18
 ### Added
 - Coverage support
