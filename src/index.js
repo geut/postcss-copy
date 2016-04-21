@@ -70,7 +70,7 @@ function getFileMeta(dirname, value, opts) {
     };
 
     if (ignore(fileMeta, opts)) {
-        throw Error(`${fileMeta.filename} ignored.`);
+        return Promise.resolve();
     }
 
     return fileMeta;
