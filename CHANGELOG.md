@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.2] - 2016-04-22
+### Fixed
+- issue with the ignore option
+
 ## [4.0.1] - 2016-04-21
 ### Removed
 - warning for ignore files
