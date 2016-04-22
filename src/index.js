@@ -70,7 +70,7 @@ function getFileMeta(dirname, value, opts) {
     };
 
     if (ignore(fileMeta, opts)) {
-        return Promise.resolve();
+        return false;
     }
 
     return fileMeta;
@@ -88,7 +88,7 @@ function getFileMeta(dirname, value, opts) {
  * @return {Promise}
  */
 function processUrl(result, decl, node, opts) {
-    // ignore absolute urls, hasshes, data uris or by **ignore option**
+    // ignore from the css file by `!`
     if (node.value.indexOf('!') === 0) {
         node.value = node.value.slice(1);
         return Promise.resolve();
@@ -109,6 +109,11 @@ function processUrl(result, decl, node, opts) {
     const dirname = opts.inputPath(decl);
 
     let fileMeta = getFileMeta(dirname, node.value, opts);
+
+    // ignore from the fileMeta config
+    if (fileMeta === false) {
+        return Promise.resolve();
+    }
 
     return copy(
         fileMeta.absolutePath,
