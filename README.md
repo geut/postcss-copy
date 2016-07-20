@@ -15,6 +15,7 @@ Sections |
 [Input Path](#input-path) |
 [Using Relative Path](#using-relative-path) |
 [Transform](#using-transform) |
+[About lifecyle and the fileMeta object](#lifecyle)
 [Using postcss-import](#using-postcss-import) |
 [Roadmap](#roadmap) |
 [Credits](#credits) |
@@ -60,13 +61,16 @@ Define the base src path of your CSS files.
 #### dest ({string} required)
 Define the dest path of your CSS files and assets.
 
-#### template ({string | function} default = '[hash].[ext]')
+#### template ({string | function} default = '[hash].[ext][query]')
 Define a template name for your final url assets.
 * string template
     * **[hash]**: Let you use a hash name based on the contents of the file.
     * **[name]**: Real name of your asset.
     * **[path]**: Original relative path of your asset.
     * **[ext]**: Extension of the asset.
+    * **[query]**: Query string.
+    * **[qparams]**: Query string params without the ```?```.
+    * **[qhash]**: Query string hash without the ```#```.
 * function template
 ```js
 var copyOpts = {
@@ -197,6 +201,41 @@ var copyOpts = {
     }
 };
 ```
+
+#### <a name="lifecyle"></a> About lifecyle and the fileMeta object
+The fileMeta is a literal object with meta information about the copy process. Its information grows with the progress of the copy process.
+
+The lifecyle of the copy process is:
+1. Detect the url in the CSS files
+2. Validate url
+3. Get the inputPath
+4. Initialize the fileMeta:
+```js
+{
+    sourceInputFile, // path to the origin CSS file
+    sourceValue, // origin asset value taked from the CSS file
+    filename, // filename normalized without query string
+    absolutePath, // absolute path of the asset file
+    fullName, // name of the asset file
+    path, // relative path of the asset file
+    name, // name without extension
+    ext, // extension name
+    query, // full query string
+    qparams, // query string params without the char '?'
+    qhash, // query string hash without the char '#'
+    src // source path
+}
+```
+5. Check ignore function
+6. Read the asset file (using a cache buffer if exists)
+7. Add ```content``` property in the fileMeta object
+8. Create hash name
+9. Add ```hash``` property in the fileMeta object
+10. Define template for the new asset
+11. Add ```resultAbsolutePath``` and ```extra``` properties in the fileMeta object
+12. Execute custom transform
+13. Write in destination
+14. Write the new URL in the PostCSS node value.
 
 #### <a name="using-postcss-import"></a> Using copy with postcss-import
 [postcss-import](https://github.com/postcss/postcss-import) is a great plugin that allow us work our css files in a modular way with the same behavior of CommonJS.

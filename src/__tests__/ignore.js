@@ -7,7 +7,7 @@ test('should keep working if the ignore option is invalid', t => {
     return processStyle('src/ignore.css', {
         src: 'src',
         dest: randomFolder('dest', t.title),
-        template: 'invalid-ignore-option/[path]/[name].[ext]',
+        template: 'invalid-ignore-option/[path]/[name].[ext][query]',
         ignore: 4
     })
     .then(result => {
@@ -22,7 +22,7 @@ test('should ignore files with string expression', t => {
     return processStyle('src/ignore.css', {
         src: 'src',
         dest: randomFolder('dest', t.title),
-        template: 'ignore-path-array/[path]/[name].[ext]',
+        template: 'ignore-path-array/[path]/[name].[ext][query]',
         ignore: 'images/other.+(jpg|png)'
     })
     .then(result => {
@@ -37,7 +37,7 @@ test('should ignore files with array of paths', t => {
     return processStyle('src/ignore.css', {
         src: 'src',
         dest: randomFolder('dest', t.title),
-        template: 'ignore-path-array/[path]/[name].[ext]',
+        template: 'ignore-path-array/[path]/[name].[ext][query]',
         ignore: ['images/other.jpg']
     })
     .then(result => {
@@ -52,7 +52,7 @@ test('should ignore files with custom function', t => {
     return processStyle('src/ignore.css', {
         src: 'src',
         dest: randomFolder('dest', t.title),
-        template: 'ignore-path-func/[path]/[name].[ext]',
+        template: 'ignore-path-func/[path]/[name].[ext][query]',
         ignore(fileMeta) {
             return fileMeta.filename === 'images/other.jpg';
         }

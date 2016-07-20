@@ -29,7 +29,7 @@ test('should rename files via custom template', t => {
     return processStyle('src/index.css', {
         src: 'src',
         dest: tempFolder,
-        template: '[path]/[name]-[hash].[ext]'
+        template: '[path]/[name]-[hash].[ext][query]'
     })
     .then(result => {
         const css = result.css;
@@ -52,7 +52,8 @@ test('should rename files via template function', t => {
         src: 'src',
         dest: tempFolder,
         template(fileMeta) {
-            return `custom-path/custom-name-${fileMeta.name}.${fileMeta.ext}`;
+            return `custom-path/custom-name-${fileMeta.name}.` +
+            `${fileMeta.ext}${fileMeta.query}`;
         }
     })
     .then(result => {

@@ -4,6 +4,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.0.0] - 2016-07-20
+### Added
+- Query string attributes in the fileMeta: **query**, **qparams** and **qhash**
+- sourceInputFile attribute in the fileMeta
+- sourceValue attribute in the fileMeta
+
+### Changed
+- Change default template to ```[hash].[ext][query]``` **(Breaking change)**
+
 ## [4.0.2] - 2016-04-22
 ### Fixed
 - issue with the ignore option

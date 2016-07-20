@@ -10,7 +10,10 @@ const tags = [
     'path',
     'name',
     'hash',
-    'ext'
+    'ext',
+    'query',
+    'qparams',
+    'qhash'
 ];
 
 /**
@@ -27,7 +30,7 @@ function ignore(fileMeta, opts) {
     }
 
     if (typeof opts.ignore === 'string' || Array.isArray(opts.ignore)) {
-        return micromatch.any(fileMeta.filename + fileMeta.extra, opts.ignore);
+        return micromatch.any(fileMeta.sourceValue, opts.ignore);
     }
 
     return false;
@@ -38,15 +41,17 @@ function ignore(fileMeta, opts) {
  * to the copy process.
  *
  * @param  {string} dirname path of the read file css
+ * @param  {string} sourceInputFile path to the source input file css
  * @param  {string} value url
  * @param  {Object} opts plugin options
  * @return {Promise} resolve => fileMeta | reject => error message
  */
-function getFileMeta(dirname, value, opts) {
+function getFileMeta(dirname, sourceInputFile, value, opts) {
     const parsedUrl = url.parse(value, true);
     const filename = parsedUrl.pathname;
     const pathname = path.resolve(dirname, filename);
-    const extra = (parsedUrl.search || '') + (parsedUrl.hash || '');
+    const params = parsedUrl.search || '';
+    const hash = parsedUrl.hash || '';
 
     // path between the basePath and the filename
     const src = opts.src.filter(item => pathname.indexOf(item) !== -1)[0];
@@ -56,6 +61,8 @@ function getFileMeta(dirname, value, opts) {
 
     const ext = path.extname(pathname);
     const fileMeta = {
+        sourceInputFile,
+        sourceValue: value,
         filename,
         // the absolute path without the #hash param and ?query
         absolutePath: pathname,
@@ -65,13 +72,11 @@ function getFileMeta(dirname, value, opts) {
         name: path.basename(pathname, ext),
         // extension without the '.'
         ext: ext.slice(1),
-        extra,
+        query: params + hash,
+        qparams: params.length > 0 ? params.slice(1) : '',
+        qhash: hash.length > 0 ? hash.slice(1) : '',
         src
     };
-
-    if (ignore(fileMeta, opts)) {
-        return false;
-    }
 
     return fileMeta;
 }
@@ -108,10 +113,15 @@ function processUrl(result, decl, node, opts) {
      */
     const dirname = opts.inputPath(decl);
 
-    let fileMeta = getFileMeta(dirname, node.value, opts);
+    let fileMeta = getFileMeta(
+        dirname,
+        decl.source.input.file,
+        node.value,
+        opts
+    );
 
     // ignore from the fileMeta config
-    if (fileMeta === false) {
+    if (ignore(fileMeta, opts)) {
         return Promise.resolve();
     }
 
@@ -130,12 +140,17 @@ function processUrl(result, decl, node, opts) {
                 tags.forEach(tag => {
                     tpl = tpl.replace(
                         '[' + tag + ']',
-                        fileMeta[tag] || opts[tag]
+                        fileMeta[tag] || opts[tag] || ''
                     );
                 });
             }
 
-            fileMeta.resultAbsolutePath = path.resolve(opts.dest, tpl);
+            const resultUrl = url.parse(tpl);
+            fileMeta.resultAbsolutePath = path.resolve(
+                opts.dest,
+                resultUrl.pathname
+            );
+            fileMeta.extra = (resultUrl.search || '') + (resultUrl.hash || '');
 
             return Promise.resolve(
                 opts.transform(fileMeta)
@@ -201,7 +216,7 @@ function processDecl(result, decl, opts) {
  */
 function init(userOpts = {}) {
     const opts = Object.assign({
-        template: '[hash].[ext]',
+        template: '[hash].[ext][query]',
         relativePath(dirname, fileMeta, result, options) {
             return path.join(
                 options.dest,
