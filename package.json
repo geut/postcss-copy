@@ -20,13 +20,13 @@
     "coveralls": "^2.11.11",
     "del-cli": "^0.2.0",
     "escape-string-regexp": "^1.0.4",
-    "eslint": "^3.1.1",
+    "eslint": "^2.13.1",
     "eslint-config-postcss": "^2.0.0",
     "eslint-config-tinchoz49": "^2.1.0",
     "hasha": "^2.2.0",
     "jimp": "^0.2.24",
     "nyc": "^7.0.0",
-    "path-exists": "^3.0.0"
+    "path-exists": "^2.1.0"
   },
   "files": [
     "dist"
