@@ -4,6 +4,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.0.1] - 2016-07-20
+### Added
+- CI for node v6
+
+### Fixed
+- revert update of eslint and path-exists since the new versions does not work with node v0.12
+
 ## [5.0.0] - 2016-07-20
 ### Added
 - Query string attributes in the fileMeta: **query**, **qparams** and **qhash**
