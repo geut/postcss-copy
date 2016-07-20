@@ -1,6 +1,6 @@
 {
   "name": "postcss-copy",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "A postcss plugin to copy all assets referenced in CSS to a custom destination folder and updating the URLs.",
   "main": "dist/index.js",
   "dependencies": {
