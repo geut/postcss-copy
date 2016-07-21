@@ -15,7 +15,7 @@ Sections |
 [Input Path](#input-path) |
 [Using Relative Path](#using-relative-path) |
 [Transform](#using-transform) |
-[About lifecyle and the fileMeta object](#lifecyle)
+[About lifecyle and the fileMeta object](#lifecyle) |
 [Using postcss-import](#using-postcss-import) |
 [Roadmap](#roadmap) |
 [Credits](#credits) |
