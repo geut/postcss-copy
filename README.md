@@ -206,26 +206,28 @@ var copyOpts = {
 The fileMeta is a literal object with meta information about the copy process. Its information grows with the progress of the copy process.
 
 The lifecyle of the copy process is:
+
 1. Detect the url in the CSS files
 2. Validate url
 3. Get the inputPath
 4. Initialize the fileMeta:
-```js
-{
-    sourceInputFile, // path to the origin CSS file
-    sourceValue, // origin asset value taked from the CSS file
-    filename, // filename normalized without query string
-    absolutePath, // absolute path of the asset file
-    fullName, // name of the asset file
-    path, // relative path of the asset file
-    name, // name without extension
-    ext, // extension name
-    query, // full query string
-    qparams, // query string params without the char '?'
-    qhash, // query string hash without the char '#'
-    src // source path
-}
-```
+
+    ```js
+    {
+        sourceInputFile, // path to the origin CSS file
+        sourceValue, // origin asset value taked from the CSS file
+        filename, // filename normalized without query string
+        absolutePath, // absolute path of the asset file
+        fullName, // name of the asset file
+        path, // relative path of the asset file
+        name, // name without extension
+        ext, // extension name
+        query, // full query string
+        qparams, // query string params without the char '?'
+        qhash, // query string hash without the char '#'
+        src // source path
+    }
+    ```
 5. Check ignore function
 6. Read the asset file (using a cache buffer if exists)
 7. Add ```content``` property in the fileMeta object
