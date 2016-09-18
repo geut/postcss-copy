@@ -1,8 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
-This project adheres to [Semantic Versioning](http://semver.org/).
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
+and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [5.1.0] - 2016-09-18
+### Fixed
+- a regression in the relativePath usage :bug:
 
 ## [5.0.1] - 2016-07-20
 ### Added
@@ -18,7 +24,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - sourceValue attribute in the fileMeta
 
 ### Changed
-- Change default template to ```[hash].[ext][query]``` **(Breaking change)**
+- Change default template to `[hash].[ext][query]` **(Breaking change)**
 
 ## [4.0.2] - 2016-04-22
 ### Fixed
@@ -62,7 +68,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.6.1] - 2016-02-11
 ### Fixed
-- replace ```_extend``` by ```Object.assign```
+- replace `_extend` by `Object.assign`
 
 ## [2.6.0] - 2016-02-10 [YANKED]
 
@@ -165,7 +171,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.1.0 - 2015-09-05
 - First release tagged!
 
-[Unreleased]: https://github.com/geut/postcss-copy/compare/v3.1.0...HEAD
+[unreleased]: https://github.com/geut/postcss-copy/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/geut/postcss-copy/compare/v5.0.1...v5.1.0
+[5.0.1]: https://github.com/geut/postcss-copy/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/geut/postcss-copy/compare/v4.0.2...v5.0.0
+[4.0.2]: https://github.com/geut/postcss-copy/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/geut/postcss-copy/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/geut/postcss-copy/compare/v3.1.0...v4.0.0
 [3.1.0]: https://github.com/geut/postcss-copy/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/geut/postcss-copy/compare/v2.6.3...v3.0.0
 [2.6.3]: https://github.com/geut/postcss-copy/compare/v2.6.2...v2.6.3
