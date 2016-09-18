@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- relativePath must return a valid dirname
 
 ## [5.1.0] - 2016-09-18
 ### Fixed
