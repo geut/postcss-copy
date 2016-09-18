@@ -158,15 +158,16 @@ var copyOpts = {
 
 #### <a name="using-relative-path"></a> relativePath {function}
 By default the copy process keep the relative path between each ```asset``` and the path of his  ```CSS file```. You can change this behavior setting a new function with your custom relativePath. For example define the relative path based only in the ```dest``` path option (see [Using copy with postcss-import](#using-postcss-import))
+
+The relativePath must return a valid `dirname` path.
 ```js
 var copyOpts = {
     ...,
     relativePath(dirname, fileMeta, result, options) {
-        // this is the relative path by default
-        return path.join(
-            result.opts.to || options.dest,
-            path.relative(fileMeta.src, dirname)
-        );
+      return path.join(
+          result.opts.to ? path.dirname(result.opts.to) : options.dest,
+          path.relative(fileMeta.src, dirname)
+      );
     }
 };
 ```
@@ -259,6 +260,7 @@ var gulp = require('gulp');
 var postcss = require('gulp-postcss');
 var postcssCopy = require('postcss-copy');
 var postcssImport = require('postcss-import');
+var path = require('path');
 
 gulp.task('buildCss', function () {
     var processors = [
@@ -266,8 +268,8 @@ gulp.task('buildCss', function () {
         postcssCopy({
             src: ['src', 'node_modules'],
             dest: 'dist',
-            relativePath(dirname, fileMeta, result, opts) {
-                return result.opts.to;
+            relativePath(dirname, fileMeta, result, options) {
+                return result.opts.to ? path.dirname(result.opts.to) : options.dest;
             }
         })
     ];
