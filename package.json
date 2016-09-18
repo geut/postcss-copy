@@ -38,7 +38,8 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "del-cli dist && babel src --out-dir dist --ignore __tests__",
     "start": "babel src --watch --source-maps --out-dir dist --ignore __tests__",
-    "prepublish": "npm run test && npm run build"
+    "prepublish": "npm run test && npm run build",
+    "version": "chan release ${npm_package_version} && git add ."
   },
   "eslintConfig": {
     "extends": "tinchoz49"

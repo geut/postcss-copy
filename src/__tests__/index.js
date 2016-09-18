@@ -37,7 +37,7 @@ commonTests.forEach(item => {
 
     if (item.opts.relativePath === false) {
         item.opts.relativePath = (dirname, fileMeta, result, options) => {
-            return result.opts.to || options.dest;
+            return result.opts.to ? path.dirname(result.opts.to) : options.dest;
         };
     }
 
@@ -51,7 +51,11 @@ commonTests.forEach(item => {
         let oldTime;
         let newTime;
 
-        return processStyle('src/index.css', copyOpts)
+        if (item.opts.to) {
+            item.opts.to = path.join(tempFolder, item.opts.to);
+        }
+
+        return processStyle('src/index.css', copyOpts, item.opts.to)
             .then(result => {
                 const css = result.css;
                 item.assertions.index.forEach(assertion => {
