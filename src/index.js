@@ -219,7 +219,7 @@ function init(userOpts = {}) {
         template: '[hash].[ext][query]',
         relativePath(dirname, fileMeta, result, options) {
             return path.join(
-                options.dest,
+                result.opts.to || options.dest,
                 path.relative(fileMeta.src, dirname)
             );
         },

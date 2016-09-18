@@ -161,10 +161,10 @@ By default the copy process keep the relative path between each ```asset``` and 
 ```js
 var copyOpts = {
     ...,
-    relativePath(dirname, fileMeta, result, opts) {
+    relativePath(dirname, fileMeta, result, options) {
         // this is the relative path by default
         return path.join(
-            options.dest,
+            result.opts.to || options.dest,
             path.relative(fileMeta.src, dirname)
         );
     }
@@ -267,7 +267,7 @@ gulp.task('buildCss', function () {
             src: ['src', 'node_modules'],
             dest: 'dist',
             relativePath(dirname, fileMeta, result, opts) {
-                return opts.dest;
+                return result.opts.to;
             }
         })
     ];
