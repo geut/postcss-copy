@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [5.2.0] - 2016-09-18
 ### Fixed
 - relativePath must return a valid dirname
 
@@ -173,7 +175,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.1.0 - 2015-09-05
 - First release tagged!
 
-[unreleased]: https://github.com/geut/postcss-copy/compare/v5.1.0...HEAD
+[unreleased]: https://github.com/geut/postcss-copy/compare/v5.2.0...HEAD
+[5.2.0]: https://github.com/geut/postcss-copy/compare/v5.1.0...v5.2.0
 [5.1.0]: https://github.com/geut/postcss-copy/compare/v5.0.1...v5.1.0
 [5.0.1]: https://github.com/geut/postcss-copy/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/geut/postcss-copy/compare/v4.0.2...v5.0.0
