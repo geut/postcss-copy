@@ -43,7 +43,7 @@ export default function copy(input, output, transform) {
         isModified = true;
         return read(input, mtime);
     })
-    .then(contents => transform ? transform(contents) : contents)
+    .then(contents => transform ? transform(contents, isModified) : contents)
     .then(contents => {
         if (typeof output === 'function') {
             output = output();

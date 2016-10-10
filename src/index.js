@@ -130,7 +130,7 @@ function processUrl(result, decl, node, opts) {
         () => {
             return fileMeta.resultAbsolutePath;
         },
-        contents => {
+        (contents, isModified) => {
             fileMeta.contents = contents;
             fileMeta.hash = opts.hashFunction(contents);
             let tpl = opts.template;
@@ -153,12 +153,9 @@ function processUrl(result, decl, node, opts) {
             fileMeta.extra = (resultUrl.search || '') + (resultUrl.hash || '');
 
             return Promise.resolve(
-                opts.transform(fileMeta)
+                isModified ? opts.transform(fileMeta) : fileMeta
             )
-            .then(transformed => {
-                fileMeta = transformed || {};
-                return fileMeta.contents;
-            });
+            .then(fileMetaTransformed => fileMetaTransformed.contents);
         }
     )
     .then(() => {
