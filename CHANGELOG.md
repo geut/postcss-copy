@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [5.3.0] - 2016-10-10
 ### Fixed
 - sould not repeat the transform process when the source is the same (related #46)
 
@@ -177,7 +179,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.1.0 - 2015-09-05
 - First release tagged!
 
-[unreleased]: https://github.com/geut/postcss-copy/compare/v5.2.0...HEAD
+[unreleased]: https://github.com/geut/postcss-copy/compare/v5.3.0...HEAD
+[5.3.0]: https://github.com/geut/postcss-copy/compare/v5.2.0...v5.3.0
 [5.2.0]: https://github.com/geut/postcss-copy/compare/v5.1.0...v5.2.0
 [5.1.0]: https://github.com/geut/postcss-copy/compare/v5.0.1...v5.1.0
 [5.0.1]: https://github.com/geut/postcss-copy/compare/v5.0.0...v5.0.1
