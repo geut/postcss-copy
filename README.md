@@ -178,26 +178,26 @@ Extend the copy method to apply a transform in the contents (e.g: optimize image
 **IMPORTANT:** The function must return the fileMeta (modified) or a promise using ```resolve(fileMeta)```.
 ```js
 var Imagemin = require('imagemin');
+var imageminJpegtran = require('imagemin-jpegtran');
+var imageminPngquant = require('imagemin-pngquant');
 
 var copyOpts = {
     ...,
     transform(fileMeta) {
-        return new Promise((resolve, reject) => {
-            if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
-                return resolve(fileMeta);
-            }
-            new Imagemin()
-                .src(fileMeta.contents)
-                .use(Imagemin.jpegtran({
+        if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
+            return fileMeta;
+        }
+        return Imagemin.buffer(fileMeta.contents, {
+            plugins: [
+                imageminPngquant(),
+                imageminJpegtran({
                     progressive: true
-                }))
-                .run((err, files) => {
-                    if (err) {
-                        reject(err);
-                    }
-                    fileMeta.contents = files[0].contents;
-                    resolve(fileMeta); // <- important
-                });
+                })
+            ]
+        })
+        .then(result => {
+            fileMeta.contents = result;
+            return fileMeta; // <- important
         });
     }
 };
