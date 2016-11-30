@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import randomFolder from './helpers/random-folder';
 import copy from '../lib/copy';
+import pify from 'pify';
 
 test('should copy file', t => {
     const tempFolder = randomFolder('dest', t.title);
@@ -61,6 +62,18 @@ test('should copy file once', t => {
     .then(() => {
         t.is(prevTime, fs.statSync(destFile).mtime.getTime());
     });
+});
+
+test(`should copy file if source was not modified
+    but the file is missing in the destination`, t => {
+    const tempFolder = randomFolder('dest', t.title);
+    const srcFile = 'src/images/test.jpg';
+    const destFile = path.join(tempFolder, 'test.jpg');
+
+    return copy(srcFile, destFile)
+        .then(() => pify(fs.unlink)(destFile))
+        .then(() => copy(srcFile, destFile))
+        .then(() => pify(fs.stat)(destFile));
 });
 
 test('should copy again if source was modified', t => {

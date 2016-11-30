@@ -11,7 +11,7 @@ function transform(fileMeta) {
     if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
         return fileMeta;
     }
-    fileMeta.contents = '';
+    fileMeta.contents = new Buffer('');
     return fileMeta;
 }
 

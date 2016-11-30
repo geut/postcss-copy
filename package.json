@@ -32,9 +32,10 @@
   ],
   "scripts": {
     "pretest": "del-cli src/__tests__/dest",
-    "test": "nyc ava --verbose",
+    "test": "ava --verbose --no-cache",
     "posttest": "eslint src",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "nycreport": "nyc ava",
+    "coverage": "npm run nycreport && nyc report --reporter=text-lcov | coveralls",
     "build": "del-cli dist && babel src --out-dir dist --ignore __tests__",
     "start": "babel src --watch --source-maps --out-dir dist --ignore __tests__",
     "prepublish": "npm run test && npm run build",
