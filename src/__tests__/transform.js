@@ -22,7 +22,7 @@ function transform(fileMeta) {
             return new Promise((resolve, reject) => {
                 lenna
                 .resize(10, 10)
-                .quality(60)
+                .quality(10)
                 .getBuffer(ext[fileMeta.ext], (err, buffer) => {
                     if (err) {
                         reject(err);
