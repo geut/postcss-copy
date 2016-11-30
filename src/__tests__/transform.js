@@ -24,17 +24,15 @@ test('should process assets via transform', t => {
         transform
     })
         .then(() => {
-            const oldStat = stat(
-                path.join('src', 'images', 'bigimage.jpg')
-            );
-            const newStat = stat(
-                path.join(tempFolder, 'images', 'bigimage.jpg')
-            );
+            const oldSize = fs
+                .statSync(path.join('src', 'images', 'bigimage.jpg'))
+                .size;
 
-            return Promise.all([oldStat, newStat]);
-        })
-        .then((results) => {
-            return t.truthy(results[0].size > results[1].size);
+            const newSize = fs
+                .statSync(path.join(tempFolder, 'images', 'bigimage.jpg'))
+                .size;
+
+            t.truthy(newSize < oldSize);
         });
 });
 
