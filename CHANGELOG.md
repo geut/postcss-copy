@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- execution of transform function: run before of the hash function (#49)
 
 ## [5.3.0] - 2016-10-10
 ### Fixed

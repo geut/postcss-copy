@@ -232,11 +232,11 @@ The lifecyle of the copy process is:
 5. Check ignore function
 6. Read the asset file (using a cache buffer if exists)
 7. Add ```content``` property in the fileMeta object
-8. Create hash name
-9. Add ```hash``` property in the fileMeta object
-10. Define template for the new asset
-11. Add ```resultAbsolutePath``` and ```extra``` properties in the fileMeta object
-12. Execute custom transform
+8. Execute custom transform
+9. Create hash name based on the custom transform
+10. Add ```hash``` property in the fileMeta object
+11. Define template for the new asset
+12. Add ```resultAbsolutePath``` and ```extra``` properties in the fileMeta object
 13. Write in destination
 14. Write the new URL in the PostCSS node value.
 
