@@ -1,7 +1,5 @@
 import test from 'ava';
 import fs from 'fs';
-import Imagemin from 'imagemin';
-import imageminJpegoptim from 'imagemin-jpegoptim';
 import path from 'path';
 import randomFolder from './helpers/random-folder';
 import processStyle from './helpers/process-style';
@@ -13,18 +11,8 @@ function transform(fileMeta) {
     if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
         return fileMeta;
     }
-    return Imagemin.buffer(fileMeta.contents, {
-        plugins: [
-            imageminJpegoptim({
-                size: '1%'
-            })
-        ]
-    })
-        .then(result => {
-            fileMeta.contents = result;
-            return fileMeta;
-        })
-        .catch(err => console.log(err));
+    fileMeta.contents = '';
+    return fileMeta;
 }
 
 test('should process assets via transform', t => {
