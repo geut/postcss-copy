@@ -1,6 +1,7 @@
 import test from 'ava';
 import fs from 'fs';
-import Jimp from 'jimp';
+import Imagemin from 'imagemin';
+import imageminJpegoptim from 'imagemin-jpegoptim';
 import path from 'path';
 import randomFolder from './helpers/random-folder';
 import processStyle from './helpers/process-style';
@@ -9,29 +10,21 @@ import pify from 'pify';
 const stat = pify(fs.stat);
 
 function transform(fileMeta) {
-    const ext = {
-        png: Jimp.MIME_PNG,
-        jpg: Jimp.MIME_JPEG
-    };
     if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
         return fileMeta;
     }
-    return Jimp
-        .read(fileMeta.contents)
-        .then(lenna => {
-            return new Promise((resolve, reject) => {
-                lenna
-                .resize(10, 10)
-                .quality(10)
-                .getBuffer(ext[fileMeta.ext], (err, buffer) => {
-                    if (err) {
-                        reject(err);
-                    }
-                    fileMeta.contents = buffer;
-                    return resolve(fileMeta);
-                });
-            });
-        });
+    return Imagemin.buffer(fileMeta.contents, {
+        plugins: [
+            imageminJpegoptim({
+                size: '1%'
+            })
+        ]
+    })
+        .then(result => {
+            fileMeta.contents = result;
+            return fileMeta;
+        })
+        .catch(err => console.log(err));
 }
 
 test('should process assets via transform', t => {

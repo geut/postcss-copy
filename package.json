@@ -24,7 +24,8 @@
     "eslint-config-postcss": "^2.0.0",
     "eslint-config-tinchoz49": "^2.1.0",
     "hasha": "^2.2.0",
-    "jimp": "^0.2.24",
+    "imagemin": "^5.2.2",
+    "imagemin-jpegoptim": "^5.0.0",
     "nyc": "^7.0.0",
     "path-exists": "^2.1.0"
   },
