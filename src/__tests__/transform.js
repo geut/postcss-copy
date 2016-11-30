@@ -34,8 +34,7 @@ test('should process assets via transform', t => {
             return Promise.all([oldStat, newStat]);
         })
         .then((results) => {
-            const [oldStat, newStat] = results;
-            return t.truthy(newStat.size < oldStat.size);
+            return t.truthy(results[0].size > results[1].size);
         });
 });
 
