@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "pretest": "del-cli src/__tests__/dest",
-    "test": "nyc --cache ava --verbose",
+    "test": "nyc ava --verbose",
     "posttest": "eslint src",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "del-cli dist && babel src --out-dir dist --ignore __tests__",

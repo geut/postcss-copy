@@ -66,3 +66,21 @@ the hash property based on the transform content`, t => {
             );
         });
 });
+
+test('should not transform when the source is the same', (t) => {
+    const tempFolder = randomFolder('dest', t.title);
+    let times = 0;
+
+    return processStyle('src/no-repeat-transform.css', {
+        src: 'src',
+        dest: tempFolder,
+        template: '[path]/[name].[ext]',
+        transform(fileMeta) {
+            times++;
+            return transform(fileMeta);
+        }
+    })
+    .then(() => {
+        t.truthy(times === 1);
+    });
+});
