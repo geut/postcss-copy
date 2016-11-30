@@ -34,7 +34,7 @@
     "pretest": "del-cli src/__tests__/dest",
     "test": "ava --verbose --no-cache",
     "posttest": "eslint src",
-    "nycreport": "nyc ava",
+    "nycreport": "nyc npm test",
     "coverage": "npm run nycreport && nyc report --reporter=text-lcov | coveralls",
     "build": "del-cli dist && babel src --out-dir dist --ignore __tests__",
     "start": "babel src --watch --source-maps --out-dir dist --ignore __tests__",
