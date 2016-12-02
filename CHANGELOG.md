@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [6.1.0] - 2016-12-02
 ### Fixed
 - concurrent tests and cache function for the transform process
 - hash parameter content
@@ -186,7 +188,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.1.0 - 2015-09-05
 - First release tagged!
 
-[unreleased]: https://github.com/geut/postcss-copy/compare/v6.0.0...HEAD
+[unreleased]: https://github.com/geut/postcss-copy/compare/v6.1.0...HEAD
+[6.1.0]: https://github.com/geut/postcss-copy/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/geut/postcss-copy/compare/v5.3.0...v6.0.0
 [5.3.0]: https://github.com/geut/postcss-copy/compare/v5.2.0...v5.3.0
 [5.2.0]: https://github.com/geut/postcss-copy/compare/v5.1.0...v5.2.0
