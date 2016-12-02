@@ -64,8 +64,8 @@ test('should copy file once', t => {
     });
 });
 
-test(`should copy file if source was not modified
-    but the file is missing in the destination`, t => {
+test('should copy file if source was not modified ' +
+   'but the file is missing in the destination', t => {
     const tempFolder = randomFolder('dest', t.title);
     const srcFile = 'src/images/test.jpg';
     const destFile = path.join(tempFolder, 'test.jpg');

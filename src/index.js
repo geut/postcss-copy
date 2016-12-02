@@ -138,7 +138,9 @@ function processUrl(result, decl, node, opts) {
                 isModified ? opts.transform(fileMeta) : fileMeta
             )
             .then(fileMetaTransformed => {
-                fileMetaTransformed.hash = opts.hashFunction(contents);
+                fileMetaTransformed.hash = opts.hashFunction(
+                    fileMetaTransformed.contents
+                );
                 let tpl = opts.template;
                 if (typeof tpl === 'function') {
                     tpl = tpl(fileMetaTransformed);

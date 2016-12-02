@@ -11,7 +11,9 @@ function transform(fileMeta) {
     if (['jpg', 'png'].indexOf(fileMeta.ext) === -1) {
         return fileMeta;
     }
+
     fileMeta.contents = new Buffer('');
+
     return fileMeta;
 }
 
@@ -36,10 +38,10 @@ test('should process assets via transform', t => {
         });
 });
 
-test(`should process assets via transform and use
-the hash property based on the transform content`, t => {
+test('should process assets via transform and use ' +
+'the hash property based on the transform content', t => {
     const tempFolder = randomFolder('dest', t.title);
-    return processStyle('src/check-transform.css', {
+    return processStyle('src/check-transform-hash.css', {
         src: 'src',
         dest: tempFolder,
         template: '[path]/[hash].[ext]',
@@ -47,7 +49,7 @@ the hash property based on the transform content`, t => {
     })
         .then(() => {
             return stat(
-                path.join(tempFolder, 'images', 'a23a149402afd438.jpg')
+                path.join(tempFolder, 'images', 'da39a3ee5e6b4b0d.jpg')
             );
         });
 });

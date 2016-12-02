@@ -9,13 +9,17 @@ const readFile = pify(fs.readFile);
 const stat = pify(fs.stat);
 const cache = {};
 
-function read(file, mtime) {
-    const contents = readFile(file);
-
+function put(file, contents, mtime) {
     cache[file] = {
         mtime,
         contents
     };
+
+    return contents;
+}
+
+function read(file) {
+    const contents = readFile(file);
 
     return contents;
 }
@@ -26,24 +30,33 @@ function write(file, contents) {
     });
 }
 
-export default function copy(input, output, transform) {
+export default function copy(
+    input,
+    output,
+    transform = (contents) => contents
+) {
     let isModified;
+    let mtime;
 
     return stat(input).catch(() => {
         throw Error(`Can't read the file in ${input}`);
     })
     .then(stats => {
         const item = cache[input];
-        const mtime = stats.mtime.getTime();
+        mtime = stats.mtime.getTime();
 
         if (item && item.mtime === mtime) {
-            return item.contents;
+            return item
+                .contents
+                .then(transform);
         }
 
         isModified = true;
-        return read(input, mtime);
+        const fileReaded = read(input)
+            .then(contents => transform(contents, isModified));
+
+        return put(input, fileReaded, mtime);
     })
-    .then(contents => transform ? transform(contents, isModified) : contents)
     .then(contents => {
         if (typeof output === 'function') {
             output = output();
