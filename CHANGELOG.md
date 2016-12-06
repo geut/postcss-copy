@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- cache for the write process to don\`t overwrite the output file (fixed race condition)
 
 ## [6.1.0] - 2016-12-02
 ### Fixed

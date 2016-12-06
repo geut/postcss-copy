@@ -7,27 +7,23 @@ const mkdir = pify(mkdirp);
 const writeFile = pify(fs.writeFile);
 const readFile = pify(fs.readFile);
 const stat = pify(fs.stat);
-const cache = {};
+const cacheReader = {};
+const cacheWriter = {};
 
-function put(file, contents, mtime) {
-    cache[file] = {
-        mtime,
-        contents
-    };
+function checkOutput(file) {
+    if (cacheWriter[file]) {
+        return cacheWriter[file].then(() => stat(file));
+    }
 
-    return contents;
-}
-
-function read(file) {
-    const contents = readFile(file);
-
-    return contents;
+    return stat(file);
 }
 
 function write(file, contents) {
-    return mkdir(path.dirname(file)).then(() => {
+    cacheWriter[file] = mkdir(path.dirname(file)).then(() => {
         return writeFile(file, contents);
     });
+
+    return cacheWriter[file];
 }
 
 export default function copy(
@@ -38,36 +34,45 @@ export default function copy(
     let isModified;
     let mtime;
 
-    return stat(input).catch(() => {
-        throw Error(`Can't read the file in ${input}`);
-    })
-    .then(stats => {
-        const item = cache[input];
-        mtime = stats.mtime.getTime();
+    return stat(input)
+        .catch(() => {
+            throw Error(`Can't read the file in ${input}`);
+        })
+        .then(stats => {
+            const item = cacheReader[input];
+            mtime = stats.mtime.getTime();
 
-        if (item && item.mtime === mtime) {
-            return item
-                .contents
-                .then(transform);
-        }
+            if (item && item.mtime === mtime) {
+                return item
+                    .contents
+                    .then(transform);
+            }
 
-        isModified = true;
-        const fileReaded = read(input)
-            .then(contents => transform(contents, isModified));
+            isModified = true;
+            const fileReaded = readFile(input)
+                .then(contents => transform(contents, isModified));
 
-        return put(input, fileReaded, mtime);
-    })
-    .then(contents => {
-        if (typeof output === 'function') {
-            output = output();
-        }
-        if (isModified) {
-            return write(output, contents);
-        }
-        return stat(output).then(() => {
-            return;
-        }, () => {
-            return write(output, contents);
+            cacheReader[input] = {
+                mtime,
+                contents: fileReaded
+            };
+
+            return fileReaded;
+        })
+        .then(contents => {
+            if (typeof output === 'function') {
+                output = output();
+            }
+
+            if (isModified) {
+                return write(output, contents);
+            }
+
+            return checkOutput(output).then(() => {
+                return;
+            }, () => {
+                return write(output, contents);
+            });
         });
-    });
 }
+
