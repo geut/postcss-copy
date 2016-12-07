@@ -1,9 +1,12 @@
 import test from 'ava';
 import randomFolder from './helpers/random-folder';
-import processStyle from './helpers/process-style';
+
+test.beforeEach(t => {
+    t.context.processStyle = require('./helpers/process-style');
+});
 
 test('should throw an error if the "src" option is not setted', t => {
-    return processStyle('src/index.css', {
+    return t.context.processStyle('src/index.css', {
         dest: randomFolder('dest', t.title)
     })
     .then(() => t.fail())
@@ -13,7 +16,7 @@ test('should throw an error if the "src" option is not setted', t => {
 });
 
 test('should throw an error if the "dest" option is not setted', t => {
-    return processStyle('src/index.css', {
+    return t.context.processStyle('src/index.css', {
         src: 'src'
     })
     .then(() => t.fail())
@@ -23,7 +26,7 @@ test('should throw an error if the "dest" option is not setted', t => {
 });
 
 test('should warn if the filename not belongs to the "src" option', t => {
-    return processStyle('external_libs/bootstrap/css/bootstrap.css', {
+    return t.context.processStyle('external_libs/bootstrap/css/bootstrap.css', {
         src: 'src',
         dest: randomFolder('dest', t.title)
     })

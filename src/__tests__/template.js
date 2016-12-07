@@ -1,13 +1,16 @@
 import test from 'ava';
 import randomFolder from './helpers/random-folder';
-import processStyle from './helpers/process-style';
 import makeRegex from './helpers/make-regex';
 import { sync as exists } from 'path-exists';
 import { join } from 'path';
 
+test.beforeEach(t => {
+    t.context.processStyle = require('./helpers/process-style');
+});
+
 test('should rename files via default template', t => {
     const tempFolder = randomFolder('dest', t.title);
-    return processStyle('src/index.css', {
+    return t.context.processStyle('src/index.css', {
         src: 'src',
         dest: tempFolder
     })
@@ -26,7 +29,7 @@ test('should rename files via default template', t => {
 
 test('should rename files via custom template', t => {
     const tempFolder = randomFolder('dest', t.title);
-    return processStyle('src/index.css', {
+    return t.context.processStyle('src/index.css', {
         src: 'src',
         dest: tempFolder,
         template: '[path]/[name]-[hash].[ext][query]'
@@ -48,7 +51,7 @@ test('should rename files via custom template', t => {
 
 test('should rename files via template function', t => {
     const tempFolder = randomFolder('dest', t.title);
-    return processStyle('src/index.css', {
+    return t.context.processStyle('src/index.css', {
         src: 'src',
         dest: tempFolder,
         template(fileMeta) {

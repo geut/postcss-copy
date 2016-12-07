@@ -1,10 +1,13 @@
 import test from 'ava';
 import randomFolder from './helpers/random-folder';
-import processStyle from './helpers/process-style';
 import makeRegex from './helpers/make-regex';
 
+test.beforeEach(t => {
+    t.context.processStyle = require('./helpers/process-style');
+});
+
 test('should keep working if the ignore option is invalid', t => {
-    return processStyle('src/ignore.css', {
+    return t.context.processStyle('src/ignore.css', {
         src: 'src',
         dest: randomFolder('dest', t.title),
         template: 'invalid-ignore-option/[path]/[name].[ext][query]',
@@ -19,7 +22,7 @@ test('should keep working if the ignore option is invalid', t => {
 });
 
 test('should ignore files with string expression', t => {
-    return processStyle('src/ignore.css', {
+    return t.context.processStyle('src/ignore.css', {
         src: 'src',
         dest: randomFolder('dest', t.title),
         template: 'ignore-path-array/[path]/[name].[ext][query]',
@@ -34,7 +37,7 @@ test('should ignore files with string expression', t => {
 });
 
 test('should ignore files with array of paths', t => {
-    return processStyle('src/ignore.css', {
+    return t.context.processStyle('src/ignore.css', {
         src: 'src',
         dest: randomFolder('dest', t.title),
         template: 'ignore-path-array/[path]/[name].[ext][query]',
@@ -49,7 +52,7 @@ test('should ignore files with array of paths', t => {
 });
 
 test('should ignore files with custom function', t => {
-    return processStyle('src/ignore.css', {
+    return t.context.processStyle('src/ignore.css', {
         src: 'src',
         dest: randomFolder('dest', t.title),
         template: 'ignore-path-func/[path]/[name].[ext][query]',

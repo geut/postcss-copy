@@ -1,11 +1,14 @@
 import test from 'ava';
 import path from 'path';
 import randomFolder from './helpers/random-folder';
-import processStyle from './helpers/process-style';
 import makeRegex from './helpers/make-regex';
 
+test.beforeEach(t => {
+    t.context.processStyle = require('./helpers/process-style');
+});
+
 test('should correctly parse url', t => {
-    return processStyle('src/correct-parse-url.css', {
+    return t.context.processStyle('src/correct-parse-url.css', {
         src: 'src',
         dest: randomFolder('dest', t.title),
         template: '[path]/[name].[ext]'
@@ -18,7 +21,7 @@ test('should correctly parse url', t => {
 });
 
 test('should ignore if the url() is not valid', t => {
-    return processStyle('src/invalid.css', {
+    return t.context.processStyle('src/invalid.css', {
         src: 'src',
         dest: randomFolder('dest', t.title)
     })
@@ -31,7 +34,7 @@ test('should ignore if the url() is not valid', t => {
 });
 
 test('should ignore if the asset is not found in the src path', t => {
-    return processStyle('src/not-found.css', {
+    return t.context.processStyle('src/not-found.css', {
         src: 'src',
         dest: randomFolder('dest', t.title)
     })

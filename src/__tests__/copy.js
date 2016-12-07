@@ -2,15 +2,18 @@ import test from 'ava';
 import path from 'path';
 import fs from 'fs';
 import randomFolder from './helpers/random-folder';
-import copy from '../lib/copy';
 import pify from 'pify';
+
+test.beforeEach(t => {
+    t.context.copy = require('../lib/copy');
+});
 
 test('should copy file', t => {
     const tempFolder = randomFolder('dest', t.title);
     const srcFile = 'src/images/test.jpg';
     const destFile = path.join(tempFolder, 'test.jpg');
 
-    return copy(srcFile, destFile).then(() => {
+    return t.context.copy(srcFile, destFile).then(() => {
         const srcBuffer = fs.readFileSync(srcFile);
         const destBuffer = fs.readFileSync(destFile);
         const compared = Buffer.compare(srcBuffer, destBuffer);
@@ -23,7 +26,7 @@ test('should copy file with dynamical dest', t => {
     const srcFile = 'src/images/test.jpg';
     const destFile = path.join(tempFolder, 'test.jpg');
 
-    return copy(srcFile, () => destFile).then(() => {
+    return t.context.copy(srcFile, () => destFile).then(() => {
         const srcBuffer = fs.readFileSync(srcFile);
         const destBuffer = fs.readFileSync(destFile);
         const compared = Buffer.compare(srcBuffer, destBuffer);
@@ -38,7 +41,7 @@ test('should copy and transform file', t => {
     const srcBuffer = fs.readFileSync(srcFile);
     const customBuffer = new Buffer([1, 2, 3, 4, 5]);
 
-    return copy(srcFile, destFile, contents => {
+    return t.context.copy(srcFile, destFile, contents => {
         const compared = Buffer.compare(srcBuffer, contents);
         t.is(compared, 0);
         return customBuffer;
@@ -55,9 +58,9 @@ test('should copy file once', t => {
     const destFile = path.join(tempFolder, 'test.jpg');
     let prevTime;
 
-    return copy(srcFile, destFile).then(() => {
+    return t.context.copy(srcFile, destFile).then(() => {
         prevTime = fs.statSync(destFile).mtime.getTime();
-        return copy(srcFile, destFile);
+        return t.context.copy(srcFile, destFile);
     })
     .then(() => {
         t.is(prevTime, fs.statSync(destFile).mtime.getTime());
@@ -70,9 +73,9 @@ test('should copy file if source was not modified ' +
     const srcFile = 'src/images/test.jpg';
     const destFile = path.join(tempFolder, 'test.jpg');
 
-    return copy(srcFile, destFile)
+    return t.context.copy(srcFile, destFile)
         .then(() => pify(fs.unlink)(destFile))
-        .then(() => copy(srcFile, destFile))
+        .then(() => t.context.copy(srcFile, destFile))
         .then(() => pify(fs.stat)(destFile));
 });
 
@@ -83,9 +86,9 @@ test('should copy again if source was modified', t => {
     const srcBuffer = fs.readFileSync(srcFile);
     const modifiedBuffer = new Buffer([srcBuffer, srcBuffer]);
 
-    return copy(srcFile, destFile).then(() => {
+    return t.context.copy(srcFile, destFile).then(() => {
         fs.writeFileSync(srcFile, modifiedBuffer);
-        return copy(srcFile, destFile);
+        return t.context.copy(srcFile, destFile);
     })
     .then(() => {
         fs.writeFileSync(srcFile, srcBuffer);

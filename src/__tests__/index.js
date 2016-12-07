@@ -4,9 +4,12 @@ import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
 import randomFolder from './helpers/random-folder';
-import processStyle from './helpers/process-style';
 import makeRegex from './helpers/make-regex';
 import commonTests from './common-tests.json';
+
+test.beforeEach(t => {
+    t.context.processStyle = require('./helpers/process-style');
+});
 
 function testFileExists(t, file) {
     return pathExists(file)
@@ -55,7 +58,7 @@ commonTests.forEach(item => {
             item.opts.to = path.join(tempFolder, item.opts.to);
         }
 
-        return processStyle('src/index.css', copyOpts, item.opts.to)
+        return t.context.processStyle('src/index.css', copyOpts, item.opts.to)
             .then(result => {
                 const css = result.css;
                 item.assertions.index.forEach(assertion => {
@@ -74,7 +77,7 @@ commonTests.forEach(item => {
                 ).mtime.getTime();
 
                 copyOpts.src = ['src', 'external_libs'];
-                return processStyle(
+                return t.context.processStyle(
                     'src/component/index.css',
                     copyOpts
                 );
@@ -102,7 +105,7 @@ commonTests.forEach(item => {
                     `${item.assertions['no-modified']} was not modified.`
                 );
 
-                return processStyle(
+                return t.context.processStyle(
                     'external_libs/bootstrap/css/bootstrap.css',
                     copyOpts
                 );

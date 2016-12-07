@@ -2,8 +2,11 @@ import test from 'ava';
 import fs from 'fs';
 import path from 'path';
 import randomFolder from './helpers/random-folder';
-import processStyle from './helpers/process-style';
 import pify from 'pify';
+
+test.beforeEach(t => {
+    t.context.processStyle = require('./helpers/process-style');
+});
 
 const stat = pify(fs.stat);
 
@@ -19,7 +22,7 @@ function transform(fileMeta) {
 
 test('should process assets via transform', t => {
     const tempFolder = randomFolder('dest', t.title);
-    return processStyle('src/check-transform.css', {
+    return t.context.processStyle('src/check-transform.css', {
         src: 'src',
         dest: tempFolder,
         template: '[path]/[name].[ext]',
@@ -41,7 +44,7 @@ test('should process assets via transform', t => {
 test('should process assets via transform and use ' +
 'the hash property based on the transform content', t => {
     const tempFolder = randomFolder('dest', t.title);
-    return processStyle('src/check-transform-hash.css', {
+    return t.context.processStyle('src/check-transform-hash.css', {
         src: 'src',
         dest: tempFolder,
         template: '[path]/[hash].[ext]',
@@ -58,7 +61,7 @@ test('should not transform when the source is the same', (t) => {
     const tempFolder = randomFolder('dest', t.title);
     let times = 0;
 
-    return processStyle('src/no-repeat-transform.css', {
+    return t.context.processStyle('src/no-repeat-transform.css', {
         src: 'src',
         dest: tempFolder,
         template: '[path]/[name].[ext]',
