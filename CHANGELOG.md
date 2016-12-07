@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [6.2.1] - 2016-12-07 [YANKED]
+
 ## [6.2.0] - 2016-12-06
 ### Added
 - cache for the write process to don\`t overwrite the output file (fixed race condition)
@@ -192,7 +194,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.1.0 - 2015-09-05
 - First release tagged!
 
-[unreleased]: https://github.com/geut/postcss-copy/compare/v6.2.0...HEAD
+[unreleased]: https://github.com/geut/postcss-copy/compare/v6.2.1...HEAD
+[6.2.1]: https://github.com/geut/postcss-copy/compare/v6.2.0...v6.2.1
 [6.2.0]: https://github.com/geut/postcss-copy/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/geut/postcss-copy/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/geut/postcss-copy/compare/v5.3.0...v6.0.0
