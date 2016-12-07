@@ -13,6 +13,8 @@ test('should copy file', t => {
     return copy(srcFile, destFile).then(() => {
         const srcBuffer = fs.readFileSync(srcFile);
         const destBuffer = fs.readFileSync(destFile);
+        console.log(srcBuffer);
+        console.log(destBuffer);
         const compared = Buffer.compare(srcBuffer, destBuffer);
         t.is(compared, 0);
     });
