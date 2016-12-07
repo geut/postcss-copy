@@ -56,7 +56,7 @@
   "ava": {
     "require": "babel-register",
     "files": [
-      "src/__tests__/copy.js"
+      "src/__tests__/*.js"
     ]
   },
   "nyc": {
