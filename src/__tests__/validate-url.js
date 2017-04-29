@@ -9,7 +9,7 @@ test.beforeEach(t => {
 
 test('should correctly parse url', t => {
     return t.context.processStyle('src/correct-parse-url.css', {
-        src: 'src',
+        basePath: 'src',
         dest: randomFolder('dest', t.title),
         template: '[path]/[name].[ext]'
     })
@@ -22,7 +22,7 @@ test('should correctly parse url', t => {
 
 test('should ignore if the url() is not valid', t => {
     return t.context.processStyle('src/invalid.css', {
-        src: 'src',
+        basePath: 'src',
         dest: randomFolder('dest', t.title)
     })
     .then(result => {
@@ -35,7 +35,7 @@ test('should ignore if the url() is not valid', t => {
 
 test('should ignore if the asset is not found in the src path', t => {
     return t.context.processStyle('src/not-found.css', {
-        src: 'src',
+        basePath: 'src',
         dest: randomFolder('dest', t.title)
     })
     .then(result => {

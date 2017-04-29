@@ -5,36 +5,29 @@ test.beforeEach(t => {
     t.context.processStyle = require('./helpers/process-style');
 });
 
-test('should throw an error if the "src" option is not setted', t => {
-    return t.context.processStyle('src/index.css', {
-        dest: randomFolder('dest', t.title)
-    })
-    .then(() => t.fail())
-    .catch(err => {
-        t.is(err.message, 'Option `src` is required in postcss-copy');
-    });
-});
-
 test('should throw an error if the "dest" option is not setted', t => {
-    return t.context.processStyle('src/index.css', {
-        src: 'src'
-    })
-    .then(() => t.fail())
-    .catch(err => {
-        t.is(err.message, 'Option `dest` is required in postcss-copy');
-    });
+    return t.context
+        .processStyle('src/index.css', {
+            basePath: 'src'
+        })
+        .then(() => t.fail())
+        .catch(err => {
+            t.is(err.message, 'Option `dest` is required in postcss-copy');
+        });
 });
 
-test('should warn if the filename not belongs to the "src" option', t => {
-    return t.context.processStyle('external_libs/bootstrap/css/bootstrap.css', {
-        src: 'src',
-        dest: randomFolder('dest', t.title)
-    })
-    .then(result => {
-        const warnings = result.warnings();
-        t.is(warnings.length, 6);
-        warnings.forEach(warning => {
-            t.is(warning.text.indexOf('"src" not found in '), 0);
+test('should warn if the filename not belongs to the "basePath" option', t => {
+    return t.context
+        .processStyle('external_libs/bootstrap/css/bootstrap.css', {
+            basePath: 'src',
+            dest: randomFolder('dest', t.title)
+        })
+        .then(result => {
+            const warnings = result.warnings();
+            t.is(warnings.length, 6);
+            warnings.forEach(warning => {
+                t.is(warning.text.indexOf('"basePath" not found in '), 0);
+            });
         });
-    });
 });
+

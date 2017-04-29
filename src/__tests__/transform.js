@@ -23,7 +23,7 @@ function transform(fileMeta) {
 test('should process assets via transform', t => {
     const tempFolder = randomFolder('dest', t.title);
     return t.context.processStyle('src/check-transform.css', {
-        src: 'src',
+        basePath: 'src',
         dest: tempFolder,
         template: '[path]/[name].[ext]',
         transform
@@ -45,7 +45,7 @@ test('should process assets via transform and use ' +
 'the hash property based on the transform content', t => {
     const tempFolder = randomFolder('dest', t.title);
     return t.context.processStyle('src/check-transform-hash.css', {
-        src: 'src',
+        basePath: 'src',
         dest: tempFolder,
         template: '[path]/[hash].[ext]',
         transform
@@ -62,7 +62,7 @@ test('should not transform when the source is the same', (t) => {
     let times = 0;
 
     return t.context.processStyle('src/no-repeat-transform.css', {
-        src: 'src',
+        basePath: 'src',
         dest: tempFolder,
         template: '[path]/[name].[ext]',
         transform(fileMeta) {

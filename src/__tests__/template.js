@@ -11,7 +11,7 @@ test.beforeEach(t => {
 test('should rename files via default template', t => {
     const tempFolder = randomFolder('dest', t.title);
     return t.context.processStyle('src/index.css', {
-        src: 'src',
+        basePath: 'src',
         dest: tempFolder
     })
     .then(result => {
@@ -30,7 +30,7 @@ test('should rename files via default template', t => {
 test('should rename files via custom template', t => {
     const tempFolder = randomFolder('dest', t.title);
     return t.context.processStyle('src/index.css', {
-        src: 'src',
+        basePath: 'src',
         dest: tempFolder,
         template: '[path]/[name]-[hash].[ext][query]'
     })
@@ -52,7 +52,7 @@ test('should rename files via custom template', t => {
 test('should rename files via template function', t => {
     const tempFolder = randomFolder('dest', t.title);
     return t.context.processStyle('src/index.css', {
-        src: 'src',
+        basePath: 'src',
         dest: tempFolder,
         template(fileMeta) {
             return `custom-path/custom-name-${fileMeta.name}.` +

@@ -12,8 +12,6 @@ Sections |
 [Quick Start](#quick-start) |
 [Options](#options) |
 [Custom Hash Function](#custom-hash-function) |
-[Input Path](#input-path) |
-[Using Relative Path](#using-relative-path) |
 [Transform](#using-transform) |
 [About lifecyle and the fileMeta object](#lifecyle) |
 [Using postcss-import](#using-postcss-import) |
@@ -41,7 +39,7 @@ var postcssCopy = require('postcss-copy');
 gulp.task('buildCss', function () {
     var processors = [
         postcssCopy({
-            src: 'src',
+            basePath: 'src',
             dest: 'dist'
         })
     ];
@@ -55,8 +53,8 @@ gulp.task('buildCss', function () {
 
 ## <a name="options"></a> Options
 
-#### src ({string|array} required)
-Define the base src path of your CSS files.
+#### basePath ({string|array} default = process.cwd())
+Define one/many base path for your CSS files.
 
 #### dest ({string} required)
 Define the dest path of your CSS files and assets.
@@ -136,42 +134,6 @@ var copyOpts = {
 };
 ```
 
-#### <a name="input-path"></a> inputPath
-Define a custom setter to define the path (dirname) of your CSS file.
-
-postcss-copy use the ```decl.source.input.file``` to get the path of your file
-and then with that information copy your assets and rewrite the urls. But some
-postcss plugins
-(e.g [css-modules-loader-core](https://github.com/css-modules/css-modules-loader-core))
-change this attribute in here execution, soo you need to fix the path of your
-read files by your own.
-
-```js
-var copyOpts = {
-    ...,
-    inputPath(decl) {
-        // this is the input path by default
-        return path.dirname(decl.source.input.file);
-    }
-};
-```
-
-#### <a name="using-relative-path"></a> relativePath {function}
-By default the copy process keep the relative path between each ```asset``` and the path of his  ```CSS file```. You can change this behavior setting a new function with your custom relativePath. For example define the relative path based only in the ```dest``` path option (see [Using copy with postcss-import](#using-postcss-import))
-
-The relativePath must return a valid `dirname` path.
-```js
-var copyOpts = {
-    ...,
-    relativePath(dirname, fileMeta, result, options) {
-      return path.join(
-          result.opts.to ? path.dirname(result.opts.to) : options.dest,
-          path.relative(fileMeta.src, dirname)
-      );
-    }
-};
-```
-
 #### <a name="using-transform"></a> transform
 Extend the copy method to apply a transform in the contents (e.g: optimize images).
 
@@ -210,8 +172,7 @@ The lifecyle of the copy process is:
 
 1. Detect the url in the CSS files
 2. Validate url
-3. Get the inputPath
-4. Initialize the fileMeta:
+3. Initialize the fileMeta:
 
     ```js
     {
@@ -226,33 +187,33 @@ The lifecyle of the copy process is:
         query, // full query string
         qparams, // query string params without the char '?'
         qhash, // query string hash without the char '#'
-        src // source path
+        basePath // basePath found
     }
     ```
-5. Check ignore function
-6. Read the asset file (using a cache buffer if exists)
-7. Add ```content``` property in the fileMeta object
-8. Execute custom transform
-9. Create hash name based on the custom transform
-10. Add ```hash``` property in the fileMeta object
-11. Define template for the new asset
-12. Add ```resultAbsolutePath``` and ```extra``` properties in the fileMeta object
-13. Write in destination
-14. Write the new URL in the PostCSS node value.
+4. Check ignore function
+5. Read the asset file (using a cache buffer if exists)
+6. Add ```content``` property in the fileMeta object
+7. Execute custom transform
+8. Create hash name based on the custom transform
+9. Add ```hash``` property in the fileMeta object
+10. Define template for the new asset
+11. Add ```resultAbsolutePath``` and ```extra``` properties in the fileMeta object
+12. Write in destination
+13. Write the new URL in the PostCSS node value.
 
 #### <a name="using-postcss-import"></a> Using copy with postcss-import
 [postcss-import](https://github.com/postcss/postcss-import) is a great plugin that allow us work our css files in a modular way with the same behavior of CommonJS.
-Since this plugin create at the end only one file with all your CSS files inline (loaded with the @import keyword) you need customized the ```relativePath``` function.
 
 ***One thing more...***
-postcss-import has the ability of load files from node_modules. If your src folder is at the same level of node_modules like this:
+postcss-import has the ability of load files from node_modules. If you are using a custom `basePath` and you want to
+track your assets from `node_modules` you need to add the `node_modules` folder in the `basePath` option:
+
 ```
 myProject/
 |-- node_modules/
 |-- dest/
 |-- src/
 ```
-In this case you need define ```a multiple src```
 
 ### Full example
 ```js
@@ -266,11 +227,8 @@ gulp.task('buildCss', function () {
     var processors = [
         postcssImport(),
         postcssCopy({
-            src: ['src', 'node_modules'],
-            dest: 'dist',
-            relativePath(dirname, fileMeta, result, options) {
-                return result.opts.to ? path.dirname(result.opts.to) : options.dest;
-            }
+            basePath: ['src', 'node_modules'],
+            dest: 'dist'
         })
     ];
 

@@ -6,15 +6,7 @@ import crypto from 'crypto';
 import micromatch from 'micromatch';
 import copy from './lib/copy';
 
-const tags = [
-    'path',
-    'name',
-    'hash',
-    'ext',
-    'query',
-    'qparams',
-    'qhash'
-];
+const tags = ['path', 'name', 'hash', 'ext', 'query', 'qparams', 'qhash'];
 
 /**
  * Helper function to ignore files
@@ -37,6 +29,45 @@ function ignore(fileMeta, opts) {
 }
 
 /**
+ * Quick function to find a basePath where the
+ * the asset file belongs.
+ *
+ * @param paths
+ * @param pathname
+ * @returns {string|boolean}
+ */
+function findBasePath(paths, pathname) {
+    for (const item of paths) {
+        if (pathname.indexOf(item) === 0) {
+            return item;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * findRelativePath
+ *
+ * @param dirname
+ * @param fileMeta
+ * @param result
+ * @param opts
+ * @returns {string}
+ */
+function findRelativePath(dirname, fileMeta, result, opts) {
+    if (!result.opts.to) {
+        return opts.dest;
+    }
+
+    if (result.opts.to === result.opts.from) {
+        return path.join(opts.dest, path.relative(fileMeta.basePath, dirname));
+    }
+
+    return path.dirname(result.opts.to);
+}
+
+/**
  * Helper function that reads the file ang get some helpful information
  * to the copy process.
  *
@@ -54,9 +85,9 @@ function getFileMeta(dirname, sourceInputFile, value, opts) {
     const hash = parsedUrl.hash || '';
 
     // path between the basePath and the filename
-    const src = opts.src.filter(item => pathname.indexOf(item) !== -1)[0];
-    if (!src) {
-        throw Error(`"src" not found in ${pathname}`);
+    const basePath = findBasePath(opts.basePath, pathname);
+    if (!basePath) {
+        throw Error(`"basePath" not found in ${pathname}`);
     }
 
     const ext = path.extname(pathname);
@@ -67,7 +98,7 @@ function getFileMeta(dirname, sourceInputFile, value, opts) {
         // the absolute path without the #hash param and ?query
         absolutePath: pathname,
         fullName: path.basename(pathname),
-        path: path.relative(src, path.dirname(pathname)),
+        path: path.relative(basePath, path.dirname(pathname)),
         // name without extension
         name: path.basename(pathname, ext),
         // extension without the '.'
@@ -75,12 +106,11 @@ function getFileMeta(dirname, sourceInputFile, value, opts) {
         query: params + hash,
         qparams: params.length > 0 ? params.slice(1) : '',
         qhash: hash.length > 0 ? hash.slice(1) : '',
-        src
+        basePath
     };
 
     return fileMeta;
 }
-
 
 /**
  * process to copy an asset based on the css file, destination
@@ -99,7 +129,8 @@ function processUrl(result, decl, node, opts) {
         return Promise.resolve();
     }
 
-    if (node.value.indexOf('/') === 0 ||
+    if (
+        node.value.indexOf('/') === 0 ||
         node.value.indexOf('data:') === 0 ||
         node.value.indexOf('#') === 0 ||
         /^[a-z]+:\/\//.test(node.value)
@@ -111,7 +142,7 @@ function processUrl(result, decl, node, opts) {
      * dirname of the read file css
      * @type {String}
      */
-    const dirname = opts.inputPath(decl);
+    const dirname = path.dirname(decl.source.input.file);
 
     let fileMeta = getFileMeta(
         dirname,
@@ -127,56 +158,48 @@ function processUrl(result, decl, node, opts) {
 
     return copy(
         fileMeta.absolutePath,
-        () => {
-            return fileMeta.resultAbsolutePath;
-        },
+        () => fileMeta.resultAbsolutePath,
         (contents, isModified) => {
-
             fileMeta.contents = contents;
 
             return Promise.resolve(
                 isModified ? opts.transform(fileMeta) : fileMeta
             )
-            .then(fileMetaTransformed => {
-                fileMetaTransformed.hash = opts.hashFunction(
-                    fileMetaTransformed.contents
-                );
-                let tpl = opts.template;
-                if (typeof tpl === 'function') {
-                    tpl = tpl(fileMetaTransformed);
-                } else {
-                    tags.forEach(tag => {
-                        tpl = tpl.replace(
-                            '[' + tag + ']',
-                            fileMetaTransformed[tag] || opts[tag] || ''
-                        );
-                    });
-                }
+                .then(fileMetaTransformed => {
+                    fileMetaTransformed.hash = opts.hashFunction(
+                        fileMetaTransformed.contents
+                    );
+                    let tpl = opts.template;
+                    if (typeof tpl === 'function') {
+                        tpl = tpl(fileMetaTransformed);
+                    } else {
+                        tags.forEach(tag => {
+                            tpl = tpl.replace(
+                                '[' + tag + ']',
+                                fileMetaTransformed[tag] || opts[tag] || ''
+                            );
+                        });
+                    }
 
-                const resultUrl = url.parse(tpl);
-                fileMetaTransformed.resultAbsolutePath = path.resolve(
-                    opts.dest,
-                    resultUrl.pathname
-                );
-                fileMetaTransformed.extra = (resultUrl.search || '') +
-                    (resultUrl.hash || '');
-                return fileMetaTransformed;
-            })
-            .then(fileMetaTransformed => fileMetaTransformed.contents);
+                    const resultUrl = url.parse(tpl);
+                    fileMetaTransformed.resultAbsolutePath = path.resolve(
+                        opts.dest,
+                        resultUrl.pathname
+                    );
+                    fileMetaTransformed.extra = (resultUrl.search || '') +
+                        (resultUrl.hash || '');
+
+                    return fileMetaTransformed;
+                })
+                .then(fileMetaTransformed => fileMetaTransformed.contents);
         }
-    )
-    .then(() => {
-        const relativePath = opts.relativePath(
-            dirname,
-            fileMeta,
-            result,
-            opts
-        );
+    ).then(() => {
+        const relativePath = findRelativePath(dirname, fileMeta, result, opts);
 
-        node.value = path.relative(
-            relativePath,
-            fileMeta.resultAbsolutePath
-        ).split('\\').join('/') + fileMeta.extra;
+        node.value = path
+            .relative(relativePath, fileMeta.resultAbsolutePath)
+            .split('\\')
+            .join('/') + fileMeta.extra;
     });
 }
 
@@ -200,12 +223,11 @@ function processDecl(result, decl, opts) {
             return;
         }
 
-        const promise = Promise.resolve().then(() => {
-            return processUrl(result, decl, node.nodes[0], opts);
-        })
-        .catch(err => {
-            decl.warn(result, err.message);
-        });
+        const promise = Promise.resolve()
+            .then(() => processUrl(result, decl, node.nodes[0], opts))
+            .catch(err => {
+                decl.warn(result, err.message);
+            });
 
         promises.push(promise);
     });
@@ -219,39 +241,35 @@ function processDecl(result, decl, opts) {
  * @return {plugin}
  */
 function init(userOpts = {}) {
-    const opts = Object.assign({
-        template: '[hash].[ext][query]',
-        relativePath(dirname, fileMeta, result, options) {
-            return path.join(
-                result.opts.to ? path.dirname(result.opts.to) : options.dest,
-                path.relative(fileMeta.src, dirname)
-            );
+    const opts = Object.assign(
+        {
+            template: '[hash].[ext][query]',
+            hashFunction(contents) {
+                return crypto
+                    .createHash('sha1')
+                    .update(contents)
+                    .digest('hex')
+                    .substr(0, 16);
+            },
+            transform(fileMeta) {
+                return fileMeta;
+            },
+            ignore: []
         },
-        hashFunction(contents) {
-            return crypto.createHash('sha1')
-                .update(contents)
-                .digest('hex')
-                .substr(0, 16);
-        },
-        transform(fileMeta) {
-            return fileMeta;
-        },
-        inputPath(decl) {
-            return path.dirname(decl.source.input.file);
-        },
-        ignore: []
-    }, userOpts);
+        userOpts
+    );
 
     return (style, result) => {
-        if (opts.src) {
-            if (typeof opts.src === 'string') {
-                opts.src = [path.resolve(opts.src)];
+        if (opts.basePath) {
+            if (typeof opts.basePath === 'string') {
+                opts.basePath = [path.resolve(opts.basePath)];
             } else {
-                opts.src = opts.src.map((elem) => path.resolve(elem));
+                opts.basePath = opts.basePath.map(elem => path.resolve(elem));
             }
         } else {
-            throw new Error('Option `src` is required in postcss-copy');
+            opts.basePath = [process.cwd()];
         }
+
         if (opts.dest) {
             opts.dest = path.resolve(opts.dest);
         } else {

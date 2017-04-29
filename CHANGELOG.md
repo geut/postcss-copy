@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- _breaking change_: The `src` option is ambiguous to the real objective, so I changed it to `basePath`
+- `basePath` (old `src`) is now optional and the default path is `process.cwd()`
+
+### Removed
+- relativePath and inputPath in favor of simplify the API of postcss-copy
 
 ## [6.2.1] - 2016-12-07 [YANKED]
 
