@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- preservePath option to work with gulp or postcss-cli and their --base option
+
 ### Changed
 - _breaking change_: The `src` option is ambiguous to the real objective, so I changed it to `basePath`
 - `basePath` (old `src`) is now optional and the default path is `process.cwd()`

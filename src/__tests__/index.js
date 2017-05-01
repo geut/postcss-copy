@@ -17,10 +17,20 @@ function testFileExists(t, file) {
     });
 }
 
-commonTests.forEach((item, key) => {
-    if (key > 0) {
-        return;
-    }
+function checkForWarnings(t, result) {
+    const warnings = result.warnings();
+
+    t.is(
+        warnings.length,
+        0,
+        [
+            'Should not had postcss warnings',
+            ...warnings.map(w => w.text)
+        ]
+    );
+}
+
+commonTests.forEach(item => {
     if (item.opts.hashFunction === 'custom') {
         item.opts.hashFunction = contents => {
             // borschik
@@ -48,13 +58,15 @@ commonTests.forEach((item, key) => {
         let oldTime;
         let newTime;
 
-        if (item.opts.to) {
+        if (item.opts.to && item.opts.to !== 'equal-from') {
             item.opts.to = path.join(tempFolder, item.opts.to);
         }
 
         return t.context
             .processStyle('src/index.css', copyOpts, item.opts.to)
             .then(result => {
+                checkForWarnings(t, result);
+
                 const css = result.css;
                 item.assertions.index.forEach(assertion => {
                     t.regex(
@@ -64,19 +76,28 @@ commonTests.forEach((item, key) => {
                     );
                 });
 
-                oldTime = fs
-                    .statSync(
-                        path.join(tempFolder, item.assertions['no-modified'])
-                    )
-                    .mtime.getTime();
+                if (item.assertions['no-modified']) {
+                    oldTime = fs
+                        .statSync(
+                            path.join(
+                                tempFolder,
+                                item.assertions['no-modified']
+                            )
+                        )
+                        .mtime.getTime();
+                }
 
-                copyOpts.src = ['src', 'external_libs'];
+                copyOpts.basePath = ['src', 'external_libs'];
+
                 return t.context.processStyle(
                     'src/component/index.css',
-                    copyOpts
+                    copyOpts,
+                    item.opts.to
                 );
             })
             .then(result => {
+                checkForWarnings(t, result);
+
                 const css = result.css;
                 item.assertions.component.forEach(assertion => {
                     t.regex(
@@ -86,24 +107,36 @@ commonTests.forEach((item, key) => {
                     );
                 });
 
-                newTime = fs
-                    .statSync(
-                        path.join(tempFolder, item.assertions['no-modified'])
-                    )
-                    .mtime.getTime();
+                if (item.assertions['no-modified']) {
+                    newTime = fs
+                        .statSync(
+                            path.join(
+                                tempFolder,
+                                item.assertions['no-modified']
+                            )
+                        )
+                        .mtime.getTime();
 
-                t.is(
-                    oldTime,
-                    newTime,
-                    `${item.assertions['no-modified']} was not modified.`
-                );
+                    t.is(
+                        oldTime,
+                        newTime,
+                        `${item.assertions['no-modified']} was not modified.`
+                    );
+                }
+
+                if (item.opts.to === 'equal-from') {
+                    item.opts.to = 'src/component/index.css';
+                }
 
                 return t.context.processStyle(
                     'external_libs/bootstrap/css/bootstrap.css',
-                    copyOpts
+                    copyOpts,
+                    item.opts.to
                 );
             })
             .then(result => {
+                checkForWarnings(t, result);
+
                 const css = result.css;
                 item.assertions.external_libs.forEach(assertion => {
                     t.regex(
@@ -113,17 +146,22 @@ commonTests.forEach((item, key) => {
                     );
                 });
 
-                newTime = fs
-                    .statSync(
-                        path.join(tempFolder, item.assertions['no-modified'])
-                    )
-                    .mtime.getTime();
+                if (item.assertions['no-modified']) {
+                    newTime = fs
+                        .statSync(
+                            path.join(
+                                tempFolder,
+                                item.assertions['no-modified']
+                            )
+                        )
+                        .mtime.getTime();
 
-                t.is(
-                    oldTime,
-                    newTime,
-                    `${item.assertions['no-modified']} was not modified.`
-                );
+                    t.is(
+                        oldTime,
+                        newTime,
+                        `${item.assertions['no-modified']} was not modified.`
+                    );
+                }
 
                 return Promise.all(
                     item.assertions.exists.map(file => {

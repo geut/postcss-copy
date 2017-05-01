@@ -1,5 +1,5 @@
 [{
-  "name": "default process test => template: 'assets/[hash].[ext][query]'",
+  "name": "template: 'assets/[hash].[ext][query]'",
   "opts": {
     "template": "assets/[hash].[ext][query]"
   },
@@ -17,26 +17,26 @@
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
-      "match": "../assets/27da26a06634b050.jpg"
+      "match": "assets/27da26a06634b050.jpg"
     }, {
       "desc": "@component/index.css => process url image (with parameters)",
-      "match": "../assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+      "match": "assets/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
     }],
     "external_libs": [{
       "desc": "@external_libs/bootstrap.css => process url fonts ttf",
-      "match": "../../assets/44bc1850f5709722.ttf"
+      "match": "assets/44bc1850f5709722.ttf"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot",
-      "match": "../../assets/86b6f62b7853e67d.eot"
+      "match": "assets/86b6f62b7853e67d.eot"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot?#iefix",
-      "match": "../../assets/86b6f62b7853e67d.eot?#iefix"
+      "match": "assets/86b6f62b7853e67d.eot?#iefix"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff",
-      "match": "../../assets/278e49a86e634da6.woff"
+      "match": "assets/278e49a86e634da6.woff"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
-      "match": "../../assets/ca35b697d99cae4d.woff2"
+      "match": "assets/ca35b697d99cae4d.woff2"
     }],
     "exists": [
       "assets/b6c8f21e92b50900.jpg",
@@ -50,7 +50,7 @@
     "no-modified": "assets/0ed7c955a2951f04.jpg"
   }
 }, {
-  "name": "process test => template: '[path]/[hash].[ext][query]'",
+  "name": "template: '[path]/[hash].[ext][query]'",
   "opts": {
     "template": "[path]/[hash].[ext][query]"
   },
@@ -68,26 +68,26 @@
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
-      "match": "images/27da26a06634b050.jpg"
+      "match": "component/images/27da26a06634b050.jpg"
     }, {
       "desc": "@component/index.css => process url image (with parameters)",
-      "match": "../images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
+      "match": "images/0ed7c955a2951f04.jpg?#iefix&v=4.4.0"
     }],
     "external_libs": [{
       "desc": "@external_libs/bootstrap.css => process url fonts ttf",
-      "match": "../fonts/44bc1850f5709722.ttf"
+      "match": "bootstrap/fonts/44bc1850f5709722.ttf"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot",
-      "match": "../fonts/86b6f62b7853e67d.eot"
+      "match": "bootstrap/fonts/86b6f62b7853e67d.eot"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot?#iefix",
-      "match": "../fonts/86b6f62b7853e67d.eot?#iefix"
+      "match": "bootstrap/fonts/86b6f62b7853e67d.eot?#iefix"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff",
-      "match": "../fonts/278e49a86e634da6.woff"
+      "match": "bootstrap/fonts/278e49a86e634da6.woff"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
-      "match": "../fonts/ca35b697d99cae4d.woff2"
+      "match": "bootstrap/fonts/ca35b697d99cae4d.woff2"
     }],
     "exists": [
       "images/b6c8f21e92b50900.jpg",
@@ -101,7 +101,7 @@
     "no-modified": "images/0ed7c955a2951f04.jpg"
   }
 }, {
-  "name": "process test => template: '[path]/[name].[ext][query]'",
+  "name": "template: '[path]/[name].[ext][query]'",
   "opts": {
     "template": "[path]/[name].[ext][query]"
   },
@@ -119,26 +119,26 @@
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
-      "match": "images/component.jpg"
+      "match": "component/images/component.jpg"
     }, {
       "desc": "@component/index.css => process url image (with parameters)",
-      "match": "../images/test.jpg?#iefix&v=4.4.0"
+      "match": "images/test.jpg?#iefix&v=4.4.0"
     }],
     "external_libs": [{
       "desc": "@external_libs/bootstrap.css => process url fonts ttf",
-      "match": "../fonts/glyphicons-halflings-regular.ttf"
+      "match": "bootstrap/fonts/glyphicons-halflings-regular.ttf"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot",
-      "match": "../fonts/glyphicons-halflings-regular.eot"
+      "match": "bootstrap/fonts/glyphicons-halflings-regular.eot"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot?#iefix",
-      "match": "../fonts/glyphicons-halflings-regular.eot?#iefix"
+      "match": "bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff",
-      "match": "../fonts/glyphicons-halflings-regular.woff"
+      "match": "bootstrap/fonts/glyphicons-halflings-regular.woff"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
-      "match": "../fonts/glyphicons-halflings-regular.woff2"
+      "match": "bootstrap/fonts/glyphicons-halflings-regular.woff2"
     }],
     "exists": [
       "images/other.jpg",
@@ -152,7 +152,7 @@
     "no-modified": "images/test.jpg"
   }
 }, {
-  "name": "process test => template: '[hash].[ext][query]', hashFunction: {custom}",
+  "name": "template: '[hash].[ext][query]', hashFunction: {custom}",
   "opts": {
     "hashFunction": "custom"
   },
@@ -170,26 +170,26 @@
     }],
     "component": [{
       "desc": "@component/index.css => process url image (simple)",
-      "match": "../J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg"
+      "match": "J9omoGY0sFB4U5nyxLRB6t3Ms7w.jpg"
     }, {
       "desc": "@component/index.css => process url image (with parameters)",
-      "match": "../DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0"
+      "match": "DtfJVaKVHwRz_PkVXOweAq13S0o.jpg?#iefix&v=4.4.0"
     }],
     "external_libs": [{
       "desc": "@external_libs/bootstrap.css => process url fonts ttf",
-      "match": "../../RLwYUPVwlyJnsWmuGPHLBrYR_6I.ttf"
+      "match": "RLwYUPVwlyJnsWmuGPHLBrYR_6I.ttf"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot",
-      "match": "../../hrb2K3hT5n0-Y19lEqWl78WOo8M.eot"
+      "match": "hrb2K3hT5n0-Y19lEqWl78WOo8M.eot"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts eot?#iefix",
-      "match": "../../hrb2K3hT5n0-Y19lEqWl78WOo8M.eot?#iefix"
+      "match": "hrb2K3hT5n0-Y19lEqWl78WOo8M.eot?#iefix"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff",
-      "match": "../../J45JqG5jTabyoC87R92dKo8mIQ8.woff"
+      "match": "J45JqG5jTabyoC87R92dKo8mIQ8.woff"
     }, {
       "desc": "@external_libs/bootstrap.css => process url fonts woff2",
-      "match": "../../yjW2l9mcrk0bYPLWD803dxmH6wc.woff2"
+      "match": "yjW2l9mcrk0bYPLWD803dxmH6wc.woff2"
     }],
     "exists": [
       "tsjyHpK1CQAzLrWA3hok0f01nks.jpg",
@@ -203,7 +203,7 @@
     "no-modified": "DtfJVaKVHwRz_PkVXOweAq13S0o.jpg"
   }
 }, {
-  "name": "process test => template: 'assets/[hash].[ext]?custom=1&[qparams]#[qhash]'",
+  "name": "template: 'assets/[hash].[ext]?custom=1&[qparams]#[qhash]'",
   "opts": {
     "template": "assets/[hash].[ext]?custom=1&[qparams]#[qhash]"
   },
@@ -228,7 +228,7 @@
     "no-modified": "assets/0ed7c955a2951f04.jpg"
   }
 }, {
-  "name": "default process test => template: 'assets/[hash].[ext][query]', with postcss.to = dest/styles/index.css",
+  "name": "template: 'assets/[hash].[ext][query]', with postcss.to && preservePath === false",
   "opts": {
     "template": "assets/[hash].[ext][query]",
     "to": "styles/index.css"
@@ -252,5 +252,48 @@
       "assets/0ed7c955a2951f04.jpg"
     ],
     "no-modified": "assets/0ed7c955a2951f04.jpg"
+  }
+}, {
+  "name": "template: '[path]/[name].[ext][query]', with postcss.to == postcss.from",
+  "opts": {
+    "template": "[path]/[name].[ext][query]",
+    "to": "equal-from"
+  },
+  "assertions": {
+    "index": [],
+    "component": [{
+      "desc": "@component/index.css => process url image (simple)",
+      "match": "images/component.jpg"
+    }, {
+      "desc": "@component/index.css => process url image (with parameters)",
+      "match": "../images/test.jpg?#iefix&v=4.4.0"
+    }],
+    "external_libs": [],
+    "exists": [
+      "component/images/component.jpg",
+      "images/test.jpg"
+    ]
+  }
+}, {
+  "name": "template: '[path]/[name].[ext][query]', with preservePath === true",
+  "opts": {
+    "template": "[path]/[name].[ext][query]",
+    "preservePath": true,
+    "to": "component/index.css"
+  },
+  "assertions": {
+    "index": [],
+    "component": [{
+      "desc": "@component/index.css => process url image (simple)",
+      "match": "images/component.jpg"
+    }, {
+      "desc": "@component/index.css => process url image (with parameters)",
+      "match": "../images/test.jpg?#iefix&v=4.4.0"
+    }],
+    "external_libs": [],
+    "exists": [
+      "component/images/component.jpg",
+      "images/test.jpg"
+    ]
   }
 }]

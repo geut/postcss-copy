@@ -12,13 +12,21 @@ export default function processStyle(filename, opts, to) {
             }
         });
     })
-    .then(file => {
-        return postcss([
-            copy(opts)
-        ])
-        .process(file.trim(), {
-            from: filename,
-            to
+        .then(file => {
+            const postcssOpts = {
+                from: filename
+            };
+
+            if (to) {
+                if (to === 'equal-from') {
+                    postcssOpts.to = filename;
+                } else {
+                    postcssOpts.to = to;
+                }
+            }
+
+            return postcss([
+                copy(opts)
+            ]).process(file.trim(), postcssOpts);
         });
-    });
 }

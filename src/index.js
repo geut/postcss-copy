@@ -47,7 +47,7 @@ function findBasePath(paths, pathname) {
 }
 
 /**
- * findRelativePath
+ * Function to define the dest path of your CSS file
  *
  * @param dirname
  * @param fileMeta
@@ -55,16 +55,28 @@ function findBasePath(paths, pathname) {
  * @param opts
  * @returns {string}
  */
-function findRelativePath(dirname, fileMeta, result, opts) {
+function defineCSSDestPath(dirname, fileMeta, result, opts) {
     if (!result.opts.to) {
         return opts.dest;
     }
 
-    if (result.opts.to === result.opts.from) {
+    const from = path.resolve(result.opts.from);
+    const to = path.resolve(result.opts.to);
+
+    if (to === from || opts.preservePath && dirname === path.dirname(from)) {
+        /**
+         * if to === results.opts.from we can't use it as a valid dest path
+         * e.g: gulp-postcss comes with this problem
+         *
+         * if dirname === path.dirname(result.opts.from) with this
+         * condition we can check if the postcss-copy runs after postcss-import
+         * and if preservePath is activated preserve the structure of
+         * the assets directory
+         */
         return path.join(opts.dest, path.relative(fileMeta.basePath, dirname));
     }
 
-    return path.dirname(result.opts.to);
+    return path.dirname(to);
 }
 
 /**
@@ -194,10 +206,15 @@ function processUrl(result, decl, node, opts) {
                 .then(fileMetaTransformed => fileMetaTransformed.contents);
         }
     ).then(() => {
-        const relativePath = findRelativePath(dirname, fileMeta, result, opts);
+        const destPath = defineCSSDestPath(
+            dirname,
+            fileMeta,
+            result,
+            opts
+        );
 
         node.value = path
-            .relative(relativePath, fileMeta.resultAbsolutePath)
+            .relative(destPath, fileMeta.resultAbsolutePath)
             .split('\\')
             .join('/') + fileMeta.extra;
     });
@@ -244,6 +261,7 @@ function init(userOpts = {}) {
     const opts = Object.assign(
         {
             template: '[hash].[ext][query]',
+            preservePath: false,
             hashFunction(contents) {
                 return crypto
                     .createHash('sha1')

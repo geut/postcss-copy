@@ -13,8 +13,9 @@ Sections |
 [Options](#options) |
 [Custom Hash Function](#custom-hash-function) |
 [Transform](#using-transform) |
-[About lifecyle and the fileMeta object](#lifecyle) |
+[Preserving paths](#preserving-paths) |
 [Using postcss-import](#using-postcss-import) |
+[About lifecyle and the fileMeta object](#lifecyle) |
 [Roadmap](#roadmap) |
 [Credits](#credits) |
 
@@ -79,6 +80,9 @@ var copyOpts = {
 }
 ```
 
+#### preservePath ({boolean} default = false)
+Flag option that can be used to preserve the directory structure of your assets
+
 #### ignore ({string | string[] | function} default = [])
 Option to ignore assets in your CSS file.
 
@@ -91,6 +95,7 @@ Option to ignore assets in your CSS file.
     background-image: url('!images/background.jpg');
 }
 ```
+
 ##### Using a string or array with [micromatch](https://github.com/jonschlinkert/micromatch) support to ignore files:
 ```js
 // ignore with string
@@ -165,6 +170,54 @@ var copyOpts = {
 };
 ```
 
+#### <a name="preserving-paths"></a> Preserving paths
+Some tools of postcss like postcss-cli or gulp-postcss can be used to preserve the relative paths of each src CSS files.
+There is some conditions in postcss-copy where we keep the structure directories and others where we not based on the `to` and `from` postcss options.
+
+These are the rules:
+- If the `to` option is not set, postcss-copy is going to use the `dest` path and will not preserve the original path.
+- If the `to` option is set and is the same as `from` (e.g: gulp-postcss do that by default) is going to preserve the directory structure.
+- If you are running postcss for multiple files (e.g: in gulp-postcss `gulp.src('src/**/*.css')`) and `to` option is set, you have to change `preservePath` to true.
+
+#### <a name="using-postcss-import"></a> Using copy with postcss-import
+[postcss-import](https://github.com/postcss/postcss-import) is a great plugin that allow us work our css files in a modular way with the same behavior of CommonJS.
+
+***One thing more...***
+postcss-import has the ability of load files from node_modules. If you are using a custom `basePath` and you want to
+track your assets from `node_modules` you need to add the `node_modules` folder in the `basePath` option:
+
+```
+myProject/
+|-- node_modules/
+|-- dest/
+|-- src/
+```
+
+### Full example
+```js
+var gulp = require('gulp');
+var postcss = require('gulp-postcss');
+var postcssCopy = require('postcss-copy');
+var postcssImport = require('postcss-import');
+var path = require('path');
+
+gulp.task('buildCss', function () {
+    var processors = [
+        postcssImport(),
+        postcssCopy({
+            basePath: ['src', 'node_modules'],
+            preservePath: true,
+            dest: 'dist'
+        })
+    ];
+
+    return gulp
+        .src('src/**/*.css')
+        .pipe(postcss(processors, {to: 'dist/css/index.css'}))
+        .pipe(gulp.dest('dist/css'));
+});
+```
+
 #### <a name="lifecyle"></a> About lifecyle and the fileMeta object
 The fileMeta is a literal object with meta information about the copy process. Its information grows with the progress of the copy process.
 
@@ -199,45 +252,7 @@ The lifecyle of the copy process is:
 10. Define template for the new asset
 11. Add ```resultAbsolutePath``` and ```extra``` properties in the fileMeta object
 12. Write in destination
-13. Write the new URL in the PostCSS node value.
-
-#### <a name="using-postcss-import"></a> Using copy with postcss-import
-[postcss-import](https://github.com/postcss/postcss-import) is a great plugin that allow us work our css files in a modular way with the same behavior of CommonJS.
-
-***One thing more...***
-postcss-import has the ability of load files from node_modules. If you are using a custom `basePath` and you want to
-track your assets from `node_modules` you need to add the `node_modules` folder in the `basePath` option:
-
-```
-myProject/
-|-- node_modules/
-|-- dest/
-|-- src/
-```
-
-### Full example
-```js
-var gulp = require('gulp');
-var postcss = require('gulp-postcss');
-var postcssCopy = require('postcss-copy');
-var postcssImport = require('postcss-import');
-var path = require('path');
-
-gulp.task('buildCss', function () {
-    var processors = [
-        postcssImport(),
-        postcssCopy({
-            basePath: ['src', 'node_modules'],
-            dest: 'dist'
-        })
-    ];
-
-    return gulp
-        .src('src/index.css')
-        .pipe(postcss(processors, {to: 'dist/css/index.css'}))
-        .pipe(gulp.dest('dist/css'));
-});
-```
+13. Write the new URL in the PostCSS node value. ([read more about preserving paths](#preserving-paths))
 
 ## <a name="roadmap"></a> On roadmap
 
