@@ -13,7 +13,6 @@ Sections |
 [Options](#options) |
 [Custom Hash Function](#custom-hash-function) |
 [Transform](#using-transform) |
-[Preserving paths](#preserving-paths) |
 [Using postcss-import](#using-postcss-import) |
 [About lifecyle and the fileMeta object](#lifecyle) |
 [Roadmap](#roadmap) |
@@ -25,10 +24,25 @@ Sections |
 With [npm](https://npmjs.com/package/postcss-copy) do:
 
 ```
-npm install postcss-copy
+$ npm install postcss-copy
 ```
 
 ## <a name="quick-start"></a> Quick Start
+
+### Using [postcss-cli](https://github.com/postcss/postcss-cli)
+```js
+// postcss.config.js
+module.exports = {
+    plugins: [
+        require('postcss-copy')({
+            dest: 'dist'
+        })
+    ]
+};
+```
+```bash
+$ postcss src/index.css
+```
 
 ### Using [Gulp](https://github.com/postcss/gulp-postcss)
 
@@ -40,13 +54,13 @@ var postcssCopy = require('postcss-copy');
 gulp.task('buildCss', function () {
     var processors = [
         postcssCopy({
-            basePath: 'src',
+            basePath: ['src', 'otherSrc']
             dest: 'dist'
         })
     ];
 
     return gulp
-        .src('src/**/*.css')
+        .src(['src/**/*.css', 'otherSrc/**/*.css'])
         .pipe(postcss(processors))
         .pipe(gulp.dest('dist'));
 });
@@ -81,7 +95,8 @@ var copyOpts = {
 ```
 
 #### preservePath ({boolean} default = false)
-Flag option that can be used to preserve the directory structure of your assets
+Flag option to notify to postcss-copy that your CSS files destination are going to preserve the directory structure.
+It's helpful if you are using `postcss-cli` with the --base option or `gulp-postcss` with multiple files (e.g: `gulp.src('src/**/*.css')`)
 
 #### ignore ({string | string[] | function} default = [])
 Option to ignore assets in your CSS file.
@@ -170,15 +185,6 @@ var copyOpts = {
 };
 ```
 
-#### <a name="preserving-paths"></a> Preserving paths
-Some tools of postcss like postcss-cli or gulp-postcss can be used to preserve the relative paths of each src CSS files.
-There is some conditions in postcss-copy where we keep the structure directories and others where we not based on the `to` and `from` postcss options.
-
-These are the rules:
-- If the `to` option is not set, postcss-copy is going to use the `dest` path and will not preserve the original path.
-- If the `to` option is set and is the same as `from` (e.g: gulp-postcss do that by default) is going to preserve the directory structure.
-- If you are running postcss for multiple files (e.g: in gulp-postcss `gulp.src('src/**/*.css')`) and `to` option is set, you have to change `preservePath` to true.
-
 #### <a name="using-postcss-import"></a> Using copy with postcss-import
 [postcss-import](https://github.com/postcss/postcss-import) is a great plugin that allow us work our css files in a modular way with the same behavior of CommonJS.
 
@@ -252,7 +258,7 @@ The lifecyle of the copy process is:
 10. Define template for the new asset
 11. Add ```resultAbsolutePath``` and ```extra``` properties in the fileMeta object
 12. Write in destination
-13. Write the new URL in the PostCSS node value. ([read more about preserving paths](#preserving-paths))
+13. Write the new URL in the PostCSS node value.
 
 ## <a name="roadmap"></a> On roadmap
 

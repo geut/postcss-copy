@@ -56,27 +56,43 @@ function findBasePath(paths, pathname) {
  * @returns {string}
  */
 function defineCSSDestPath(dirname, fileMeta, result, opts) {
-    if (!result.opts.to) {
-        return opts.dest;
-    }
-
     const from = path.resolve(result.opts.from);
-    const to = path.resolve(result.opts.to);
+    let to;
 
-    if (to === from || opts.preservePath && dirname === path.dirname(from)) {
+    if (result.opts.to) {
         /**
-         * if to === results.opts.from we can't use it as a valid dest path
+         * if to === from we can't use it as a valid dest path
          * e.g: gulp-postcss comes with this problem
          *
-         * if dirname === path.dirname(result.opts.from) with this
-         * condition we can check if the postcss-copy runs after postcss-import
-         * and if preservePath is activated preserve the structure of
-         * the assets directory
          */
-        return path.join(opts.dest, path.relative(fileMeta.basePath, dirname));
+        to = path.resolve(result.opts.to);
+        to = to === from ? opts.dest : path.dirname(to);
+    } else {
+        to = opts.dest;
     }
 
-    return path.dirname(to);
+    if (opts.preservePath) {
+        let srcPath;
+        let basePath;
+
+        if (dirname === path.dirname(from)) {
+            srcPath = dirname;
+            basePath = fileMeta.basePath;
+        } else {
+            /**
+             * dirname !== path.dirname(result.opts.from) means that
+             * postcss-import is grouping different css files in
+             * only one destination, so, the relative path must be defined
+             * based on the CSS file where we read the @imports
+             */
+            srcPath = path.dirname(from);
+            basePath = findBasePath(opts.basePath, from);
+        }
+
+        return path.join(to, path.relative(basePath, srcPath));
+    }
+
+    return to;
 }
 
 /**
