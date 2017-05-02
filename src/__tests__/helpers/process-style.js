@@ -14,16 +14,9 @@ export default function processStyle(filename, opts, to) {
     })
         .then(file => {
             const postcssOpts = {
-                from: filename
+                from: filename,
+                to
             };
-
-            if (to) {
-                if (to === 'equal-from') {
-                    postcssOpts.to = filename;
-                } else {
-                    postcssOpts.to = to;
-                }
-            }
 
             return postcss([
                 copy(opts)

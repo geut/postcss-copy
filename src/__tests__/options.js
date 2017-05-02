@@ -1,11 +1,26 @@
 import test from 'ava';
 import randomFolder from './helpers/random-folder';
+import makeRegex from './helpers/make-regex.js';
 
 test.beforeEach(t => {
     t.context.processStyle = require('./helpers/process-style');
 });
 
-test('should throw an error if the "dest" option is not setted', t => {
+test('should set basePath to process.cwd() as default', t => {
+    return t.context
+        .processStyle('src/index.css', {
+            dest: randomFolder('dest', t.title),
+            template: 'assets/[path]/[name].[ext]'
+        })
+        .then(result => {
+            t.regex(
+                result.css,
+                makeRegex('assets/src/images/test.jpg')
+            );
+        });
+});
+
+test('should throw an error if the "dest" option is not set', t => {
     return t.context
         .processStyle('src/index.css', {
             basePath: 'src'

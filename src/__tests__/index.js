@@ -49,7 +49,7 @@ commonTests.forEach(item => {
         const tempFolder = randomFolder('dest', t.title);
         const copyOpts = Object.assign(
             {
-                basePath: 'src',
+                basePath: item.opts.basePath || 'src',
                 dest: tempFolder
             },
             item.opts
@@ -58,7 +58,7 @@ commonTests.forEach(item => {
         let oldTime;
         let newTime;
 
-        if (item.opts.to && item.opts.to !== 'equal-from') {
+        if (item.opts.to) {
             item.opts.to = path.join(tempFolder, item.opts.to);
         }
 
@@ -76,16 +76,14 @@ commonTests.forEach(item => {
                     );
                 });
 
-                if (item.assertions['no-modified']) {
-                    oldTime = fs
-                        .statSync(
-                            path.join(
-                                tempFolder,
-                                item.assertions['no-modified']
-                            )
+                oldTime = fs
+                    .statSync(
+                        path.join(
+                            tempFolder,
+                            item.assertions['no-modified']
                         )
-                        .mtime.getTime();
-                }
+                    )
+                    .mtime.getTime();
 
                 copyOpts.basePath = ['src', 'external_libs'];
 
@@ -107,22 +105,20 @@ commonTests.forEach(item => {
                     );
                 });
 
-                if (item.assertions['no-modified']) {
-                    newTime = fs
-                        .statSync(
-                            path.join(
-                                tempFolder,
-                                item.assertions['no-modified']
-                            )
+                newTime = fs
+                    .statSync(
+                        path.join(
+                            tempFolder,
+                            item.assertions['no-modified']
                         )
-                        .mtime.getTime();
+                    )
+                    .mtime.getTime();
 
-                    t.is(
-                        oldTime,
-                        newTime,
-                        `${item.assertions['no-modified']} was not modified.`
-                    );
-                }
+                t.is(
+                    oldTime,
+                    newTime,
+                    `${item.assertions['no-modified']} was not modified.`
+                );
 
                 if (item.opts.to === 'equal-from') {
                     item.opts.to = 'src/component/index.css';
@@ -146,22 +142,20 @@ commonTests.forEach(item => {
                     );
                 });
 
-                if (item.assertions['no-modified']) {
-                    newTime = fs
-                        .statSync(
-                            path.join(
-                                tempFolder,
-                                item.assertions['no-modified']
-                            )
+                newTime = fs
+                    .statSync(
+                        path.join(
+                            tempFolder,
+                            item.assertions['no-modified']
                         )
-                        .mtime.getTime();
+                    )
+                    .mtime.getTime();
 
-                    t.is(
-                        oldTime,
-                        newTime,
-                        `${item.assertions['no-modified']} was not modified.`
-                    );
-                }
+                t.is(
+                    oldTime,
+                    newTime,
+                    `${item.assertions['no-modified']} was not modified.`
+                );
 
                 return Promise.all(
                     item.assertions.exists.map(file => {
