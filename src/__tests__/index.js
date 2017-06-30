@@ -1,34 +1,15 @@
 import test from 'ava';
-import pathExists from 'path-exists';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
 import randomFolder from './helpers/random-folder';
 import makeRegex from './helpers/make-regex';
 import commonTests from './common-tests.json';
+import { testFileExists, checkForWarnings } from './helpers';
 
 test.beforeEach(t => {
     t.context.processStyle = require('./helpers/process-style');
 });
-
-function testFileExists(t, file) {
-    return pathExists(file).then(exists => {
-        t.truthy(exists, `File "${file}" created.`);
-    });
-}
-
-function checkForWarnings(t, result) {
-    const warnings = result.warnings();
-
-    t.is(
-        warnings.length,
-        0,
-        [
-            'Should not had postcss warnings',
-            ...warnings.map(w => w.text)
-        ]
-    );
-}
 
 commonTests.forEach(item => {
     if (item.opts.hashFunction === 'custom') {
@@ -165,4 +146,3 @@ commonTests.forEach(item => {
             });
     });
 });
-

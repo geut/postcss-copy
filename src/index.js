@@ -41,7 +41,7 @@ function ignore(fileMeta, opts) {
  */
 function getFileMeta(dirname, sourceInputFile, value, opts) {
     const parsedUrl = url.parse(value, true);
-    const filename = parsedUrl.pathname;
+    const filename = decodeURI(parsedUrl.pathname);
     const pathname = path.resolve(dirname, filename);
     const params = parsedUrl.search || '';
     const hash = parsedUrl.hash || '';
@@ -144,9 +144,11 @@ function processUrl(result, decl, node, opts) {
                     }
 
                     const resultUrl = url.parse(tpl);
-                    fileMetaTransformed.resultAbsolutePath = path.resolve(
-                        opts.dest,
-                        resultUrl.pathname
+                    fileMetaTransformed.resultAbsolutePath = decodeURI(
+                        path.resolve(
+                            opts.dest,
+                            resultUrl.pathname
+                        )
                     );
                     fileMetaTransformed.extra = (resultUrl.search || '') +
                         (resultUrl.hash || '');

@@ -30,7 +30,7 @@ test('should process assets via transform', t => {
     })
         .then(() => {
             const oldSize = fs
-                .statSync(path.join('src', 'images', 'bigimage.jpg'))
+                .statSync('src/__tests__/src/images/bigimage.jpg')
                 .size;
 
             const newSize = fs
@@ -44,7 +44,7 @@ test('should process assets via transform', t => {
 test('should process assets via transform and use ' +
 'the hash property based on the transform content', t => {
     const tempFolder = randomFolder('dest', t.title);
-    return t.context.processStyle('src/check-transform-hash.css', {
+    const process = t.context.processStyle('src/check-transform-hash.css', {
         basePath: 'src',
         dest: tempFolder,
         template: '[path]/[hash].[ext]',
@@ -55,6 +55,8 @@ test('should process assets via transform and use ' +
                 path.join(tempFolder, 'images', 'da39a3ee5e6b4b0d.jpg')
             );
         });
+
+    return t.notThrows(process);
 });
 
 test('should not transform when the source is the same', (t) => {
@@ -70,7 +72,7 @@ test('should not transform when the source is the same', (t) => {
             return transform(fileMeta);
         }
     })
-    .then(() => {
-        t.truthy(times === 1);
-    });
+        .then(() => {
+            t.truthy(times === 1);
+        });
 });

@@ -15,7 +15,7 @@ test('should set basePath to process.cwd() as default', t => {
         .then(result => {
             t.regex(
                 result.css,
-                makeRegex('assets/src/images/test.jpg')
+                makeRegex('assets/src/__tests__/src/images/test.jpg')
             );
         });
 });
@@ -45,4 +45,3 @@ test('should warn if the filename not belongs to the "basePath" option', t => {
             });
         });
 });
-
