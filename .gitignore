@@ -3,3 +3,4 @@ dist
 src/__tests__/dest
 .nyc_output
 npm-debug.log
+package-lock.json

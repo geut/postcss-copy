@@ -14,17 +14,17 @@ test('should rename files via default template', t => {
         basePath: 'src',
         dest: tempFolder
     })
-    .then(result => {
-        const css = result.css;
+        .then(result => {
+            const css = result.css;
 
-        t.is(result.warnings().length, 0);
+            t.is(result.warnings().length, 0);
 
-        t.regex(css, makeRegex('0ed7c955a2951f04.jpg?#iefix&v=4.4.0'));
-        t.truthy(exists(join(tempFolder, '0ed7c955a2951f04.jpg')));
+            t.regex(css, makeRegex('0ed7c955a2951f04.jpg?#iefix&v=4.4.0'));
+            t.truthy(exists(join(tempFolder, '0ed7c955a2951f04.jpg')));
 
-        t.regex(css, makeRegex('b6c8f21e92b50900.jpg'));
-        t.truthy(exists(join(tempFolder, 'b6c8f21e92b50900.jpg')));
-    });
+            t.regex(css, makeRegex('b6c8f21e92b50900.jpg'));
+            t.truthy(exists(join(tempFolder, 'b6c8f21e92b50900.jpg')));
+        });
 });
 
 test('should rename files via custom template', t => {
@@ -34,19 +34,23 @@ test('should rename files via custom template', t => {
         dest: tempFolder,
         template: '[path]/[name]-[hash].[ext][query]'
     })
-    .then(result => {
-        const css = result.css;
+        .then(result => {
+            const css = result.css;
 
-        t.is(result.warnings().length, 0);
+            t.is(result.warnings().length, 0);
 
-        t.regex(css, makeRegex(
-            'images/test-0ed7c955a2951f04.jpg?#iefix&v=4.4.0'
-        ));
-        t.truthy(exists(join(tempFolder, 'images/test-0ed7c955a2951f04.jpg')));
+            t.regex(css, makeRegex(
+                'images/test-0ed7c955a2951f04.jpg?#iefix&v=4.4.0'
+            ));
+            t.truthy(
+                exists(join(tempFolder, 'images/test-0ed7c955a2951f04.jpg'))
+            );
 
-        t.regex(css, makeRegex('images/other-b6c8f21e92b50900.jpg'));
-        t.truthy(exists(join(tempFolder, 'images/other-b6c8f21e92b50900.jpg')));
-    });
+            t.regex(css, makeRegex('images/other-b6c8f21e92b50900.jpg'));
+            t.truthy(
+                exists(join(tempFolder, 'images/other-b6c8f21e92b50900.jpg'))
+            );
+        });
 });
 
 test('should rename files via template function', t => {
@@ -59,17 +63,21 @@ test('should rename files via template function', t => {
             `${fileMeta.ext}${fileMeta.query}`;
         }
     })
-    .then(result => {
-        const css = result.css;
+        .then(result => {
+            const css = result.css;
 
-        t.is(result.warnings().length, 0);
+            t.is(result.warnings().length, 0);
 
-        t.regex(css, makeRegex(
-            'custom-path/custom-name-test.jpg?#iefix&v=4.4.0'
-        ));
-        t.truthy(exists(join(tempFolder, 'custom-path/custom-name-test.jpg')));
+            t.regex(css, makeRegex(
+                'custom-path/custom-name-test.jpg?#iefix&v=4.4.0'
+            ));
+            t.truthy(
+                exists(join(tempFolder, 'custom-path/custom-name-test.jpg'))
+            );
 
-        t.regex(css, makeRegex('custom-path/custom-name-other.jpg'));
-        t.truthy(exists(join(tempFolder, 'custom-path/custom-name-other.jpg')));
-    });
+            t.regex(css, makeRegex('custom-path/custom-name-other.jpg'));
+            t.truthy(
+                exists(join(tempFolder, 'custom-path/custom-name-other.jpg'))
+            );
+        });
 });
